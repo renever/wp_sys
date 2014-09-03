@@ -1,3 +1,4 @@
 .ve
 *.pyc
-.idea/*
+/.idea
+/.idea/*
