@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="cf0f40fa-57fd-4a92-960b-327043b06142" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/parseXML/get_address.py" afterPath="$PROJECT_DIR$/parseXML/get_address.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/parseXML/new_address.py" afterPath="$PROJECT_DIR$/parseXML/new_address.py" />
     </list>
     <ignored path="learning.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,20 +38,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="get_address.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="get_address.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/parseXML/get_address.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3753" max-vertical-offset="7436">
-              <caret line="155" column="30" selection-start-line="155" selection-start-column="30" selection-end-line="155" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.69616026" vertical-offset="3093" max-vertical-offset="3692">
+              <caret line="135" column="10" selection-start-line="135" selection-start-column="10" selection-end-line="135" selection-end-column="10" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="location.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="location.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/parseXML/location.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.43405676" vertical-offset="0" max-vertical-offset="227448">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="227448">
               <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
               <folding />
             </state>
@@ -358,7 +357,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1922" height="1055" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -366,7 +365,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16684435" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16684435" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39957264" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -443,14 +442,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/parseXML/get_address.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3753" max-vertical-offset="7436">
-          <caret line="155" column="30" selection-start-line="155" selection-start-column="30" selection-end-line="155" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/parseXML/new_address.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.728223" vertical-offset="210676" max-vertical-offset="211250">
@@ -461,8 +452,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/parseXML/location.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43405676" vertical-offset="0" max-vertical-offset="227448">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="227448">
           <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/parseXML/get_address.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.69616026" vertical-offset="3093" max-vertical-offset="3692">
+          <caret line="135" column="10" selection-start-line="135" selection-start-column="10" selection-end-line="135" selection-end-column="10" />
           <folding />
         </state>
       </provider>
