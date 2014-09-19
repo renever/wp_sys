@@ -1,0 +1,36 @@
+
+ LOE 部署总结
+概述：主要问题与（1,数据库恢复;  2,migrate操作; 3, 额外的翻译字段; 
+
+
+最初问题描述：郑海清 在bjowl.acttao.com 上部署后，打开页面报502。 查看log，发现报错提示：You need compress，
+但执行python manage.py compress 后，问题依然存在。
+
+现在对该问题的判断：应该是由于一张图片的名字 不是 unicode 所导致。
+
+当时的判断：可能是migrate 没有做好。
+当时的决定：全新部署一遍。
+
+接着新旧问题不断出现。因为我对LOE项目的不熟悉，以及对 supervisor ，compress ，sentry工具包的不了解，所以花费了不少时间。
+
+问题1：bjowl报错后，在sentry（http://sentry.acttao.com）看到的日志时间对不上（其实是时区没有设置为GMT+8），就修改setting里面的logging配置，想在指定的文件或者console查看错误日志，但不知道什么原因，并没有数据显示或写入指定的log文件。
+解决：在本地测试所有的setting文件。解决BUG后，LOE 在指定 任意 的配置文件，通过python manage.py runserver 127.0.0.1:9000 都能正常运行。
+现在sentry上时区设置正确后，可以明确看到即时错误信息了，方便DEBUG。
+
+问题2：郑海清向我述说问题后，我决定在owl.acttao.com 测试部署，以 owl.settings.pro 为配置文件（原是：owl.settings.staging)。接着在执行命令python manage.py supervisor restart all 后，提示 http://sentry.acttao.com/xxxxxx.....connection refused。网站首页报502错误。看信息，我以为是sentry网站登录出现了问题。但sentry帐号相关的配置我没修改过。这时，我还认为sentry网站上的日志是不同步的，无法使用。所以无法定位到具体错误信息。而且，命令python supervisor restart all 让我认为supervisor 服务已经启动，掩盖了真正的报错原因。
+ 解决：执行命令python manage.py supervisor -d ,网站首页能正常打开。
+
+问题3：在对owl.acttao.com 多次测试的过程中，再次遇到打开首页报502错误，根据问题2的经验，执行命令后，提示：
+Error: Another program is already listening on a port that one of our HTTP servers is configured to use.  Shut this program down first before starting supervisord.
+由于对 工具 supervisor的不了解，跟郑海清说明情况后，他尝试了 kill已启动的supervisor程序，但没有成功，后来重启机器，得以解决。今天（9月19）遇到同样的问题。owl 和bjowl两个测试服务器只能一个启动supervisor。而郑海清有事没有在电脑旁，无法重启。
+解决：我自己突然想到，每个项目都是在vituralenv 虚拟的独立环境下的，应该有自己的独立supervisor 服务进程。于是，开始google 查看supervisor 配置文档。
+在项目目录 下的 supervisord.conf 文件 添加 以下配置信息：
+
+[unix_http_server] 
+file = /home/loe/owl/supervisor.sock
+
+ 
+
+
+
+
