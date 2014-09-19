@@ -1,24 +1,24 @@
 
  LOE 部署总结
-概述：主要问题与（1,数据库恢复;  2,migrate操作; 3, 额外的翻译字段; 
-
-
+==============
 最初问题描述：郑海清 在bjowl.acttao.com 上部署后，打开页面报502。 查看log，发现报错提示：You need compress，
 但执行python manage.py compress 后，问题依然存在。
 
 现在对该问题的判断：应该是由于一张图片的名字 不是 unicode 所导致。
 
 当时的判断：可能是migrate 没有做好。
-当时的决定：全新部署一遍。
+当时的决定：全新部署一遍。接着新旧问题不断出现。因为我对LOE项目的不熟悉，以及对 supervisor ，compress ，sentry工具包的不了解，所以花费了不少时间，并且和苏小明，郑海清频繁沟通，才解决所遇问题。
 
-接着新旧问题不断出现。因为我对LOE项目的不熟悉，以及对 supervisor ，compress ，sentry工具包的不了解，所以花费了不少时间。
-
+重新部署后所遇问题
+=================
 问题1：bjowl报错后，在sentry（http://sentry.acttao.com）看到的日志时间对不上（其实是时区没有设置为GMT+8），就修改setting里面的logging配置，想在指定的文件或者console查看错误日志，但不知道什么原因，并没有数据显示或写入指定的log文件。
 解决：在本地测试所有的setting文件。解决BUG后，LOE 在指定 任意 的配置文件，通过python manage.py runserver 127.0.0.1:9000 都能正常运行。
 现在sentry上时区设置正确后，可以明确看到即时错误信息了，方便DEBUG。
 
+
 问题2：郑海清向我述说问题后，我决定在owl.acttao.com 测试部署，以 owl.settings.pro 为配置文件（原是：owl.settings.staging)。接着在执行命令python manage.py supervisor restart all 后，提示 http://sentry.acttao.com/xxxxxx.....connection refused。网站首页报502错误。看信息，我以为是sentry网站登录出现了问题。但sentry帐号相关的配置我没修改过。这时，我还认为sentry网站上的日志是不同步的，无法使用。所以无法定位到具体错误信息。而且，命令python supervisor restart all 让我认为supervisor 服务已经启动，掩盖了真正的报错原因。
  解决：执行命令python manage.py supervisor -d ,网站首页能正常打开。
+
 
 问题3：在对owl.acttao.com 多次测试的过程中，再次遇到打开首页报502错误，根据问题2的经验，执行命令后，提示：
 Error: Another program is already listening on a port that one of our HTTP servers is configured to use.  Shut this program down first before starting supervisord.
@@ -29,8 +29,30 @@ Error: Another program is already listening on a port that one of our HTTP serve
 [unix_http_server] 
 file = /home/loe/owl/supervisor.sock
 
- 
+并执行命令：
+unlink /home/loe/owl/supervisor.sock
+再次运行命令：python manage.py supervisor -d #成功启动服务，不用重启了。首页不再报错502。
 
 
+问题4：python manage.py compress 提示压缩文件有编码错误。但却没有提示具体哪个文件
+解决： 找到compress的 报错的具体文件，打印出具体是哪个文件 有编码错误，最后打印看到是css文件夹，修改了里面的一个非UT8格式的文件，问题依旧存在，查看css所在文件夹的父目录，发现还有一个img文件夹，在里面找到一张文件名有乱码的图片，修改后，问题解决。
 
 
+问题5：执行 python manage.py migrate card  报错：django.contrib.auth has no migration 。
+分析： 实际上，并不需要给 django的自带包做migrate 操作，只是因为loe有个auth包 和 django自带的同名了。
+解决：将表 south_migrationhistory 里面 app_name = auth 的记录删除 再执行命令就可以了。
+
+
+问题6：注册页面提交后，报502错误，提示：缺少某些字段。
+分析：恢复数据库后，需要执行而外数据库操作，将翻译字段插入到数据库对应的表。并且还需要执行 python manage.py migrate 执行其他缺少的数据库同步操作
+python manage.py sync_translation_fields
+python manage.py update_translation_fields
+python manage.py migrate
+
+问题7：花费不少时间，在确定所有的操作和代码都和本地一样后，执行 python manage.py supervisor restart all 后，网站依然报错。
+分析：是不是执行以上命令后，owl实际上并没有使用我修改后的 settings文件。
+解决：和郑海清 沟通后，确定问题所在，在如果需要export 新的配置文件，需要手动看kill并重启supervisor 服务。
+
+至此，owl.acttao.com (使用owl.setting.staging配置） ，bjowl.acttao.com(使用owl.settings.prod配置) 都能正常运行。
+
+总结：对项目和工具的不熟悉，是我花费时间最多的地方。而使用supervisor 运行LOE后，我没找到错误日志写在哪里，控制台也没有信息，尝试配置django的log，依然没有数据写入指定的文件。和郑海清沟通后，他是用python manage.py runserver 来做debug，但样式是错乱的。这会让DEBUG的定位具有不确定性，郑海清也无法在管理工具supervisor上给我更多的信息，我只能不断google，查看文档。幸好，截至到今天（2014-9-19）中午，总算是把出现的问题解决了，成功将loe部署在两个测试服务器上。这是我第一次学习在服务端部署网站，接触compress，supervisor等管理工具，这让我学到很多经验和知识。
