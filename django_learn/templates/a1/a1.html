@@ -20,7 +20,8 @@ $(document).ready(function(){
      csrfmiddlewaretoken:'{{ csrf_token }}'
      },
     function(data,status){
-      alert("Data: " + data + "\nStatus: " + status);
+    data_json = JSON.parse(data)
+      alert("Data: " + data_json.message + "\nAddress " + data_json.address + "\nStatus: " + status);
     })
     .fail(function(xhr) {
         console.log("Error: " + xhr.statusText);
