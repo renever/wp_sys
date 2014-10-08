@@ -6,9 +6,9 @@ def d(items, key=None):
 		if val not in seen:
 			seen.add(val)
 			yield item
-			
+
 with open('1.txt', 'r') as f:
 	for line in d(f):
 		print line,
-		
+
 
