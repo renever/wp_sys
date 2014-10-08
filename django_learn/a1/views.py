@@ -9,8 +9,8 @@ def a1_index(request):
         name = 'fang'
         city = 'ST'
         message = name + ' lives in ' + city
-        print 'xxx'
 
-        return render_to_response('a1/a1.html',json.dumps({'message': message}),\
-context_instance=RequestContext(request))
+        return HttpResponse(json.dumps({'message': message}))
+        #return render_to_response('a1/a1.html',json.dumps({'message': message}),\
+#context_instance=RequestContext(request))
     return render(request, 'a1/a1.html')
