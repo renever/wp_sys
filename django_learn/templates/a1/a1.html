@@ -1,10 +1,40 @@
 <html>
 
     <head>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     </head>
 
     <body>
-        test
+<form id="my_form" action="" method="post">
+{% csrf_token %}
+<input type="submit" value="Send">
+</form>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $("#my_form").submit(function(){
+    $.post("",
+    {name:"Donald Duck",
+     city:"Duckburg",
+     csrfmiddlewaretoken:'{{ csrf_token }}'
+     },
+    function(data,status){
+      alert("Data: " + data + "\nStatus: " + status);
+    })
+    .fail(function(xhr) {
+        console.log("Error: " + xhr.statusText);
+        alert("Error: " + xhr.statusText);
+    });
+    return false;
+  });
+
+});
+</script>
+
+
+
+
     </body>
 
 </html>
