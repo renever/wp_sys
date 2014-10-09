@@ -37,7 +37,17 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'a1',
+    'djangobower',
+)
+
+STATICFILES_FINDERS = (
+     'djangobower.finders.BowerFinder',
+)
+
+BOWER_INSTALLED_APPS = (
+    'jquery#1.9',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,7 +91,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+
 
 STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = [os.path.join(PROJECT_DIR, 'templates')]
+
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_DIR, 'components')
