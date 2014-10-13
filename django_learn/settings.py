@@ -48,6 +48,7 @@ STATICFILES_FINDERS = (
 
 BOWER_INSTALLED_APPS = (
     'jquery#1.9',
+    'sweetalert',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -91,7 +92,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'site-static')
 
 
 STATIC_URL = '/static/'

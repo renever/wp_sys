@@ -4,13 +4,16 @@ import json
 #from django.utils import
 # Create your views here.
 
+def render_to_json(dic):
+    return HttpResponse(json.dumps(dic))
+
 def a1_index(request):
     if request.method == 'POST' and request.is_ajax():
-        name = 'fang'
+        name = 'Fang'
         city = 'ST'
         message = name + ' lives in ' + city
 
-        return HttpResponse(json.dumps({'message': message, 'address': 'BeiJing'}))
-        #return render_to_response('a1/a1.html',json.dumps({'message': message}),\
-#context_instance=RequestContext(request))
+
+        dic = dict(message = message, address = 'BeiJing')
+        return render_to_json(dic)
     return render(request, 'a1/a1.html')

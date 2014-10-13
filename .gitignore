@@ -2,3 +2,5 @@
 *.pyc
 /.idea
 /.idea/*
+site-static/
+components/
