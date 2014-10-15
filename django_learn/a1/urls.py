@@ -7,4 +7,7 @@ urlpatterns = patterns('a1.views',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', 'a1_index',name='a1_index'),
+    url(r'a2/', 'a2',name='a2'),
+
+
 )

@@ -43,7 +43,9 @@ INSTALLED_APPS = (
 )
 
 STATICFILES_FINDERS = (
-     'djangobower.finders.BowerFinder',
+    'djangobower.finders.BowerFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
 )
 
 BOWER_INSTALLED_APPS = (
@@ -89,14 +91,17 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATICFILES_DIRS = (
+        ("css",os.path.join(PROJECT_DIR, "static/css")),
+    )
+print STATICFILES_DIRS
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'site-static')
-
-
+MEDIA_ROOT = os.path.join(PROJECT_DIR, 'site-media')
 STATIC_URL = '/static/'
-
+MEDIA_URL = '/media/'
 TEMPLATE_DIRS = [os.path.join(PROJECT_DIR, 'templates')]
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_DIR, 'components')

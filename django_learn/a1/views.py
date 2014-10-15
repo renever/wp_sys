@@ -17,3 +17,14 @@ def a1_index(request):
         dic = dict(message = message, address = 'BeiJing')
         return render_to_json(dic)
     return render(request, 'a1/a1.html')
+
+def a2(request):
+    if request.method == 'POST' and request.is_ajax():
+        name = 'Fang'
+        city = 'ST'
+        message = name + ' lives in ' + city
+
+
+        dic = dict(message = message, address = 'BeiJing')
+        return render_to_json(dic)
+    return render(request, 'a1/a2.html')
