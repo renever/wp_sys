@@ -3,11 +3,17 @@ import threading
 #, time
 #count = 0
 class Thread_Upload(threading.Thread):
-    def __init__(self,file,handle):
+    def __init__(self, ftp, file, threadName):
+        super(Thread_Upload, self).__init__(name = threadName)
+        self.ftp = ftp
         self.file = file
-        self.handle = handle
+        #self.handle = handle
 
     def run(self):
+        self.ftp.storbinary('STOR ' + self.file.name,\
+                            self.file.file,\
+                            self.ftp.blocksize,\
+                            self.ftp.handle)
         pass
 
 #class Counter(threading.Thread):
