@@ -33,6 +33,7 @@ article_tags = Table('article_tags', Base.metadata,
 
 class Article(Base):
 	__tablename__ = 'articles'
+	id = Column(Integer, primary_key=True)
 	website = Column(String(255))
 	url = Column(String(255))
 	title = Column(String(255))
@@ -42,7 +43,7 @@ class Article(Base):
 	# many to many Article<->Tag
 	tags = relationship('Tag', secondary=article_tags, backref='articles')
 
-	title = Column(String(255))
+	# title = Column(String(255))
 
 class Tag(Base):
 	__tablename__ = 'tags'
@@ -52,6 +53,11 @@ class Tag(Base):
 
 	def __init__(self, Tag):
 		self.keyword = Tag
+
+class DownloadRecord(Base):
+	__tablename__ = 'downloadrecoders'
+
+	id = Column(Integer, primary_key=True)
 
 Base.metadata.create_all(engine)
 
