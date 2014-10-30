@@ -1,0 +1,1008 @@
+/usr/bin/python2.7 /home/lotaku/app/learning/wangpan_django/main.py
+No handlers could be found for logger "ghost"
+200
+<!DOCTYPE html><html><head>
+    <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>Uploadable.ch - #1 Easy &amp; Fast File Storage</title>
+<link rel="shortcut icon" href="/images/favicon.ico"> 
+<link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" type="text/css">
+<link href="/styles/main.css?20" rel="stylesheet" type="text/css">
+
+
+	<script async="" src="http://static.kinley.com/lib/PGMymxKANO9q4r3a/loader.js"></script><script type="text/javascript" src="/script/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="/script/jquery.tools-1.2.5.min.js"></script>
+<script type="text/javascript" src="/script/main.js?20"></script>
+
+	<script>
+		if (top != self) top.location = self.location;
+	</script>
+
+
+    <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+    <script src="/landing/L1/download_captcha.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/script/payment.js?20"></script>
+    <script type="text/javascript" src="/script/ZeroClipboard.min.js"></script>
+
+    <script type="text/javascript">
+         window._adn = window._adn || [];
+         _adn.push({photo: 'auto'});
+         !function(e, f, u) {
+                 e.async = 1;
+                 e.src = u;
+                 f.parentNode.insertBefore(e, f);
+         }(document.createElement('script'), document.getElementsByTagName('script')[0], 'http://static.kinley.com/lib/PGMymxKANO9q4r3a/loader.js');
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btn_upgrade_premium').click(function(){
+                $('#premiumForm').submit();
+            });
+            
+            $('#btn_high_Speed_Dl').click(function(){
+                $('#premiumForm').submit();
+            });
+            try {
+              var client = new ZeroClipboard(
+                $(".d_clip_button"), { 
+                  swfPath: "/script/ZeroClipboard-1.3.0.swf", 
+                  moviePath: "/script/ZeroClipboard-1.3.0.swf" 
+                });
+              client.on( 'load', function(client) {
+                client.on( 'datarequested', function(client) {
+                  client.setText($(this).attr('data-url'));
+                });
+              });
+              client.on( 'wrongflash noflash', function() {
+                ZeroClipboard.destroy();
+                $('.d_clip_button').click(function(){
+                  $('#'+$(this).attr('data-tag')).select();
+                })
+              });
+            }catch(e){
+              $('.d_clip_button').click(function(){
+                $('#'+$(this).attr('data-tag')).select();
+              })
+            }
+        });
+
+        $(function(){
+            Landing.ready('/file/SwkwFPd7scRC');
+        });
+
+        var reCAPTCHA_publickey='6LdlJuwSAAAAAPJbPIoUhyqOJd7-yrah5Nhim5S3';
+
+        function executePaymentRequest(campaign_id) {
+      $('#selectCampaignForm'+campaign_id).submit();
+    }
+
+
+ </script>
+    <style>
+        #recaptcha_image, #recaptcha_image img {width:220px!important; height:48px!important;margin-right:5px;}
+        #recaptcha_btns {float:right; width:25px;}
+    </style>
+
+
+<script async="" src="http://static.kinley.com/js/ender.min.js"></script><link rel="stylesheet" type="text/css" href="http://static.kinley.com/css/PGMymxKANO9q4r3a" media="all"><script async="" src="http://static.kinley.com/lib/PGMymxKANO9q4r3a/implement.js?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwIjozLCJjIjoiMTE2LjI0LjEwNi4xMzMiLCJ0IjoiMjAxNC0xMC0zMFQwNTozMzoxMi43MThaIiwiY2MiOiJDTiIsImNwIjoiZGVza3RvcCIsImlhdCI6MTQxNDY0NzE5M30.yCLUmTpSirtKZG763GFGycycioGLPRo_3OaOtfvSMMw&amp;f=4256809536&amp;p=undefined&amp;t=1414647193385"></script></head>
+<body class="topAdbar en">
+	
+	<div class="overlay" id="anonymous">
+	
+<script src="/script/signup_validate.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+<script src="/script/pwdmeter.js" type="text/javascript"></script>
+<script>
+    function submitCheck(){
+        if($('#userIAgree').attr('checked')){
+            $('#regForm').submit();
+        }else{
+            alert('You must check the box to agree the terms and conditions in order to be a member');
+            return false;
+        }
+    }
+	
+	function showPopupCaptcha() {
+          var RecaptchaOptions = {
+              theme: 'custom',
+              lang: 'en',
+              custom_theme_widget: 'recaptcha_widget',
+			  callback: function(){ 
+				
+			  }
+		  };
+		  
+          Recaptcha.create(reCAPTCHA_publickey,
+              "popupCaptchaArea", RecaptchaOptions);
+    }
+
+	function getCookie(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+		}
+		return "";
+	}
+
+    $(document).ready(function () {
+		if (getCookie('isPopupAnonymousShown') != 'true'){
+			var d = new Date();
+			d.setTime(d.getTime() + (1*24*60*60*1000)); // one day
+			var expires = "expires="+d.toGMTString();
+			document.cookie = "isPopupAnonymousShown=true; path=/; " + expires;
+			
+			$("#anonymous").overlay({mask: {color: '#fff'},load: true});
+			showPopupCaptcha();
+		}
+	});
+</script>
+<style>
+	#popupCaptchaArea { position: relative; width: 307px;}
+	
+    #recaptcha_image, #popup_recaptcha_image img {width:220px!important; height:48px!important;}
+    #recaptcha_btns {float:right; width:34px; padding-bottom:3px;}
+</style>
+
+
+	<div class="box" style="padding: 10px 15px;">
+		<div class="box"><div class="close right">&nbsp;</div></div>
+		<div class="pop_heading">
+			<p><span>Not yet a member?</span> Sign up and enjoy:</p>
+			<ul>
+				<li>400 Kb/s of Download speed</li>
+				<li>250 GB of FREE STORAGE</li>
+				<li>Shorter wait in-between files</li>                                        
+			</ul>
+		</div>
+		
+		<form id="regForm" class="form" name="regForm" action="/registration.php" method="post">
+			<div class="form">
+				<div class="colL">
+					<div class="input_q">Username</div>
+					<div class="input_a">
+						<input id="userName" name="userName" type="text" class="input_txt">
+						<div class="note">Please use alphanumeric characters only.</div>
+					</div>
+					<!-- <div class="checking_msg">Please enter a username</div> -->
+				</div>
+				<div class="colR">
+					<div class="input_q">Email</div>
+					<div class="input_a">
+						<input id="userEmail" type="text" name="userEmail" class="input_txt">
+						<div class="note">Your valid email address</div>
+					</div>
+					
+					<!-- <div class="checking_msg">Please enter a valid email address</div> -->
+				</div>
+				<div class="clear"></div>
+				<div class="colL">
+					<div class="input_q">Password</div>
+					<div class="input_a">
+						<input id="userPassword" name="userPassword" type="password" class="input_txt">
+						<div class="note">Must be between 6 to 20 alphanumeric characters.</div>
+					</div>
+					
+					<!-- <div class="checking_msg">Please enter 6 to 20 alphanumeric characters</div> -->
+				</div>
+				<div class="colR">
+					<div class="input_q">Repeat password</div>
+					<div class="input_a">
+						<input id="userConfirmPassword" name="userConfirmPassword" type="password" class="input_txt">
+						<div class="note">Re-enter your password for confirmation</div>
+					</div>
+					
+					<!-- <div class="checking_msg">Please confirm your password</div> -->
+				</div>
+				<div class="clear"></div>
+				<div class="colL">
+					<div class="input_q">Captcha</div>
+					<div class="input_a">
+						<div id="popupCaptchaArea" class="validate" style="width:260px">
+							<div id="recaptcha_widget" class="val_code">
+								<div id="recaptcha_image" class="val_word"></div>
+								<div id="recaptcha_btns">
+									<div><a href="javascript:Recaptcha.reload()"><div id="recaptcha_reload" class="val_btn reload"></div></a></div>
+									<div class="recaptcha_only_if_image"><a href="javascript:Recaptcha.switch_type('audio')"><div id="recaptcha_switch_audio" class="val_btn audio"></div></a></div>
+									<div class="recaptcha_only_if_audio"><a href="javascript:Recaptcha.switch_type('image')"><div id="recaptcha_switch_img" class="val_btn text"></div></a></div>
+									<div><a href="javascript:Recaptcha.showhelp()"><div id="recaptcha_whatsthis" class="val_btn showhelp"></div></a></div>
+								</div>
+								<div class="clear"></div>
+								<div class="inputbox_val">
+									<input type="text" id="recaptcha_response_field" class="input_txt" name="recaptcha_response_field" onclick="$('span.checking_msg').hide();" autocomplete="off">
+									<input type="hidden" id="recaptcha_challenge_field" name="recaptcha_challenge_field">
+								</div>
+								<div class="note" id="captchaAreaLabel">
+									Enter the code shown above
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="colR">
+					<div class="checkbox_panel">
+						<input id="userIAgree" name="userIAgree" type="checkbox" class="checkbox">&nbsp;I agree to the  <a href="/terms.php">terms &amp; conditions</a>
+					</div>
+					<input name="action__signup" type="hidden" value="normalSignup">
+					<input name="p" type="hidden" value="landing_popup_signup">
+					<a class="btn_send" href="#" onclick="javascript:return submitCheck();"><span>Create Account</span></a>
+					<p>Have an account? <a href="/login.php">Sign in &gt;&gt;</a></p>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</form>
+	</div>
+
+	<div class="box offer">
+		<p>Become a Premium Member. You can enjoy a range of benefits including:</p>
+		<ul>
+			<li><span class="icon1"></span><p>Maximum<br>Download Speed</p></li>
+			<li><span class="icon2"></span><p>Unlimited<br>Parallel Downloads</p><p></p></li>
+			<li><span class="icon3"></span><p>Support<br>Accelerators</p><p></p></li>
+			<li class="btn"><a href="/premium.php">Buy Premium</a></li>
+			<div class="clear"></div>     
+		</ul>
+	</div>
+	</div>
+<div class="content_box">
+<div class="container index landingADs">
+    <div class="header" id="header">
+        	
+
+
+
+<script language="JavaScript">
+    $(document).ready(function () {
+        $('.list_fm tr').hover(function () {
+            $(this).addClass('active');
+        }, function () {
+            $(this).removeClass('active');
+        });
+        $('.list_fm th a').hover(function () {
+            $(this).addClass('active');
+        }, function () {
+            $(this).removeClass('active');
+        });
+    });
+</script>
+
+
+<div class="head_menu_top"></div>
+<div class="menu">
+
+			
+<script type="text/javascript">
+$(document).ready(function()  {
+    $(".tooltip_login").css({position: "absolute", top: "35px", left: "619px"}).hover(function(e) { $(this).data("mouseIsInside", e.type == "mouseenter"); });
+    $("#list_login a").hover(function(e) { if (e.type == "mouseenter") $(".tooltip_login").show(); });
+    $("body").mouseup(function() { if (!$(".tooltip_login").data("mouseIsInside")) { $(".tooltip_login").hide(); } });
+//		$("#list_quest a").tooltip({ position: "bottom left", offset:[-1,47],relative: true ,opacity: 1 });
+		$("#loginDialogSubmit").click(function(){
+			$("#loginDialogBoxForm").submit();
+		});
+		$("#list_upload a").tooltip({ position: "bottom left", offset:[0,255],relative: true ,opacity: 1 });
+	});
+</script>
+
+
+<ul class="menu_L">
+	<li class="logo"><a href="/"></a></li>
+	<li class="logo"></li>
+	<li id="list_upload"><a href="/upload.php">Upload</a></li>
+	<div class="tooltip2 tooltip_makemoney">
+		<table cellpadding="0" cellspacing="0" width="100%" border="0" align="left">
+			<tbody><tr><td><span class="tooltip2_content"><a href="/upload.php">Upload</a></span></td></tr>
+			<tr><td><span class="tooltip2_content"><a href="/uploadremote.php">Remote Upload</a></span></td></tr>
+			<tr><td><span class="tooltip2_content"><a href="/uploadftp.php">FTP Upload</a></span></td></tr>
+		</tbody></table>
+	</div>
+	<li id="list_premium"><a href="/premium.php">Premium</a></li>
+	<li id="list_register"><a href="/registration.php">Registration</a></li>
+</ul>
+<ul class="menu_R">
+	<li class="btn_buypremium"><a href="/premium.php">Upgrade to Premium</a></li>
+	<li id="list_login" class="btn_login"><a href="/login.php">Login</a></li>
+</ul>
+	</div>
+<div class="header_main">
+	<a href="/index.php" class="logo left" title="Uploadable">&nbsp;</a>
+	<div class="left section">Incredibly fast and easy file storage</div>
+		    <div class="sharebox">
+    </div>
+		<div class="clear"></div>
+</div>
+
+    </div>
+    <div id="welcome_box" style="overflow:visible">
+      
+<script type="text/javascript">
+  
+    var est = 7;
+    var tail = " only!";
+  
+  $(document).ready(function(){
+    $("#freeEst").html("<span>"+convertTimeValue(est)+"</span> "+convertTimeUnit(est));
+    $("#premEst").html("<span>"+convertTimeValue(est/10)+"</span> "+convertTimeUnit(est/10)+tail);
+  });
+  function convertTimeValue(s) {
+    if (s < 60) {
+      return s;
+    } else if (s < 3600) {
+      s/=60;
+    } else {
+      s/=3600;
+    }
+    if (s < 1) {
+      return s.toFixed(2);
+    } else {
+      return s.toFixed(0);
+    }
+  }
+  function convertTimeUnit(s) {
+    
+      var sec = "sec", min = "min", hr = "hr";
+      var secs = "secs", mins = "mins", hrs = "hrs";
+    
+    if (s < 60) {
+      return (s<=1)?sec:secs;
+    } else if (s < 3600) {
+      return (s==60)?min:mins;
+    } else {
+      return (s==3600)?hr:hrs;
+    }
+    return sec;
+  }
+</script>
+
+<div class="navBar2">
+  <div class="box">
+    <div class="left file_link">
+        <div id="top_zipfile">
+          <div class="icon pdf"></div>
+            <div class="shareicons"><span><!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_default_style " style="width:145px">
+  <a class="addthis_button_preferred_1"></a>
+  <a class="addthis_button_preferred_2"></a>
+  <a class="addthis_button_preferred_3"></a>
+  <a class="addthis_button_preferred_4"></a>
+  <a class="addthis_button_compact"></a>
+  <a class="addthis_counter addthis_bubble_style"></a>
+</div>
+
+  <script type="text/javascript">var addthis_config = {"data_track_addressbar":false};</script>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-52df668d29b7d090"></script>
+
+<!-- AddThis Button END --></span></div>
+            <div id="file_name" title="123.pdf">123.pdf<span class="filename_normal">(4.21 MB)</span></div>
+         </div>
+    </div>
+  </div>
+  <div class="box">
+    <div class="infobar">
+      <ul>
+        <li>
+          <p class="type">Average download time<br>as a free user:</p>
+          <p id="freeEst" class="time"><span>--</span> mins</p>
+        </li>
+        <li>
+          <p class="type">Average download time<br>as a <span>Premium</span> user:</p>
+          <p id="premEst" class="time green"><span>--</span> mins only!</p>
+        </li>
+        <li class="premium">
+          <p>Become a <span>Premium</span> user now!</p>
+          <a href="/premium.php">Buy Premium</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+      <div class="clear"></div>
+      <div class="shadow"></div>
+              
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#shareBox').change(function(){
+				$('.shareLink').hide();
+				$("#shareLink"+$(this).val()).show();
+			});
+			$(".fast_tab .btn1").click(function(){
+				$('#premiumForm').submit();
+			});
+			$(".btn_box .high_speed_dl").click(function(){
+				$('#premiumForm').submit();
+			});
+			$('.btn_paymentRequest').click(function(){
+				var cid = $(this).attr('data-cid');
+				console.log(cid);
+				if (cid > 0) {
+					$("#form_payment #formVal_paymentCid").val(cid);
+					$("#form_payment").submit();
+				}
+			});
+		});
+	</script>
+
+<div id="navBar3" style="overflow:visible;">
+  <script type="text/javascript">
+	var captchaArea = '<div id="captchaArea" class="errorBox blue" style="display:none;">';
+	captchaArea += '<div id="recaptcha_widget"  class="errorMsg">'
+	captchaArea += '<div class="clear"></div>'
+	captchaArea += '<div class="icon_err write">'
+	captchaArea += '<div id="captchaAreaLabel">'
+	captchaArea += '<div class="recaptcha_only_if_image val_tips"><h1>Enter the code shown below</h1></div>'
+	captchaArea += '<div class="recaptcha_only_if_audio val_tips" style="display:none;"><h1>Enter the numbers you hear</h1></div>'
+	captchaArea += '</div>'
+	captchaArea += '<div class="v_code_l">'
+	captchaArea += '<input id="recaptcha_response_field" type="text" style="border:1px solid #ABC2D5; padding:3px 5px" name="recaptcha_response_field"/>'
+	captchaArea += '<input type="hidden" id="recaptcha_challenge_field" name="recaptcha_challenge_field" />'
+	captchaArea += '<input type="hidden" id="recaptcha_shortencode_field" name="recaptcha_shortencode_field" value="SwkwFPd7scRC" />'
+	captchaArea += '<div class="clear"></div>'
+	captchaArea += '<div id="captchaError" class="err_msg"></div>'
+	captchaArea += '<a id="regularBtn2" class="btn_buy_submit" href="javascript:void(0);"><span>Submit</span></a>'
+	captchaArea += '</div>'
+	captchaArea += '<div class="v_code_r">'
+	captchaArea += '<div class="v_code_arrow"></div>'
+	captchaArea += '<div id="recaptcha_image" class="val_word"></div>'
+	captchaArea += '<div id="recaptcha_btns" class="val_btn_list">'
+	captchaArea += '<div><a href="javascript:Recaptcha.reload()"><div id="recaptcha_reload" class="reload"></div></a></div>'
+	captchaArea += '<div class="recaptcha_only_if_image"><a href="javascript:Recaptcha.switch_type(\'audio\')"><div id="recaptcha_switch_audio" class="val_btn audio"></div></a></div>'
+	captchaArea += '<div class="recaptcha_only_if_audio"><a href="javascript:Recaptcha.switch_type(\'image\')"><div id="recaptcha_switch_img" class="val_btn text"></div></a></div>'
+	captchaArea += '<div><a href="javascript:Recaptcha.showhelp()"><div id="recaptcha_whatsthis" class="showhelp"></div></a></div>'
+	captchaArea += '</div>'
+	captchaArea += '<div class="clear"></div>'
+	captchaArea += '</div>'
+	captchaArea += '</div>'
+	captchaArea += '<div class="buy_right v_code_right">'
+	captchaArea += '<span class="smalltxt">Download Instanly</span>'
+	captchaArea += '<a href="#" class="btn_buy_premium"><span>Buy 30 days Now</span></a>'
+	captchaArea += '<div class="clear"></div>'
+	captchaArea += '<div class="loginbox">"Or <a href="/login.php">login</a> with Premium account"</div>'
+	captchaArea += '</div>'
+	captchaArea += '<div class="clear"></div>'
+	captchaArea += '</div>'
+	captchaArea += '<div class="clear"></div>'
+	captchaArea += '</div>'
+
+	captchaArea += '<div id="downloadBox" class="errorBox blue" style="display:none;">'
+	captchaArea += '<div class="errorMsg">'
+	captchaArea += '<div class="clear"></div>'
+	captchaArea += '<div class="icon_err green">'
+	captchaArea += '<h1>Your File is ready</h1>'
+	captchaArea += '<a id="regularBtn3" class="btn_download" href="javascript:void(0);"><span>Download Now</span></a>'
+	captchaArea += '</div>'
+	captchaArea += '<div class="clear"></div>'
+	captchaArea += '</div>'
+	captchaArea += '<div class="clear"></div>'
+	captchaArea += '</div>'
+</script>
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.btn_paymentRequest').click(function(){
+        $("#form_premiumCampaign input[name='p']").val($(this).attr('data-pid'));
+        $("#form_premiumCampaign input[name='c']").val($(this).attr('data-cid'));
+        $("#form_premiumCampaign").submit();
+        return false;
+      });
+      $('.btn_btc_buy').click(function(){
+        if (!$(this).hasClass("grey")) {
+          $("#form_premiumCampaign input[name='p']").val($(this).attr('data-pid'));
+          $("#form_premiumCampaign input[name='c']").val($(this).attr('data-cid'));
+          $("#form_premiumCampaign").submit();
+        }
+        return false;
+      });
+    });
+  </script>
+
+<form id="form_premiumCampaign" action="/payment.php" method="post" style="display:none;">
+  <input type="hidden" name="c">
+  <input type="hidden" name="p">
+</form>
+
+  
+<div id="left_content">
+  <div id="left_left">
+    <div id="left_buynow">
+      <div class="left_caption">
+        <div class="filezer_btn"></div>
+        <div class="left_subcaption">Upgrade to Premium Now</div>
+        <div class="clear"></div>
+      </div>
+      <div class="all_days fourplans">
+                  
+          <div class="days first">
+          	          <a href="javascript:void(0);" class="btn_paymentRequest" data-cid="90" data-pid="17">
+	              <div class="plan_ribbon"></div>
+	              <h4 class="caption">1 Day</h4>
+	              <h6 class="sub_dollar"><span class="dollar_sign">$</span>0<sup>99*</sup></h6>
+	              <span class="sub_caption">&nbsp;</span>
+	              <div class="paypal_buy"><span>Try Now</span></div>
+	            </a>
+	          </div>
+          <div class="days">
+                      <a href="javascript:void(0);" class="btn_paymentRequest" data-cid="92" data-pid="17">
+              <h4 class="caption">30 Days</h4>
+              <h6 class="sub_dollar"><span class="dollar_sign">$</span>12<sup>99*</sup></h6>
+              <span class="sub_caption">Just  $0.43  per day</span>
+              <div class="paypal_buy"><span>Buy Now</span></div>
+              <p class="safe">100% Safe &amp; Anonymous</p>
+            </a>
+            <p>Buy with <a href="javascript:void(0)" class="btn_btc_buy" data-cid="21" data-pid="14">BitCoin</a></p>
+            <p style="padding:0">Buy from <a href="http://reseller.uploadable.ch" target="_blank">Resellers</a></p>
+          </div>
+                    <div class="days">
+            <a href="javascript:void(0);" class="btn_paymentRequest" data-cid="96" data-pid="17">
+              <h4 class="caption">60 Days</h4>
+              <h6 class="sub_dollar"><span class="dollar_sign">$</span>22<sup>99*</sup></h6>
+              <span class="sub_caption">Just  $0.38  per day</span>
+              <div class="paypal_buy"><span>Buy Now</span></div>
+              <p class="safe">100% Safe &amp; Anonymous</p>
+            </a>
+            <p>Buy with <a href="javascript:void(0)" class="btn_btc_buy" data-cid="81" data-pid="14">BitCoin</a></p>
+            <p style="padding:0">Buy from <a href="http://reseller.uploadable.ch" target="_blank">Resellers</a></p>
+          </div>
+          <div class="days last">
+            <a href="javascript:void(0);" class="btn_paymentRequest" data-cid="98" data-pid="17">
+              <h4 class="caption">90 Days</h4>
+              <h6 class="sub_dollar"><span class="dollar_sign">$</span>29<sup>99*</sup></h6>
+              <span class="sub_caption">Just  $0.33  per day</span>
+              <div class="paypal_buy"><span>Buy Now</span></div>
+              <p class="safe">100% Safe &amp; Anonymous</p>
+            </a>
+            <p>Buy with <a href="javascript:void(0)" class="btn_btc_buy" data-cid="22" data-pid="14">BitCoin</a></p>
+            <p style="padding:0">Buy from <a href="http://reseller.uploadable.ch" target="_blank">Resellers</a></p>
+          </div>
+                <div class="note">*Recurring Billing applied</div>
+      </div>
+      <div class="clear"></div>
+
+      <!--.all_days end-->
+      <div class="clear"></div>
+    </div>
+  </div>  <!--#left_left end-->
+</div>  <!--left_content end-->
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $(".downloadBtn").click(function(){
+        $(".downloadBtn").unbind("click").hide();
+        $(".countdownBtn").show();
+        $("#regularBtn").click();
+      });
+      var est = 7;
+      $("#freeEstTime").html("Download time:<span class='sec'>"+convertTimeValue(est)+"</span> <span>"+convertTimeUnit(est)+"</span>");
+      $("#premEstTime").html("Download time:<span class='sec'>"+convertTimeValue(est/10)+"</span> <span>"+convertTimeUnit(est/10)+"</span>");
+    })
+  </script>
+
+<div id="download_tab">
+  <ul>
+    <li class="features">
+      <div class="feat_box">
+        <div class="usertype premium"></div>
+        <ul>
+          <li><span class="feat_icon icon1"></span><p>Support Resuming</p></li>
+          <li><span class="feat_icon icon2"></span><p>Support Accelerators</p></li>
+          <li class="long"><span class="feat_icon icon3"></span><p>Unlimited Parallel Downloads</p></li>
+          <li><span class="feat_icon icon4"></span><p>Instant Downloads</p></li>
+          <li><span class="feat_icon icon5"></span><p>Unlimited Storage</p></li>
+          <li class="long"><span class="feat_icon icon6"></span><p>Unlimited Archiving time of your files</p></li>
+        </ul>
+        <div class="btn_box highspeed"><a href="/premium.php">High Speed Download</a></div>
+      </div> 
+      <div class="feat_box">
+        <div class="usertype">Free User</div>
+        <ul>
+          <li><span class="feat_icon icon7"></span><p>No Resume Downloads</p></li>
+          <li><span class="feat_icon icon8"></span><p>No<br>Accelerators</p></li>
+          <li class="long"><span class="feat_icon icon9"></span><p>Limited Parallel Downloads</p></li>
+          <li><span class="feat_icon icon10"></span><p>Manual Download</p></li>
+          <li><span class="feat_icon icon11"></span><p>Limited <br>Storage</p></li>
+          <li class="long"><span class="feat_icon icon12"></span><p>Limited time for Archived Files</p></li>
+        </ul>
+        <div class="btn_box slowspeed downloadBtn"><span>Slow Speed Download</span></div>
+        <div class="btn_box waiting countdownBtn" id="regularBtn"><span class="timer" data-time="30" data-format="Wait %TIME% sec">Wait 30 sec</span></div>
+      </div>
+    </li>
+    <li class="ad">
+      <div class="ad_300x250">
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $(".btn_premiumBoxCampaign").click(function(){
+        $("#premiumBoxCampaign input[name='c']").val($(this).attr('data-cid'));
+        $("#premiumBoxCampaign input[name='p']").val($(this).attr('data-pid'));
+        $("#premiumBoxCampaign").submit();
+      });
+    })
+  </script>
+
+<div class="ad_300x250">
+  <div class="plantable">
+    <p class="title">Choose Your Plan</p>
+    <ul>
+            	      	<li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="90" data-pid="17">Try Now</a>
+          <div class="plan_price">
+            <p><span>1 Day&nbsp;</span>$0.99*</p><p>
+            </p><p class="note special">Risk FREE Trial</p>
+          </div>
+        </li>
+                <li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="92" data-pid="17">Buy Now</a>
+          <div class="plan_price">
+            <p><span>30 Days&nbsp;</span>$12.99*</p>
+            <p class="note">Just $0.43 per day</p>
+          </div>
+        </li>
+                <li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="96" data-pid="17">Buy Now</a>
+          <div class="plan_price">
+            <p><span>60 Days&nbsp;</span>$22.99*</p>
+            <p class="note">Just $0.38 per day</p>
+          </div>
+        </li>
+        <li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="98" data-pid="17">Buy Now</a>
+          <div class="plan_price">
+            <p><span>90 Days&nbsp;</span>$29.99*</p>
+            <p class="note">Just $0.33 per day</p>
+          </div>
+        </li>
+          </ul>
+          <p class="payment">Prices in USD</p>
+      </div>
+</div>
+<form id="premiumBoxCampaign" method="post" action="/payment.php" style="display:none;">
+    <input type="hidden" name="c">
+    <input type="hidden" name="p">
+</form></div>
+    </li>
+  </ul>
+</div>
+<div class="speedbar">
+  <ul>
+    <li class="premium">
+      <div class="type"></div>
+      <div class="download">
+        <p class="speedslider high"></p>
+        <p id="premEstTime" class="dl_time"></p>
+        <div class="btn_box highspeed"><a href="/premium.php">High Speed Download</a></div>
+      </div>
+    </li>
+    <li class="freeuser">
+      <div class="type">Free User</div>        
+      <div class="download">
+        <p class="speedslider slow"></p>
+        <p id="freeEstTime" class="dl_time grey"></p>
+        <div class="btn_box slowspeed downloadBtn"><span>Slow Speed Download</span></div>
+        <div class="btn_box waiting countdownBtn"><span class="timer" data-time="30" data-format="Wait %TIME% sec">Wait 30 sec</span></div>
+      </div>
+    </li>
+  </ul>
+</div>
+  <div id="download_tab" class="fast_tab" style="display:none;">
+    <ul>
+      <li class="tab">
+        <a onclick="javascript:void(0);" class="tab_btn btn1 on">
+          <div class="icon"><span class="tab_icon fast"></span></div>
+          <div class="btn_download color_on">Fastest Download</div>
+          <div class="desc">Instantly</div>
+        </a>
+        <div class="btnline"></div>
+        <a onclick="javascript:void(0);" class="tab_btn btn2 off">
+          <div class="icon"><span class="tab_icon slow"></span></div>
+          <div class="btn_download color_off">Slow Speed Download</div>
+          <div class="desc"> Wait 30 sec</div>
+        </a>
+      </li>
+      <li class="features">
+        <div id="features_fast">
+          <div class="speedslider">
+            <span class="high"></span>
+            <p>Highest<br>Priority</p>
+          </div>
+          <div class="feat_box">
+            <ul>
+              <li><span class="feat_icon icon1"></span><p>Support Resuming</p></li>
+              <li><span class="feat_icon icon2"></span><p>Support Accelerators</p></li>
+              <li class="long"><span class="feat_icon icon3"></span><p>Unlimited Parallel Downloads</p></li>
+              <li><span class="feat_icon icon4"></span><p>Instant Downloads</p></li>
+              <li><span class="feat_icon icon5"></span><p>Unlimited Storage</p></li>
+              <li class="long"><span class="feat_icon icon6"></span><p>Unlimited Archiving time of your files</p></li>
+            </ul>
+            <div class="btn_box"><a href="javascript:void(0);" class="high_speed_dl">High Speed Download</a></div>
+          </div>
+        </div>
+        <div id="features_slow"></div>
+      </li>
+      <li class="ad">
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $(".btn_premiumBoxCampaign").click(function(){
+        $("#premiumBoxCampaign input[name='c']").val($(this).attr('data-cid'));
+        $("#premiumBoxCampaign input[name='p']").val($(this).attr('data-pid'));
+        $("#premiumBoxCampaign").submit();
+      });
+    })
+  </script>
+
+<div class="ad_300x250">
+  <div class="plantable">
+    <p class="title">Choose Your Plan</p>
+    <ul>
+            	      	<li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="90" data-pid="17">Try Now</a>
+          <div class="plan_price">
+            <p><span>1 Day&nbsp;</span>$0.99*</p><p>
+            </p><p class="note special">Risk FREE Trial</p>
+          </div>
+        </li>
+                <li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="92" data-pid="17">Buy Now</a>
+          <div class="plan_price">
+            <p><span>30 Days&nbsp;</span>$12.99*</p>
+            <p class="note">Just $0.43 per day</p>
+          </div>
+        </li>
+                <li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="96" data-pid="17">Buy Now</a>
+          <div class="plan_price">
+            <p><span>60 Days&nbsp;</span>$22.99*</p>
+            <p class="note">Just $0.38 per day</p>
+          </div>
+        </li>
+        <li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="98" data-pid="17">Buy Now</a>
+          <div class="plan_price">
+            <p><span>90 Days&nbsp;</span>$29.99*</p>
+            <p class="note">Just $0.33 per day</p>
+          </div>
+        </li>
+          </ul>
+          <p class="payment">Prices in USD</p>
+      </div>
+</div>
+<form id="premiumBoxCampaign" method="post" action="/payment.php" style="display:none;">
+    <input type="hidden" name="c">
+    <input type="hidden" name="p">
+</form></li>                
+    </ul>
+  </div><!-- download_tab ends -->
+  
+  <div id="download_tab" class="slow_tab" style="display:none;">
+    <ul>
+      <li class="tab">
+        <a onclick="javascript:void(0);" class="tab_btn btn1 off">
+          <div class="icon"><span class="tab_icon fast"></span></div>
+          <div class="btn_download color_on">Fastest Download</div>
+          <div class="desc">Instantly</div>
+        </a>
+        <div class="btnline"></div>
+        <a onclick="javascript:void(0);" class="tab_btn btn2 on">
+          <div class="icon"><span class="tab_icon wait"><span id="timer_icon">30</span></span></div>
+          <div class="btn_download color_off" id="regularBtn">Slow Download</div>
+          <div class="desc">Wait <span id="timer">30</span> sec</div>
+        </a>
+      </li>
+      <li class="features">
+        <div id="features_fast">
+          <div class="speedslider">
+            <span class="low"></span>
+            <p>Lowest<br>Priority</p>
+          </div>
+            <div class="feat_box">
+              <ul>
+                <li><span class="feat_icon icon7"></span><p>Support Resuming</p></li>
+                <li><span class="feat_icon icon8"></span><p>Support Accelerators</p></li>
+                <li class="long"><span class="feat_icon icon9"></span><p>Unlimited Parallel Downloads</p></li>
+                <li><span class="feat_icon icon10"></span><p>Instant Downloads</p></li>
+                <li><span class="feat_icon icon11"></span><p>Unlimited Storage</p></li>
+                <li class="long"><span class="feat_icon icon12"></span><p>Unlimited Archiving time of your files</p></li>
+              </ul>
+              <div class="btn_box"><a href="javascript:void(0);" class="high_speed_dl">Upgrade Now</a></div>
+          </div>
+        </div>
+        <div id="features_slow"></div>
+      </li>
+      <li class="ad">
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $(".btn_premiumBoxCampaign").click(function(){
+        $("#premiumBoxCampaign input[name='c']").val($(this).attr('data-cid'));
+        $("#premiumBoxCampaign input[name='p']").val($(this).attr('data-pid'));
+        $("#premiumBoxCampaign").submit();
+      });
+    })
+  </script>
+
+<div class="ad_300x250">
+  <div class="plantable">
+    <p class="title">Choose Your Plan</p>
+    <ul>
+            	      	<li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="90" data-pid="17">Try Now</a>
+          <div class="plan_price">
+            <p><span>1 Day&nbsp;</span>$0.99*</p><p>
+            </p><p class="note special">Risk FREE Trial</p>
+          </div>
+        </li>
+                <li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="92" data-pid="17">Buy Now</a>
+          <div class="plan_price">
+            <p><span>30 Days&nbsp;</span>$12.99*</p>
+            <p class="note">Just $0.43 per day</p>
+          </div>
+        </li>
+                <li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="96" data-pid="17">Buy Now</a>
+          <div class="plan_price">
+            <p><span>60 Days&nbsp;</span>$22.99*</p>
+            <p class="note">Just $0.38 per day</p>
+          </div>
+        </li>
+        <li>
+          <a href="javascript:void(0);" class="btn_premiumBoxCampaign" data-cid="98" data-pid="17">Buy Now</a>
+          <div class="plan_price">
+            <p><span>90 Days&nbsp;</span>$29.99*</p>
+            <p class="note">Just $0.33 per day</p>
+          </div>
+        </li>
+          </ul>
+          <p class="payment">Prices in USD</p>
+      </div>
+</div>
+<form id="premiumBoxCampaign" method="post" action="/payment.php" style="display:none;">
+    <input type="hidden" name="c">
+    <input type="hidden" name="p">
+</form></li>
+    </ul>
+  </div>
+	<div id="right_content"></div>
+  <div class="clear"></div>
+
+</div>
+            <div class="shareFull">
+        <div class="sharebox">
+          <div class="shareicons"><span><!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_default_style " style="width:145px">
+  <a class="addthis_button_preferred_1"></a>
+  <a class="addthis_button_preferred_2"></a>
+  <a class="addthis_button_preferred_3"></a>
+  <a class="addthis_button_preferred_4"></a>
+  <a class="addthis_button_compact"></a>
+  <a class="addthis_counter addthis_bubble_style"></a>
+</div>
+
+  <script type="text/javascript">var addthis_config = {"data_track_addressbar":false};</script>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-52df668d29b7d090"></script>
+
+<!-- AddThis Button END --></span>Share this page with your friends now!</div>
+        </div>
+        <ul id="d_clip_container">
+          <li><span>Text link</span><span class="btn_copy d_clip_button" data-url="http://www.uploadable.ch/file/SwkwFPd7scRC/123.pdf" data-tag="url_text"><a>Copy</a></span><input id="url_text" type="text" class="input_txt" value="http://www.uploadable.ch/file/SwkwFPd7scRC/123.pdf"></li>
+          <li><span>Forum (BBCode)</span><span class="btn_copy d_clip_button" data-url="[url=http://www.uploadable.ch/file/SwkwFPd7scRC/123.pdf][b]File name: 123.pdf File size: 4.21 MB[/b][/url]" data-tag="url_forum"><a>Copy</a></span><input id="url_forum" type="text" class="input_txt" value="[url=http://www.uploadable.ch/file/SwkwFPd7scRC/123.pdf][b]File name: 123.pdf File size: 4.21 MB[/b][/url]"></li>
+          <li><span>Website (HTML)</span><span class="btn_copy d_clip_button" data-url="&lt;a href='http://www.uploadable.ch/file/SwkwFPd7scRC/123.pdf'&gt;&lt;b&gt;File name: 123.pdf&lt;br/&gt;File size: 4.21 MB&lt;br/&gt;&lt;/b&gt;&lt;/a&gt;" data-tag="url_web"><a>Copy</a></span><input id="url_web" type="text" class="input_txt" value="&lt;a href='http://www.uploadable.ch/file/SwkwFPd7scRC/123.pdf'&gt;&lt;b&gt;File name: 123.pdf&lt;br/&gt;File size: 4.21 MB&lt;br/&gt;&lt;/b&gt;&lt;/a&gt;"></li>                          
+        </ul>
+      </div>
+      <div id="adn-below-article"></div>
+      
+         <script type="text/javascript">
+         window._adn = window._adn || [];
+         _adn.push({mode:'thumbs-4r', container:'adn-below-article', placement:'below-article', target_type:'mix'});
+         </script>
+      
+    </div>
+  <div class="clear"></div>
+  <div class="fix_foot_box">&nbsp;</div>
+</div>
+<form id="premiumForm" action="/file/SwkwFPd7scRC" method="post">
+    <input type="hidden" name="download" value="premium">
+</form>
+<form id="regularForm" action="/file/SwkwFPd7scRC" method="post">
+    <input type="hidden" name="download" value="normal">
+</form>
+<div class="footer makemoneyfoot">
+<script type="text/javascript">
+		
+	$(function(){
+		var text;
+		var timestamp;
+		var origin;
+		
+		getServerTime();
+	
+		function getServerTime()
+		{	
+			$.ajax({
+    			async: false,
+    			url: "/now.php",
+    			type: "GET",
+    			dataType: "json",
+			    success: function(json){
+					text=json.text;
+					timestamp=(new Date(text)).getTime();
+					origin=(new Date()).getTime();
+					displayTime();
+				}
+			});		
+		}
+		
+		function pad2(number)
+		{   
+	     	return (number<10?"0":"")+number;
+	   	}
+		
+		function checkTime()
+		{
+			var date=new Date();
+						
+			if(date.getTime()-origin >= 900000)
+				return true;
+			else
+				return false;
+		}		
+		
+		function updateTime()
+		{
+			var week=new Array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
+			var month=["January","February","March","April","May","June","July","August","September","October","November","December" ];			
+			var d=new Date();
+			var timeDiff=d.getTime()-origin;
+			d=new Date(timestamp+timeDiff);
+			text=week[d.getDay()]+", "+pad2(d.getDate())+" "+month[d.getMonth()]+" "+d.getFullYear()+", "+pad2(d.getHours())+":"+pad2(d.getMinutes())+":"+pad2(d.getSeconds());			
+		}		
+		
+		function displayTime()
+		{
+			$('#servertime').html(text+" GMT");
+			setTimeout(refreshClock,1000);
+		}	
+		
+		function refreshClock()
+		{				
+			updateTime();
+			if(checkTime())
+			{
+				getServerTime();
+			}
+			else
+			{				
+				displayTime();
+			}		
+		}
+	});
+
+</script>
+	<div class="optimize">
+    <a href="/registration.php">Registration</a>		<a href="/premium.php">Uploadable Premium</a>
+	
+		<a href="http://reseller.uploadable.ch" target="_blank">Reseller</a>
+
+                <a href="/check.php">Check Links</a>
+		<a href="/sitemap.php">Site Map</a>
+		<a href="/dmca.php">DMCA</a>
+		<a href="/terms.php">Terms &amp; Conditions</a>
+		<a href="/privacypolicy.php">Privacy Policy</a>
+                <a href="/support.php">Support</a>
+	</div>
+    <span class="copyright">© 2014 Uploadable, All Rights Reserved</span>
+    <span class="serverTime">Server Time: <span id="servertime"></span></span>
+</div>
+<!-- tracker_script -->
+
+  <script type="text/javascript">
+    window._adn = window._adn || [];
+    _adn.push({flush:true});
+  </script>
+
+</div>
+
+
+<!-- DL1 -->
+<!--  -->
+</body></html>
+

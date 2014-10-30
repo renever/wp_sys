@@ -1,5 +1,5 @@
 import scrapy
-from scrapy.selector
+
 
 class DmozSpider(scrapy.Spider):
 	name = "dmoz"
