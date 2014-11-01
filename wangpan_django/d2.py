@@ -2,6 +2,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait  # available since 2.4.0
 from selenium.webdriver.support import expected_conditions as EC  # available since 2.26.0
 import time
@@ -26,52 +27,48 @@ ffprofile = webdriver.FirefoxProfile("/home/l/.mozilla/firefox/mwad0hks.default"
 # ffprofile.set_preference("plugin.scan.Acrobat", "99.0")
 
 driver = webdriver.Firefox(ffprofile)
-
 # driver = webdriver.Chrome()
 
 # go to the google home page
-driver.get(url_login)
 
+driver.get("http://www.baidu.com")
 # the page is ajaxy so the title is originally this:
 print driver.title
 
 # find the element that's name attribute is q (the google search box)
-inputElement_userName = driver.find_element_by_name("userName")
-inputElement_userPassword = driver.find_element_by_name("userPassword")
-inputElement_userName.clear()
-inputElement_userPassword.clear()
+inputElement_kw = driver.find_element_by_id("kw")
+# inputElement_userPassword = driver.find_element_by_name("userPassword")
+inputElement_kw.clear()
+# inputElement_userPassword.clear()
 # type in the search
-inputElement_userName.send_keys('lxl001')
-inputElement_userPassword.send_keys('qQ2@wW')
+inputElement_kw.send_keys('qq')
+# inputElement_userPassword.send_keys('qQ2@wW')
 
-btn_login = driver.find_element_by_id("loginFormSubmit")
-btn_login.click()
-
-
-WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "dashboard_button")))
-driver.get(url_download)
-# a = driver.switch_to.alert
-# a.accept()
-
-current_window_handle = driver.current_window_handle
-new_window_handle = driver.window_handles
-for handle in new_window_handle:
-	print "old:",current_window_handle
-	print 'new:',handle
-	if current_window_handle !=handle:
-		driver.switch_to.window(handle)
-		print "切换成功"
-# driver.implicitly_wait(5)
+btn_search = driver.find_element_by_id("su")
 
 
-# if True:
-# 	for i in range(0,3):
-# 		driver.get(url_download)
+btn_search.click()
+driver.get("http://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=98765000_hao_pg&wd=qq&rsv_enter=0&rsv_sug3=1&rsv_sug4=59&rsv_sug1=1&inputT=10283")
+
+try:
+	WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "c-gap-left-small")))
+	print "开始找按钮--普通下载"
+	btn_down = driver.find_element_by_link_text(u'普通下载')
+	btn_down.click()
+	# a = driver.switch_to.alert
+	# a.accept()
+	time.sleep(5)
+
+
+except Exception, e:
+	print "错了！"
+	print e
 
 print "...."
 print '2'
 print '3'
 print '4'
+time.sleep(20)
 # except:
 # print "没有找到登录按钮"
 # 	driver.quit()

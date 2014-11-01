@@ -10,7 +10,7 @@ url_login = 'http://www.uploadable.ch/login.php'
 url_download = 'http://www.uploadable.ch/file/SwkwFPd7scRC/123.pdf'
 
 # ffprofile = webdriver.FirefoxProfile("/home/lotaku/.mozilla/firefox/mwad0hks.default")
-ffprofile = webdriver.FirefoxProfile("/home/l/.mozilla/firefox/mwad0hks.default")
+
 # ffprofile = webdriver.FirefoxProfile()
 # ffprofile.set_preference("browser.download.folderList",2)
 # # Create a new instance of the Firefox driver
@@ -25,7 +25,7 @@ ffprofile = webdriver.FirefoxProfile("/home/l/.mozilla/firefox/mwad0hks.default"
 # ffprofile.set_preference("plugin.scan.plid.all",False)
 # ffprofile.set_preference("plugin.scan.Acrobat", "99.0")
 
-driver = webdriver.Firefox(ffprofile)
+driver = webdriver.Chrome()
 
 # driver = webdriver.Chrome()
 
@@ -47,26 +47,20 @@ inputElement_userPassword.send_keys('qQ2@wW')
 btn_login = driver.find_element_by_id("loginFormSubmit")
 btn_login.click()
 
-
-WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "dashboard_button")))
-driver.get(url_download)
-# a = driver.switch_to.alert
-# a.accept()
-
-current_window_handle = driver.current_window_handle
-new_window_handle = driver.window_handles
-for handle in new_window_handle:
-	print "old:",current_window_handle
-	print 'new:',handle
-	if current_window_handle !=handle:
-		driver.switch_to.window(handle)
-		print "切换成功"
-# driver.implicitly_wait(5)
+try:
+	WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "dashboard_button")))
+	driver.get(url_download)
+	# a = driver.switch_to.alert
+	# a.accept()
 
 
-# if True:
-# 	for i in range(0,3):
-# 		driver.get(url_download)
+
+	driver.implicitly_wait(5)
+	l = driver.window_handles
+	print l
+
+except Exception, e:
+	print e
 
 print "...."
 print '2'
