@@ -13,14 +13,7 @@ def create_session(engine, base):
 
 session = create_session(ENGING, BASE)
 
-# url = Url(url='http://www.baidu.com')
-#
-# session.add(url)
-# try:
-# 	session.commit()
-# except exc.IntegrityError, e :
-# 	print "捕获异常： "+e.message
 
 article_urls = spider.filmav_grab_article_url()
 
-spider.filmav_save_article_url(article_urls=article_urls,session=session,Url=Url)
+spider.filmav_save_article_url(article_urls=article_urls,session=session,model_url=Url)

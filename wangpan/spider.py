@@ -32,10 +32,10 @@ def filmav_grab_article_url(website_index="http://filmav.com/"):
 	return article_urls
 
 
-def filmav_save_article_url(article_urls,session,Url):
+def filmav_save_article_url(article_urls,session,model_url):
 	website = 'filmav.com'
 	for url in article_urls:
-		url_instance = Url(url=url,website=website)
+		url_instance = model_url(url=url,website=website)
 		session.add(url_instance)
 		try:
 			session.commit()

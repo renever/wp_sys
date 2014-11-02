@@ -37,8 +37,8 @@ class Article(Base):
 	website = Column(String(255))
 	url = Column(String(255))
 	title = Column(String(255))
-	waite_download_list = Column(String(255))
-	compelet_download_list = Column(String(255))
+	old_download_links = Column(String(255))
+	new_download_links = Column(String(255))
 	is_posted = Column(Boolean, default=False)
 	# many to many Article<->Tag
 	tags = relationship('Tag', secondary=article_tags, backref='articles')
@@ -49,10 +49,10 @@ class Tag(Base):
 	__tablename__ = 'tags'
 
 	id = Column(Integer, primary_key=True)
-	tag = Column(String(50), nullable=False, unique=True)
+	name = Column(String(50), nullable=False, unique=True)
 
-	def __init__(self, Tag):
-		self.keyword = Tag
+	def __init__(self, name):
+		self.name = name
 
 class DownloadRecord(Base):
 	__tablename__ = 'downloadrecoders'
