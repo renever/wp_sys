@@ -14,7 +14,7 @@ post.terms_names = {
   'post_tag': ['test', 'firstpost'],
   'category': ['Introductions', 'Tests']
 }
-post.
+
 # a = wp.call(NewPost(post))
 print "xx"
 # print a

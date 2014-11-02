@@ -4,7 +4,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait  # available since 2.4.0
 from selenium.webdriver.support import expected_conditions as EC  # available since 2.26.0
-
+import time
 url_login = 'http://www.uploadable.ch/login.php'
 url_download = 'http://www.uploadable.ch/file/SwkwFPd7scRC/123.pdf'
 
@@ -31,3 +31,7 @@ btn_login.click()
 
 WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "dashboard_button")))
 driver.get(url_download)
+time.sleep(3)
+driver.get(url_download)
+time.sleep(3)
+driver.quit()
