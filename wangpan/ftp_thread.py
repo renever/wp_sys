@@ -7,7 +7,8 @@ from multiprocessing import Pool
 from multiprocessing.dummy import Pool as ThreadPool
 import time
 class MyFtp():
-	def __init__(self,host,user,password,port=21,blocksize=8192):
+
+	def __init__(self,host='ftp.uploadable.ch',user='lxl001',password='f19174de',port=21,blocksize=8192):
 		self.host = host
 		self.user = user
 		self.password = password
@@ -17,6 +18,7 @@ class MyFtp():
 
 	def login(self):
 		self.ftp.login(user=self.user, passwd=self.password)
+
 
 	def handle(self):
 
@@ -47,12 +49,13 @@ class MyFtp():
 		# 	sizeWritten += blocksize
 		# 	result = sizeWritten / file_total_size * 100
 		# 	print "%0.3f percent complete" % result
-
+		new_ftp = MyFtp()
+		new_ftp.login()
 
 		file_name = os.path.basename(full_path_file_name)
 		with open(full_path_file_name,'rb') as f:
 			try:
-				myFtp.ftp.storbinary('STOR ' + file_name,
+				new_ftp.ftp.storbinary('STOR ' + file_name,
 						   f,
 						   self.blocksize,
 						   self.callback_handle(file_name))
@@ -95,16 +98,14 @@ ftp_password = 'f19174de'
 if __name__ == '__main__':
 	full_path_file_name_list = get_all_file_path(BASE_FILE_DIR)
 
-	myFtp = MyFtp(host=ftp_host,user=ftp_user,password=ftp_password)
+	myFtp = MyFtp()
 	myFtp.login()
 
-	# myFtp.upload(full_path_file_name_list)
 
-	pool = ThreadPool(1)
-	# Open the urls in their own threads
-	# and return the results
-	# for full_path_file_name in full_path_file_name_list:
+	pool = ThreadPool(9)
+
 	results = pool.map(myFtp.upload, full_path_file_name_list)
-	#close the pool and wait for the work to finish
+
 	pool.close()
 	pool.join()
+
