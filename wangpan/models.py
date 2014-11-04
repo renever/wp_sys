@@ -8,11 +8,13 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import exc
 
-engine = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8",
-					   echo=True)  # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
-Base = declarative_base()  # 生成了declarative基类, 以后的model继承此类
+from settings import DB_ENGINE, DB_BASE
 
-class Url(Base):
+# engine = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8",
+# 					   echo=True)  # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
+# Base = declarative_base()  # 生成了declarative基类, 以后的model继承此类
+
+class Url(DB_BASE):
 	__tablename__ = 'urls'
 	id = Column(Integer,Sequence('url_id_seq'), primary_key=True)
 	url = Column(String(255), unique=True)
@@ -26,12 +28,12 @@ class Url(Base):
 
 
 
-article_tags = Table('article_tags', Base.metadata,
+article_tags = Table('article_tags', DB_BASE.metadata,
 					  Column('article_id', Integer, ForeignKey('articles.id')),
 					  Column('tag_id', Integer, ForeignKey('tags.id'))
 )
 
-class Article(Base):
+class Article(DB_BASE):
 	__tablename__ = 'articles'
 	id = Column(Integer, primary_key=True)
 	website = Column(String(255))
@@ -45,7 +47,7 @@ class Article(Base):
 
 	# title = Column(String(255))
 
-class Tag(Base):
+class Tag(DB_BASE):
 	__tablename__ = 'tags'
 
 	id = Column(Integer, primary_key=True)
@@ -54,10 +56,10 @@ class Tag(Base):
 	def __init__(self, name):
 		self.name = name
 
-class DownloadRecord(Base):
+class DownloadRecord(DB_BASE):
 	__tablename__ = 'downloadrecoders'
 
 	id = Column(Integer, primary_key=True)
 
-Base.metadata.create_all(engine)
+DB_BASE.metadata.create_all(DB_ENGINE)
 

@@ -103,7 +103,7 @@ if __name__ == '__main__':
 	myFtp.login()
 
 
-	pool = ThreadPool(20)
+	pool = ThreadPool(10)
 
 	results = pool.map(myFtp.upload, full_path_file_name_list)
 
