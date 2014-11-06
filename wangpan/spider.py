@@ -32,7 +32,8 @@ def filmav_grab_article_url(website_index="http://filmav.com/"):
 
 	return article_urls
 
-def filmav_grab_article_body(url='http://filmav.com/52661.html'):
+# def filmav_grab_article_body(url='http://filmav.com/52707.html'):
+def filmav_grab_article_body(url='http://filmav.com/52686.html'):
 	headers={
 		'Host': 'filmav.com',
 		'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0',
@@ -51,17 +52,40 @@ def filmav_grab_article_body(url='http://filmav.com/52661.html'):
 
 	h = pq(r.text)
 	body = h('.entry')
-	# article_urls_htmlelements = h('.more-link')
-	# article_urls=[]
-	# for url in article_urls_htmlelements:
-	# 	u = url.attrib['href'].split("#")[0]
-	# 	article_urls.append(u)
-	# print unicode(body)
+	#匹配中文，记得要进行编码
+	str1 =str(unicode(body).encode('utf-8'))
+	# print str1
 
-	# a = re.compile(r'(?P<body>.*)<strong><span id="more-52661">\$')
-	a = re.compile(r'(?P<body>.*)',re.MULTILINE)
-	m = a.findall(unicode(body))
+	#抓取主体
+	newbody = re.split('<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br />',str1)
+	newbody = newbody[0][:-53]
 
+	#抓取tag,使用非贪婪模式
+	tags_re_str = r'tag/.*?>(.*?)</a>'
+	tags_re = re.compile(tags_re_str)
+	tags = re.findall(tags_re, str1)
+	# for tag in tags:
+	# 	print tag
+
+	#抓取old_download_links
+	links_re_str = r'(http://www.uploadable.ch/file/.*?)["<]'
+	links_re = re.compile(links_re_str)
+	links = re.findall(links_re, str1)
+	for link in links:
+		print "old download links:",link
+
+
+	#抓取文件名
+	file_name_re_strs  = [r'>(.*?).part\d.rar',r'/?([\d\w]*[-]*[\w\d]*)\.wmv']
+	for file_name_re_str in file_name_re_strs:
+		file_name_re = re.compile(file_name_re_str)
+		file_names = re.findall(file_name_re, str1)
+		if len(file_names) == 0:
+			continue
+		for file_name in file_names:
+			print "file_name: ",file_name
+
+		break
 
 
 
