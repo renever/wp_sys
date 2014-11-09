@@ -3,6 +3,56 @@ import re
 import requests
 from pyquery import PyQuery as pq
 from sqlalchemy import exc
+import logging
+import logging.config
+
+logging.config.fileConfig("/home/l/app/learning/wangpan/logging.conf")
+logger = logging.getLogger("wp")
+
+class Filmav_Grab():
+
+	def __init__(self):
+		self.headers = {
+			'Host': 'filmav.com',
+			'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0',
+			'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+			'Accept-Language': 'zh-cn,en;q=0.7,en-us;q=0.3',
+			'Accept-Encoding': 'gzip, deflate',
+			'Connection': 'keep-alive',
+			}
+		self.requests = requests
+		self.r = '' # 用于保存抓取网页的Response
+
+
+	def get(self,url):
+		try:
+			self.r = self.requests.get(url,headers = self.headers)
+			logging.debug('获取网页成功')
+
+		except:
+			logging.debug('获取网页失败')
+
+	def get_image(self,url):
+		self.get(url=url)
+		if self.r.status_code is not 200:
+			logging.debug('获取网页失败，无法进一步抓取图片')
+			return
+		whole_html = pq(self.r.text)
+		body = whole_html('.entry')
+		body_str =str(unicode(body).encode('utf-8'))
+		# src="http://img58.imagetwist.com/th/07136/5d5ks9fozzp8.jpg
+
+		#抓取所有图片,使用非贪婪模式
+		images_re_str = r'(?P<images>http://img[\d]{0,3}.imagetwist.com/.*?.jpg)'
+		images_re = re.compile(images_re_str)
+		images = re.findall(images_re, body_str)
+		for image in images:
+			print "images links:",image
+			#todo 以上获得所有小图，th 字眼在链接里，替换i，获得大图，下载图片失败，将jpg换成jpeg
+
+
+
+
 
 
 def filmav_grab_article_url(website_index="http://filmav.com/"):
@@ -88,6 +138,29 @@ def filmav_grab_article_body(url='http://filmav.com/52686.html'):
 		break
 
 
+def filmav_grab_article_image(url='http://filmav.com/53026.html'):
+	headers={
+		'Host': 'filmav.com',
+		'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0',
+		'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+		'Accept-Language': 'zh-cn,en;q=0.7,en-us;q=0.3',
+		'Accept-Encoding': 'gzip, deflate',
+		'Connection': 'keep-alive',
+	}
+
+	r = requests.get(url=url, headers=headers)
+
+	if r.status_code is not 200:
+		s = "首页抓取不是200,返回状态码：" + str(r.status_code)
+		print s
+		return s
+
+	h = pq(r.text)
+	body = h('.entry')
+	#匹配中文，记得要进行编码
+	str1 =str(unicode(body).encode('utf-8'))
+
+
 
 
 
@@ -104,6 +177,9 @@ def filmav_save_article_url(article_urls,session,model_url):
 
 
 if __name__ == '__main__':
-	filmav_grab_article_body()
+	filmav_grab = Filmav_Grab()
+	# filmav_grab.get(url='http://filmav.com/53049.html')
+	filmav_grab.get_image(url='http://filmav.com/52792.html')
+
 
 
