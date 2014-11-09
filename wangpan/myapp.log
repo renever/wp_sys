@@ -1,0 +1,10 @@
+Sun, 09 Nov 2014 23:01:53 spider.py[line:31] DEBUG 获取网页失败
+Sun, 09 Nov 2014 23:01:59 spider.py[line:28] DEBUG 获取网页成功
+Sun, 09 Nov 2014 23:05:16 spider.py[line:32] DEBUG 获取网页失败
+Sun, 09 Nov 2014 23:05:29 spider.py[line:29] DEBUG 获取网页成功
+Mon, 10 Nov 2014 00:36:23 spider.py[line:30] DEBUG 获取网页成功
+Mon, 10 Nov 2014 00:37:18 spider.py[line:30] DEBUG 获取网页成功
+Mon, 10 Nov 2014 00:37:56 spider.py[line:30] DEBUG 获取网页成功
+Mon, 10 Nov 2014 00:38:54 spider.py[line:30] DEBUG 获取网页成功
+Mon, 10 Nov 2014 00:40:19 spider.py[line:30] DEBUG 获取网页成功
+Mon, 10 Nov 2014 00:41:30 spider.py[line:30] DEBUG 获取网页成功
