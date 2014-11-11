@@ -5,6 +5,10 @@ from pyquery import PyQuery as pq
 from sqlalchemy import exc
 import logging
 import logging.config
+from contextlib import closing
+from settings import CHUNK_SIZE,IMG_PATH
+
+import os
 
 logging.config.fileConfig("/home/l/app/learning/wangpan/logging.conf")
 logger = logging.getLogger("wp")
@@ -29,8 +33,9 @@ class Filmav_Grab():
 			self.r = self.requests.get(url,headers = self.headers)
 			logging.debug('获取网页成功')
 
-		except:
-			logging.debug('获取网页失败')
+		except Exception ,e:
+			Mes = '获取网页失败，原因：%s' % e
+			logging.debug(Mes)
 
 	def get_image(self,url):
 		self.get(url=url)
@@ -47,8 +52,40 @@ class Filmav_Grab():
 		images_re = re.compile(images_re_str)
 		images = re.findall(images_re, body_str)
 		for image in images:
-			print "images links:",image
+			# print "images links:",image
 			#todo 以上获得所有小图，th 字眼在链接里，替换i，获得大图，下载图片失败，将jpg换成jpeg
+			self.save_image(url=image)
+	def save_image(self,url):
+		img_filename = url.split('/')[-1]
+		try:
+			with closing(requests.get(url, stream=True)) as img:
+
+				if img.status_code == 200:
+					logging.debug('抓取图片成功，开始下载...')
+				else:
+					Mes = "抓取图片失败，原因：%s " % img.status_code
+					logging.debug(Mes)
+					return
+
+				file_total_size = img.headers.get('content-length')
+				img_new_path = os.path.join(IMG_PATH,img_filename)
+				#todo 判断图片是否存在。存在，则名字加上时间戳
+				with open(img_new_path, 'wb') as f:
+					for counter,chunk in enumerate(img.iter_content(chunk_size=CHUNK_SIZE)):
+						if chunk:  # filter out keep-alive new chunks
+							f.write(chunk)
+							f.flush()
+							percent_completeness = 100*counter*CHUNK_SIZE/int(file_total_size)
+							Mes =  '{0}% 已下载 --（图片名：{1})'.format(percent_completeness,img_filename)
+							logging.debug(Mes)
+						else:
+							Mes =  '100% 已下载 --（图片名：{1})'.format(img_filename)
+							logging.debug(Mes)
+
+		except Exception ,e:
+			Mes = "抓取图片失败，原因：%s " % e
+			logging.debug(Mes)
+
 
 
 

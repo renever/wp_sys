@@ -31,15 +31,15 @@ def download_file(url, r):
 
         if a.status_code == 200:
             print 'oK'
-        # i = 0
-        # with open(local_filename, 'wb') as f:
-        #     # for chunk in a.iter_content(chunk_size=1024):
-        #     for chunk in a.iter_content(1024):
-        #         if chunk:  # filter out keep-alive new chunks
-        #             f.write(chunk)
-        #             f.flush()
-        #             i += 1
-        #             print i
+        i = 0
+        with open(local_filename, 'wb') as f:
+            # for chunk in a.iter_content(chunk_size=1024):
+            for chunk in a.iter_content(1024):
+                if chunk:  # filter out keep-alive new chunks
+                    f.write(chunk)
+                    f.flush()
+                    i += 1
+                    print i
     print "end"
     # return local_filename
 
