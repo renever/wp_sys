@@ -54,6 +54,7 @@ class Filmav_Grab():
 		for image in images:
 			# print "images links:",image
 			#todo 以上获得所有小图，th 字眼在链接里，替换i，获得大图，下载图片失败，将jpg换成jpeg
+			#todo 如果替换th为i，图片存在，则--》原图是文章的“大图”，如果替换后，找不到图片，则原图是“小图”，jpg替换成jpeg，可以找到小图的大图
 			self.save_image(url=image)
 	def save_image(self,url):
 		img_filename = url.split('/')[-1]
@@ -83,7 +84,7 @@ class Filmav_Grab():
 							logging.debug(Mes)
 
 		except Exception ,e:
-			Mes = "抓取图片失败，原因：%s " % e
+			Mes = "下载图片失败，原因：%s " % e
 			logging.debug(Mes)
 
 
@@ -208,8 +209,12 @@ def filmav_save_article_url(article_urls,session,model_url):
 		session.add(url_instance)
 		try:
 			session.commit()
+			Msg =  "已保存文件链接： "+url
+			logging.debug(Msg)
 		except exc.IntegrityError, e :
-			print "捕获异常(链接已经存在）： "+e.message
+			Msg =  "捕获异常(链接已经存在）： "+e.message
+			logging.debug(Msg)
+
 			session.close()
 
 

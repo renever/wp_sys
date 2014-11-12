@@ -10,6 +10,9 @@ from sqlalchemy import exc
 
 from settings import DB_ENGINE, DB_BASE
 
+
+
+
 class CommonForum(DB_BASE):
 	__abstract__  = True
 
@@ -39,8 +42,8 @@ class CommonLink(DB_BASE):
 		self.website = website
 
 
-class ArticleLink(CommonLink):
-	__tablename__ = 'article_links'
+class FileLink(CommonLink):
+	__tablename__ = 'file_links'
 
 	id = Column(Integer, primary_key=True, autoincrement=True)
 	have_crawled = Column(Boolean, default=False)
@@ -77,9 +80,9 @@ class Article(DB_BASE):
 
 	tags = relationship('Tag', secondary=article_tag, backref='articles')
 
-	article_link_id = Column(Integer, ForeignKey('article_links.id'))
-	article_link = relationship(ArticleLink, backref=backref('article_link', order_by=id))
-
+	file_link_id = Column(Integer, ForeignKey('file_links.id'))
+	file_link = relationship(FileLink, backref=backref('file_link', order_by=id))
+	#images 已经在定义在Images 类一对多。
 
 
 class Tag(DB_BASE):
@@ -109,6 +112,15 @@ class NewDownloadLink(CommonLink):
 	article_id = Column(Integer, ForeignKey('articles.id'))
 	article = relationship(Article, backref=backref('new_download_links', order_by=id))
 
+class Image(DB_BASE):
+	__tablename__ = 'images'
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	name = Column(String(255))
+	small_path = Column(String(255)) #小图路径
+	big_path = Column(String(255)) #大图路径
+	article_id = Column(Integer, ForeignKey('articles.id'))
+	article = relationship(Article, backref=backref('images', order_by=id))
+	img_type =  Column(String(255)) # 'main'-->文章主图，'normal' -->文章普通图片
 
 if __name__ == '__main__':
 	DB_BASE.metadata.create_all(DB_ENGINE)

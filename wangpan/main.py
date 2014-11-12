@@ -2,15 +2,9 @@
 from settings import DB_ENGINE, DB_BASE
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
-from models import ArticleLink
+from models import FileLink
 import spider
-
-
-def create_session(engine, base):
-    Session = sessionmaker(bind=engine)  # 创建一个Session类
-    session = Session()  # 生成一个Session实例
-
-    return session
+from utility import create_session
 
 
 if __name__ == '__main__':
@@ -18,4 +12,4 @@ if __name__ == '__main__':
 
     article_urls = spider.filmav_grab_article_url()
 
-    spider.filmav_save_article_url(article_urls=article_urls, session=session, model_url=ArticleLink)
+    spider.filmav_save_article_url(article_urls=article_urls, session=session, model_url=FileLink)
