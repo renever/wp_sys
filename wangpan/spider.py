@@ -34,8 +34,8 @@ class Filmav_Grab():
 			logging.debug('获取网页成功')
 
 		except Exception ,e:
-			Mes = '获取网页失败，原因：%s' % e
-			logging.debug(Mes)
+			Msg = '获取网页失败，原因：%s' % e
+			logging.debug(Msg)
 
 	def get_image(self,url):
 		self.get(url=url)
@@ -48,24 +48,49 @@ class Filmav_Grab():
 		# src="http://img58.imagetwist.com/th/07136/5d5ks9fozzp8.jpg
 
 		#抓取所有图片,使用非贪婪模式
-		images_re_str = r'(?P<images>http://img[\d]{0,3}.imagetwist.com/.*?.jpg)'
-		images_re = re.compile(images_re_str)
-		images = re.findall(images_re, body_str)
-		for image in images:
+		small_img_re_str = r'(?P<images>http://img[\d]{0,3}.imagetwist.com/.*?.jpg)'
+		small_img_re = re.compile(small_img_re_str)
+		small_imgs = re.findall(small_img_re, body_str)
+		for small_img in small_imgs:
+
+			path = '' # small_path--> 图片存于small_path, 图片存于big_path-->图片存于big_path
+
+			# #th替换成i
+			# big_img_re_str = r'/th/'
+			# big_img_re =re.compile(big_img_re_str)
+			# big_img = re.sub(big_img_re,'/i/',small_img)
+			#
+			# response = requests.get(big_img)
+			# if response.headers['content-length'] == 8183: #一张错误图片，则原图是normal图片
+			# 	img_type = 'normal'
+			# 	#替换成i
+			# 	big_img_re_str = r'jpg$'
+			# 	big_img_re =re.compile(big_img_re_str)
+			# 	big_img = re.sub(big_img_re,'jpeg',small_img)
+			big_img, img_type = self.get_big_img_and_type(small_img=small_img)
+			#保存 small_path 图片
+			self.save_image(url=small_img, img_type=img_type, path='small_path')
+			self.save_image(url=big_img, img_type=img_type, path='big_path')
+
 			# print "images links:",image
 			#todo 以上获得所有小图，th 字眼在链接里，替换i，获得大图，下载图片失败，将jpg换成jpeg
 			#todo 如果替换th为i，图片存在，则--》原图是文章的“大图”，如果替换后，找不到图片，则原图是“小图”，jpg替换成jpeg，可以找到小图的大图
-			self.save_image(url=image)
-	def save_image(self,url):
+
+			# self.save_image(url=image, img_type=img_type, size=size)
+	def save_image(self,url,img_type='normal',path='small_path'):
 		img_filename = url.split('/')[-1]
+		img_filename = path + '_' + img_filename #区分大小图
 		try:
 			with closing(requests.get(url, stream=True)) as img:
 
 				if img.status_code == 200:
-					logging.debug('抓取图片成功，开始下载...')
+					Msg = '抓取图片成功，开始下载...'
+					print Msg
+					logging.debug(Msg)
 				else:
-					Mes = "抓取图片失败，原因：%s " % img.status_code
-					logging.debug(Mes)
+					Msg = "抓取图片失败，原因：%s " % img.status_code
+					print Msg
+					logging.debug(Msg)
 					return
 
 				file_total_size = img.headers.get('content-length')
@@ -77,17 +102,37 @@ class Filmav_Grab():
 							f.write(chunk)
 							f.flush()
 							percent_completeness = 100*counter*CHUNK_SIZE/int(file_total_size)
-							Mes =  '{0}% 已下载 --（图片名：{1})'.format(percent_completeness,img_filename)
-							logging.debug(Mes)
+							Msg =  '{0}% 已下载 --（图片名：{1})'.format(percent_completeness,img_filename)
+							print Msg
+							logging.debug(Msg)
 						else:
-							Mes =  '100% 已下载 --（图片名：{1})'.format(img_filename)
-							logging.debug(Mes)
+							Msg =  '100% 已下载 --（图片名：{1})'.format(img_filename)
+							print Msg
+							logging.debug(Msg)
 
 		except Exception ,e:
-			Mes = "下载图片失败，原因：%s " % e
-			logging.debug(Mes)
+			Msg = "下载图片失败，原因：%s " % e
+			print Msg
+			logging.debug(Msg)
 
+	def get_big_img_and_type(self, small_img):
+		"""返回大图地址，已经原图类型（main，normal）"""
+		img_type = 'main' #默认设定原图是主图
+		#th替换成i
+		big_img_re_str = r'/th/'
+		big_img_re =re.compile(big_img_re_str)
+		big_img = re.sub(big_img_re,'/i/',small_img)
 
+		response = requests.get(big_img)
+		print response.headers['content-length']
+		if int(response.headers['content-length']) == 8183: #一张错误图片，则原图是normal图片
+			img_type = 'normal'
+			#替换成i
+			big_img_re_str = r'jpg$'
+			big_img_re =re.compile(big_img_re_str)
+			big_img = re.sub(big_img_re,'jpeg',big_img)
+			print big_img
+		return (big_img, img_type)
 
 
 
@@ -167,10 +212,10 @@ def filmav_grab_article_body(url='http://filmav.com/52686.html'):
 	file_name_re_strs  = [r'>(.*?).part\d.rar',r'/?([\d\w]*[-]*[\w\d]*)\.wmv']
 	for file_name_re_str in file_name_re_strs:
 		file_name_re = re.compile(file_name_re_str)
-		file_names = re.findall(file_name_re, str1)
-		if len(file_names) == 0:
+		file_naMsg = re.findall(file_name_re, str1)
+		if len(file_naMsg) == 0:
 			continue
-		for file_name in file_names:
+		for file_name in file_naMsg:
 			print "file_name: ",file_name
 
 		break
@@ -212,7 +257,7 @@ def filmav_save_article_url(article_urls,session,model_url):
 			Msg =  "已保存文件链接： "+url
 			logging.debug(Msg)
 		except exc.IntegrityError, e :
-			Msg =  "捕获异常(链接已经存在）： "+e.message
+			Msg =  "捕获异常(链接已经存在）： "+e.Msgsage
 			logging.debug(Msg)
 
 			session.close()
