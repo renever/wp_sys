@@ -104,7 +104,7 @@ class StatusHandler(tornado.web.RequestHandler):
         使用self.async_callback包住回调函数以确保回调函数中引发的异常不会使RequestHandler关闭连接
         """
         # 注册到 shoppingCart
-        self.application.shoppingCart.register(self.async_callback(self.on_message))
+        self.application.shoppingCart.register((self.on_message))
 
     def on_message(self, count):
         """
