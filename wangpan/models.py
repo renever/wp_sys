@@ -83,6 +83,8 @@ class Article(DB_BASE):
 	file_link_id = Column(Integer, ForeignKey('file_links.id'))
 	file_link = relationship(FileLink, backref=backref('file_link', order_by=id))
 	#images 已经在定义在Images 类一对多。
+	#OldDownloadLink 一对多
+	#NewDownloadLink 一对多
 
 
 class Tag(DB_BASE):

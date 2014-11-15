@@ -1,441 +1,104 @@
-Fri, 14 Nov 2014 00:13:28 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:13:31 spider.py[line:86] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:13:31 spider.py[line:102] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:32 spider.py[line:102] DEBUG 13% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:32 spider.py[line:102] DEBUG 26% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:32 spider.py[line:102] DEBUG 40% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:32 spider.py[line:102] DEBUG 53% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:32 spider.py[line:102] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:32 spider.py[line:102] DEBUG 80% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:32 spider.py[line:102] DEBUG 93% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:33 spider.py[line:86] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:13:33 spider.py[line:102] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:33 spider.py[line:102] DEBUG 6% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:33 spider.py[line:102] DEBUG 12% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:33 spider.py[line:102] DEBUG 18% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:33 spider.py[line:102] DEBUG 24% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 30% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 36% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 42% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 49% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 55% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 61% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 73% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 79% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 85% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 91% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:13:34 spider.py[line:102] DEBUG 98% 已下载 --（图片名：xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:16:53 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:16:57 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:16:57 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpgsmall_path)
-Fri, 14 Nov 2014 00:16:57 spider.py[line:107] DEBUG 13% 已下载 --（图片名：xu4ni6aul1l3.jpgsmall_path)
-Fri, 14 Nov 2014 00:16:57 spider.py[line:107] DEBUG 26% 已下载 --（图片名：xu4ni6aul1l3.jpgsmall_path)
-Fri, 14 Nov 2014 00:16:57 spider.py[line:107] DEBUG 40% 已下载 --（图片名：xu4ni6aul1l3.jpgsmall_path)
-Fri, 14 Nov 2014 00:16:57 spider.py[line:107] DEBUG 53% 已下载 --（图片名：xu4ni6aul1l3.jpgsmall_path)
-Fri, 14 Nov 2014 00:16:58 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpgsmall_path)
-Fri, 14 Nov 2014 00:16:58 spider.py[line:107] DEBUG 80% 已下载 --（图片名：xu4ni6aul1l3.jpgsmall_path)
-Fri, 14 Nov 2014 00:16:58 spider.py[line:107] DEBUG 93% 已下载 --（图片名：xu4ni6aul1l3.jpgsmall_path)
-Fri, 14 Nov 2014 00:16:59 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:16:59 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:16:59 spider.py[line:107] DEBUG 6% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:16:59 spider.py[line:107] DEBUG 12% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:16:59 spider.py[line:107] DEBUG 18% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:16:59 spider.py[line:107] DEBUG 24% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:16:59 spider.py[line:107] DEBUG 30% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:16:59 spider.py[line:107] DEBUG 36% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:16:59 spider.py[line:107] DEBUG 42% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:16:59 spider.py[line:107] DEBUG 49% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:16:59 spider.py[line:107] DEBUG 55% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:17:00 spider.py[line:107] DEBUG 61% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:17:00 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:17:00 spider.py[line:107] DEBUG 73% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:17:00 spider.py[line:107] DEBUG 79% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:17:00 spider.py[line:107] DEBUG 85% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:17:00 spider.py[line:107] DEBUG 91% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:17:00 spider.py[line:107] DEBUG 98% 已下载 --（图片名：xu4ni6aul1l3.jpgbig_path)
-Fri, 14 Nov 2014 00:17:03 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:17:03 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpgsmall_path)
-Fri, 14 Nov 2014 00:17:03 spider.py[line:107] DEBUG 29% 已下载 --（图片名：6a37qgogk7lp.jpgsmall_path)
-Fri, 14 Nov 2014 00:17:03 spider.py[line:107] DEBUG 58% 已下载 --（图片名：6a37qgogk7lp.jpgsmall_path)
-Fri, 14 Nov 2014 00:17:03 spider.py[line:107] DEBUG 87% 已下载 --（图片名：6a37qgogk7lp.jpgsmall_path)
-Fri, 14 Nov 2014 00:17:04 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:17:04 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpgbig_path)
-Fri, 14 Nov 2014 00:18:34 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:19:07 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:19:27 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:19:28 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:19:28 spider.py[line:107] DEBUG 13% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:19:28 spider.py[line:107] DEBUG 26% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:19:28 spider.py[line:107] DEBUG 40% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:19:29 spider.py[line:107] DEBUG 53% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:19:31 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:19:32 spider.py[line:107] DEBUG 80% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:19:32 spider.py[line:107] DEBUG 93% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:19:38 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:19:47 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:47 spider.py[line:107] DEBUG 6% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:47 spider.py[line:107] DEBUG 12% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:48 spider.py[line:107] DEBUG 18% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:48 spider.py[line:107] DEBUG 24% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:50 spider.py[line:107] DEBUG 30% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:50 spider.py[line:107] DEBUG 36% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:50 spider.py[line:107] DEBUG 42% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:50 spider.py[line:107] DEBUG 49% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:50 spider.py[line:107] DEBUG 55% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:50 spider.py[line:107] DEBUG 61% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:50 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:51 spider.py[line:107] DEBUG 73% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:51 spider.py[line:107] DEBUG 79% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:51 spider.py[line:107] DEBUG 85% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:54 spider.py[line:107] DEBUG 91% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:19:56 spider.py[line:107] DEBUG 98% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:20:09 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:20:09 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:20:10 spider.py[line:107] DEBUG 29% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:20:10 spider.py[line:107] DEBUG 58% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:20:10 spider.py[line:107] DEBUG 87% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:20:11 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:20:11 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpg_big_path)
-Fri, 14 Nov 2014 00:23:40 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:23:58 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:24:03 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:24:03 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:04 spider.py[line:107] DEBUG 13% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:04 spider.py[line:107] DEBUG 26% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:04 spider.py[line:107] DEBUG 40% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:04 spider.py[line:107] DEBUG 53% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:04 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:04 spider.py[line:107] DEBUG 80% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:04 spider.py[line:107] DEBUG 93% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:05 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:24:05 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 6% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 12% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 18% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 24% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 30% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 36% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 42% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 49% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 55% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 61% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 73% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 79% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 85% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 91% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:06 spider.py[line:107] DEBUG 98% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:08 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:24:08 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:24:09 spider.py[line:107] DEBUG 29% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:24:09 spider.py[line:107] DEBUG 58% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:24:09 spider.py[line:107] DEBUG 87% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:24:10 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:24:10 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpg_big_path)
-Fri, 14 Nov 2014 00:24:43 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:24:48 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:24:48 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:48 spider.py[line:107] DEBUG 13% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:48 spider.py[line:107] DEBUG 26% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:48 spider.py[line:107] DEBUG 40% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:49 spider.py[line:107] DEBUG 53% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:49 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:49 spider.py[line:107] DEBUG 80% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:49 spider.py[line:107] DEBUG 93% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:24:49 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:24:49 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:50 spider.py[line:107] DEBUG 6% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:50 spider.py[line:107] DEBUG 12% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:50 spider.py[line:107] DEBUG 18% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:50 spider.py[line:107] DEBUG 24% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:50 spider.py[line:107] DEBUG 30% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:50 spider.py[line:107] DEBUG 36% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:51 spider.py[line:107] DEBUG 42% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:52 spider.py[line:107] DEBUG 49% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:52 spider.py[line:107] DEBUG 55% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:52 spider.py[line:107] DEBUG 61% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:53 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:53 spider.py[line:107] DEBUG 73% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:53 spider.py[line:107] DEBUG 79% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:53 spider.py[line:107] DEBUG 85% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:54 spider.py[line:107] DEBUG 91% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:54 spider.py[line:107] DEBUG 98% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:24:56 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:24:56 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:24:56 spider.py[line:107] DEBUG 29% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:24:56 spider.py[line:107] DEBUG 58% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:24:56 spider.py[line:107] DEBUG 87% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:24:57 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:24:57 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpg_big_path)
-Fri, 14 Nov 2014 00:26:39 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:26:44 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:26:44 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:26:45 spider.py[line:107] DEBUG 13% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:26:45 spider.py[line:107] DEBUG 26% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:26:45 spider.py[line:107] DEBUG 40% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:26:45 spider.py[line:107] DEBUG 53% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:26:45 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:26:45 spider.py[line:107] DEBUG 80% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:26:45 spider.py[line:107] DEBUG 93% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:26:46 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:26:46 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:47 spider.py[line:107] DEBUG 6% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:47 spider.py[line:107] DEBUG 12% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:47 spider.py[line:107] DEBUG 18% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:47 spider.py[line:107] DEBUG 24% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:48 spider.py[line:107] DEBUG 30% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:48 spider.py[line:107] DEBUG 36% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:48 spider.py[line:107] DEBUG 42% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:48 spider.py[line:107] DEBUG 49% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:48 spider.py[line:107] DEBUG 55% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:48 spider.py[line:107] DEBUG 61% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:49 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:49 spider.py[line:107] DEBUG 73% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:49 spider.py[line:107] DEBUG 79% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:49 spider.py[line:107] DEBUG 85% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:49 spider.py[line:107] DEBUG 91% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:49 spider.py[line:107] DEBUG 98% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:26:51 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:26:51 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:26:52 spider.py[line:107] DEBUG 29% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:26:52 spider.py[line:107] DEBUG 58% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:26:52 spider.py[line:107] DEBUG 87% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:26:53 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:26:53 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:24 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:27:29 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:27:29 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:27:29 spider.py[line:107] DEBUG 13% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:27:29 spider.py[line:107] DEBUG 26% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:27:30 spider.py[line:107] DEBUG 40% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:27:30 spider.py[line:107] DEBUG 53% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:27:30 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:27:31 spider.py[line:107] DEBUG 80% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:27:31 spider.py[line:107] DEBUG 93% 已下载 --（图片名：xu4ni6aul1l3.jpg_small_path)
-Fri, 14 Nov 2014 00:27:32 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:27:32 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:32 spider.py[line:107] DEBUG 6% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:32 spider.py[line:107] DEBUG 12% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:33 spider.py[line:107] DEBUG 18% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:33 spider.py[line:107] DEBUG 24% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:33 spider.py[line:107] DEBUG 30% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:33 spider.py[line:107] DEBUG 36% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:33 spider.py[line:107] DEBUG 42% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:33 spider.py[line:107] DEBUG 49% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:34 spider.py[line:107] DEBUG 55% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:34 spider.py[line:107] DEBUG 61% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:34 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:34 spider.py[line:107] DEBUG 73% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:34 spider.py[line:107] DEBUG 79% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:35 spider.py[line:107] DEBUG 85% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:35 spider.py[line:107] DEBUG 91% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:35 spider.py[line:107] DEBUG 98% 已下载 --（图片名：xu4ni6aul1l3.jpg_big_path)
-Fri, 14 Nov 2014 00:27:38 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:27:38 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:27:38 spider.py[line:107] DEBUG 29% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:27:39 spider.py[line:107] DEBUG 58% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:27:39 spider.py[line:107] DEBUG 87% 已下载 --（图片名：6a37qgogk7lp.jpg_small_path)
-Fri, 14 Nov 2014 00:27:41 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:27:41 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:41 spider.py[line:107] DEBUG 4% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:41 spider.py[line:107] DEBUG 8% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:42 spider.py[line:107] DEBUG 12% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:42 spider.py[line:107] DEBUG 16% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:42 spider.py[line:107] DEBUG 20% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:42 spider.py[line:107] DEBUG 24% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:43 spider.py[line:107] DEBUG 28% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:43 spider.py[line:107] DEBUG 32% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:43 spider.py[line:107] DEBUG 36% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:43 spider.py[line:107] DEBUG 40% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:44 spider.py[line:107] DEBUG 44% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:44 spider.py[line:107] DEBUG 48% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:44 spider.py[line:107] DEBUG 52% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:44 spider.py[line:107] DEBUG 56% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:44 spider.py[line:107] DEBUG 60% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:45 spider.py[line:107] DEBUG 64% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:45 spider.py[line:107] DEBUG 69% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:45 spider.py[line:107] DEBUG 73% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:45 spider.py[line:107] DEBUG 77% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:45 spider.py[line:107] DEBUG 81% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:45 spider.py[line:107] DEBUG 85% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:45 spider.py[line:107] DEBUG 89% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:45 spider.py[line:107] DEBUG 93% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:27:45 spider.py[line:107] DEBUG 97% 已下载 --（图片名：6a37qgogk7lp.jpeg_big_path)
-Fri, 14 Nov 2014 00:29:53 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:29:58 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:29:59 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:29:59 spider.py[line:107] DEBUG 13% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:29:59 spider.py[line:107] DEBUG 26% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:29:59 spider.py[line:107] DEBUG 40% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:29:59 spider.py[line:107] DEBUG 53% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:00 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:00 spider.py[line:107] DEBUG 80% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:00 spider.py[line:107] DEBUG 93% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:01 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:30:01 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:01 spider.py[line:107] DEBUG 6% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:01 spider.py[line:107] DEBUG 12% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:01 spider.py[line:107] DEBUG 18% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:01 spider.py[line:107] DEBUG 24% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:02 spider.py[line:107] DEBUG 30% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:02 spider.py[line:107] DEBUG 36% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:03 spider.py[line:107] DEBUG 42% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:03 spider.py[line:107] DEBUG 49% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:03 spider.py[line:107] DEBUG 55% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:03 spider.py[line:107] DEBUG 61% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:03 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:03 spider.py[line:107] DEBUG 73% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:03 spider.py[line:107] DEBUG 79% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:04 spider.py[line:107] DEBUG 85% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:04 spider.py[line:107] DEBUG 91% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:04 spider.py[line:107] DEBUG 98% 已下载 --（图片名：xu4ni6aul1l3.jpgxu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:06 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:30:06 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpg6a37qgogk7lp._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:06 spider.py[line:107] DEBUG 29% 已下载 --（图片名：6a37qgogk7lp.jpg6a37qgogk7lp._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:06 spider.py[line:107] DEBUG 58% 已下载 --（图片名：6a37qgogk7lp.jpg6a37qgogk7lp._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:06 spider.py[line:107] DEBUG 87% 已下载 --（图片名：6a37qgogk7lp.jpg6a37qgogk7lp._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:07 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:30:07 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:08 spider.py[line:107] DEBUG 4% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:08 spider.py[line:107] DEBUG 8% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:08 spider.py[line:107] DEBUG 12% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:08 spider.py[line:107] DEBUG 16% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:08 spider.py[line:107] DEBUG 20% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:08 spider.py[line:107] DEBUG 24% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:08 spider.py[line:107] DEBUG 28% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:08 spider.py[line:107] DEBUG 32% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:08 spider.py[line:107] DEBUG 36% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 40% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 44% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 48% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 52% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 56% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 60% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 64% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 69% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 73% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 77% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 81% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 85% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:09 spider.py[line:107] DEBUG 89% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:10 spider.py[line:107] DEBUG 93% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:10 spider.py[line:107] DEBUG 97% 已下载 --（图片名：6a37qgogk7lp.jpeg6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:26 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:30:31 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:30:31 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:31 spider.py[line:107] DEBUG 13% 已下载 --（图片名：xu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:31 spider.py[line:107] DEBUG 26% 已下载 --（图片名：xu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:32 spider.py[line:107] DEBUG 40% 已下载 --（图片名：xu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:32 spider.py[line:107] DEBUG 53% 已下载 --（图片名：xu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:32 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:32 spider.py[line:107] DEBUG 80% 已下载 --（图片名：xu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:32 spider.py[line:107] DEBUG 93% 已下载 --（图片名：xu4ni6aul1l3._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:33 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:30:33 spider.py[line:107] DEBUG 0% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:34 spider.py[line:107] DEBUG 6% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:34 spider.py[line:107] DEBUG 12% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:34 spider.py[line:107] DEBUG 18% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:34 spider.py[line:107] DEBUG 24% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:35 spider.py[line:107] DEBUG 30% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:35 spider.py[line:107] DEBUG 36% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:35 spider.py[line:107] DEBUG 42% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:35 spider.py[line:107] DEBUG 49% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:35 spider.py[line:107] DEBUG 55% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:35 spider.py[line:107] DEBUG 61% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:36 spider.py[line:107] DEBUG 67% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:36 spider.py[line:107] DEBUG 73% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:36 spider.py[line:107] DEBUG 79% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:36 spider.py[line:107] DEBUG 85% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:36 spider.py[line:107] DEBUG 91% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:36 spider.py[line:107] DEBUG 98% 已下载 --（图片名：xu4ni6aul1l3._big_pathjpeg)
-Fri, 14 Nov 2014 00:30:38 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:30:38 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:39 spider.py[line:107] DEBUG 29% 已下载 --（图片名：6a37qgogk7lp._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:39 spider.py[line:107] DEBUG 58% 已下载 --（图片名：6a37qgogk7lp._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:39 spider.py[line:107] DEBUG 87% 已下载 --（图片名：6a37qgogk7lp._small_pathjpeg)
-Fri, 14 Nov 2014 00:30:40 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:30:40 spider.py[line:107] DEBUG 0% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:40 spider.py[line:107] DEBUG 4% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:40 spider.py[line:107] DEBUG 8% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:40 spider.py[line:107] DEBUG 12% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 16% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 20% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 24% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 28% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 32% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 36% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 40% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 44% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 48% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 52% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 56% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 60% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 64% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:41 spider.py[line:107] DEBUG 69% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:42 spider.py[line:107] DEBUG 73% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:42 spider.py[line:107] DEBUG 77% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:42 spider.py[line:107] DEBUG 81% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:42 spider.py[line:107] DEBUG 85% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:42 spider.py[line:107] DEBUG 89% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:42 spider.py[line:107] DEBUG 93% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:30:42 spider.py[line:107] DEBUG 97% 已下载 --（图片名：6a37qgogk7lp.j_big_pathjpeg)
-Fri, 14 Nov 2014 00:33:15 spider.py[line:34] DEBUG 获取网页成功
-Fri, 14 Nov 2014 00:33:18 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:33:18 spider.py[line:107] DEBUG 0% 已下载 --（图片名：small_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:19 spider.py[line:107] DEBUG 13% 已下载 --（图片名：small_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:19 spider.py[line:107] DEBUG 26% 已下载 --（图片名：small_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:19 spider.py[line:107] DEBUG 40% 已下载 --（图片名：small_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:19 spider.py[line:107] DEBUG 53% 已下载 --（图片名：small_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:19 spider.py[line:107] DEBUG 67% 已下载 --（图片名：small_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:19 spider.py[line:107] DEBUG 80% 已下载 --（图片名：small_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:19 spider.py[line:107] DEBUG 93% 已下载 --（图片名：small_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:20 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:33:20 spider.py[line:107] DEBUG 0% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:20 spider.py[line:107] DEBUG 6% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:20 spider.py[line:107] DEBUG 12% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:20 spider.py[line:107] DEBUG 18% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 24% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 30% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 36% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 42% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 49% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 55% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 61% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 67% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 73% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 79% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 85% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 91% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:21 spider.py[line:107] DEBUG 98% 已下载 --（图片名：big_path_xu4ni6aul1l3.jpg)
-Fri, 14 Nov 2014 00:33:24 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:33:24 spider.py[line:107] DEBUG 0% 已下载 --（图片名：small_path_6a37qgogk7lp.jpg)
-Fri, 14 Nov 2014 00:33:24 spider.py[line:107] DEBUG 29% 已下载 --（图片名：small_path_6a37qgogk7lp.jpg)
-Fri, 14 Nov 2014 00:33:24 spider.py[line:107] DEBUG 58% 已下载 --（图片名：small_path_6a37qgogk7lp.jpg)
-Fri, 14 Nov 2014 00:33:24 spider.py[line:107] DEBUG 87% 已下载 --（图片名：small_path_6a37qgogk7lp.jpg)
-Fri, 14 Nov 2014 00:33:25 spider.py[line:89] DEBUG 抓取图片成功，开始下载...
-Fri, 14 Nov 2014 00:33:25 spider.py[line:107] DEBUG 0% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:26 spider.py[line:107] DEBUG 4% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:26 spider.py[line:107] DEBUG 8% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:26 spider.py[line:107] DEBUG 12% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:26 spider.py[line:107] DEBUG 16% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:26 spider.py[line:107] DEBUG 20% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:26 spider.py[line:107] DEBUG 24% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:27 spider.py[line:107] DEBUG 28% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:27 spider.py[line:107] DEBUG 32% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:27 spider.py[line:107] DEBUG 36% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:27 spider.py[line:107] DEBUG 40% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:27 spider.py[line:107] DEBUG 44% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:27 spider.py[line:107] DEBUG 48% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:27 spider.py[line:107] DEBUG 52% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:27 spider.py[line:107] DEBUG 56% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:28 spider.py[line:107] DEBUG 60% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:28 spider.py[line:107] DEBUG 64% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:28 spider.py[line:107] DEBUG 69% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:28 spider.py[line:107] DEBUG 73% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:28 spider.py[line:107] DEBUG 77% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:28 spider.py[line:107] DEBUG 81% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:28 spider.py[line:107] DEBUG 85% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:28 spider.py[line:107] DEBUG 89% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:28 spider.py[line:107] DEBUG 93% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
-Fri, 14 Nov 2014 00:33:28 spider.py[line:107] DEBUG 97% 已下载 --（图片名：big_path_6a37qgogk7lp.jpeg)
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53684.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53722.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53720.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53718.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53696.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53692.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53703.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53694.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53705.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53690.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53700.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53688.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53686.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53682.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53678.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53674.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53664.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53666.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53668.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53660.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53658.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53656.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53654.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53652.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53636.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53641.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53638.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53643.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53645.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53627.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53618.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53616.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53614.html
+Sat, 15 Nov 2014 12:41:47 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53611.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53609.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53607.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53605.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53572.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53601.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53597.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53592.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53574.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53588.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53585.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53578.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53550.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53567.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53554.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53556.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53552.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53548.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53576.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53546.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53544.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53558.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53523.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53532.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53528.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53526.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53539.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53534.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53530.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53519.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53515.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53513.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53510.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53496.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53505.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53503.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53501.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53478.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53492.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53480.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53483.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53476.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53473.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53471.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53465.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53460.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53442.html
+Sat, 15 Nov 2014 12:41:48 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53455.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53451.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53446.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53448.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53436.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53434.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53424.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53422.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53420.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53432.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53416.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53418.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53444.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53363.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53392.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53411.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53390.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53399.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53403.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53395.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53733.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53728.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53731.html
+Sat, 15 Nov 2014 12:41:49 spider.py[line:226] DEBUG 已保存文件链接： http://filmav.com/53725.html
