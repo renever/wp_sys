@@ -7,18 +7,19 @@ import logging
 import logging.config
 from contextlib import closing
 from settings import CHUNK_SIZE,IMG_PATH
-from settings import DB_ENGINE, DB_BASE
+from settings import DB_ENGINE, DB_BASE,logger
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
 #数据库表
 from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag
 
-from utility import create_session
+from utility import create_session, wp_logging
+
 
 import os
 
-logging.config.fileConfig("/home/l/app/learning/wangpan/logging.conf")
-logger = logging.getLogger("wp")
+# logging.config.fileConfig("/home/l/app/learning/wangpan/logging.conf")
+# logger = logging.getLogger("wp")
 
 class Filmav_Grab():
 
@@ -38,6 +39,16 @@ class Filmav_Grab():
 		self.FileLink = FileLink # 表：用于保存文章链接
 
 		# self.db_session = None
+		self.uploadable_headers = {
+				'Request URL': 'http://www.uploadable.ch/login.php',
+				'Accept-Encoding': 'gzip,deflate,sdch',
+				'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4,ja;q=0.',
+				'Connection': 'keep-alive',
+				'Host': 'www.uploadable.ch',
+				'Referer': 'http://www.uploadable.ch/login.php',
+				'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36',
+			}
+		self.article_files = {}
 
 	def db_session(self):
 		db_session = create_session(DB_ENGINE, DB_BASE)
@@ -78,11 +89,6 @@ class Filmav_Grab():
 			self.save_image(url=small_img, img_type=img_type, path='small_path')
 			self.save_image(url=big_img, img_type=img_type, path='big_path')
 
-			# print "images links:",image
-			#todo 以上获得所有小图，th 字眼在链接里，替换i，获得大图，下载图片失败，将jpg换成jpeg
-			#todo 如果替换th为i，图片存在，则--》原图是文章的“大图”，如果替换后，找不到图片，则原图是“小图”，jpg替换成jpeg，可以找到小图的大图
-
-			# self.save_image(url=image, img_type=img_type, size=size)
 	def save_image(self,url,img_type='normal',path='small_path'):
 		img_filename = url.split('/')[-1]
 		img_filename = path + '_' + img_filename #区分大小图
@@ -169,52 +175,80 @@ class Filmav_Grab():
 		return article_urls
 
 
-	def grab_article_body(self,url='http://filmav.com/52686.html'):
+	def grab_article_body(self,url='http://filmav.com/53769.html'):
 
 		r = requests.get(url=url, headers=self.headers)
 
 		if r.status_code is not 200:
 			Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
-			print Msg
-			logging.debug(Msg)
+			wp_logging(Msg=Msg)
 			return
 
-		h = pq(r.text)
+		h = pq(r.content)
 		body = h('.entry')
 		#匹配中文，记得要进行编码
-		str1 =str(unicode(body).encode('utf-8'))
-
+		old_body_str =str(unicode(body).encode('utf-8'))
 
 		#抓取主体
-		newbody = re.split('<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br />',str1)
-		newbody = newbody[0][:-53]
+		old_body = re.split('<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br />',old_body_str)
+		old_body = old_body[0][:-53]
 
+		#抓取文章标题
+		title = h('.title-single')
+		if len(title.html()) < 0:
+			Msg = "失败! 抓取文章标题!"
+			wp_logging(Msg=Msg)
+			return
+		self.article_files.update(
+			title = title
+		)
+		Msg = "抓取文章标题：" + str(unicode(title.html()).encode('utf-8'))
+		wp_logging(Msg=Msg)
+		#todo 抓取作者，电影分类
+		#抓取电影分类
+		categories = h('a[rel="category tag"]')
+		for category in categories:
+			Msg = "抓取文章分类：" + category.text
+			wp_logging(Msg=Msg)
 		#抓取tag,使用非贪婪模式
 		tags_re_str = r'tag/.*?>(.*?)</a>'
 		tags_re = re.compile(tags_re_str)
-		tags = re.findall(tags_re, str1)
-		# for tag in tags:
-		# 	print tag
+		tags = re.findall(tags_re, old_body_str)
+		for tag in tags:
+			Msg = "抓取文章标签：" + tag
+			wp_logging(Msg=Msg)
 
 		#抓取old_download_links
 		links_re_str = r'(http://www.uploadable.ch/file/.*?)["<]'
 		links_re = re.compile(links_re_str)
-		links = re.findall(links_re, str1)
+		links = re.findall(links_re, old_body_str)
 		for link in links:
 			print "old download links:",link
 
-
 		#抓取文件名
+		file_name=''
 		file_name_re_strs  = [r'>(.*?).part\d.rar',r'/?([\d\w]*[-]*[\w\d]*)\.wmv']
 		for file_name_re_str in file_name_re_strs:
 			file_name_re = re.compile(file_name_re_str)
-			file_naMsg = re.findall(file_name_re, str1)
-			if len(file_naMsg) == 0:
+			file_names = re.findall(file_name_re, old_body_str)
+			if len(file_names) == 0:
 				continue
-			for file_name in file_naMsg:
-				print "file_name: ",file_name
+			for file_name_ in file_names:
+				file_name = file_name_
+				Msg =  "抓取文件名： "+ file_name
+				wp_logging(Msg=Msg)
+				break
+		# 创建 文章实例
+		if len(file_name):
+			self.article_files.update(
+				file_name = file_name,
+				website = self.website,
+				title = ''
+			)
+			new_article = Article(file_name=file_name)
+			Msg =  "创建文章实例： "+ new_article.file_name
+			wp_logging(Msg=Msg)
 
-			break
 
 
 	def save_article_url(self, article_urls):
@@ -232,13 +266,15 @@ class Filmav_Grab():
 				logging.debug(Msg)
 				db_session.close()
 
+	# def grap_atrical_details(self):
 
 if __name__ == '__main__':
 	filmav_grab = Filmav_Grab()
 	# filmav_grab.get(url='http://filmav.com/53049.html')
 	# filmav_grab.get_image(url='http://filmav.com/52792.html')
-	article_urls = filmav_grab.grab_article_url()
-	filmav_grab.save_article_url(article_urls)
+	# article_urls = filmav_grab.grab_article_url()
+	# filmav_grab.save_article_url(article_urls)
+	filmav_grab.grab_article_body()
 
 
 

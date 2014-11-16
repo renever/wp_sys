@@ -54,6 +54,20 @@ class FileLink(CommonLink):
 		self.url = url
 		self.website = website
 
+class Object(DB_BASE):
+	__abstract__ = True
+
+	name = Column(String(255))
+
+class Category(Object):
+	__tablename__ = 'categories'
+
+	id = Column(Integer, primary_key=True, autoincrement=True)
+
+	def __init__(self,name):
+		super(Category,self).__init__()
+		self.name = name
+
 
 article_tag = Table('article_tag', DB_BASE.metadata,
 					 Column('article_id', Integer, ForeignKey('articles.id')),
@@ -65,6 +79,11 @@ article_forum = Table('article_forum', DB_BASE.metadata,
 					 Column('forum_id', Integer, ForeignKey('forums.id'))
 )
 
+article_category = Table('article_category',DB_BASE.metadata,
+					 Column('article_id', Integer, ForeignKey('articles.id')),
+					 Column('category_id', Integer, ForeignKey('categories.id'))
+)
+
 class Article(DB_BASE):
 	__tablename__ = 'articles'
 	id = Column(Integer, primary_key=True, autoincrement=True)
@@ -73,7 +92,8 @@ class Article(DB_BASE):
 	is_posted = Column(Boolean, default=False)
 	unrar_times = Column(Integer,default=0)
 	can_posted = Column(Boolean, default=False)
-	body = Column(String(512))
+	body = Column(String(512)) #保存HTML文件路径，文章正文
+	file_name = Column(String(255),unique=True) #以文件名为唯一值
 	# many to many
 	have_post_to = relationship('Forum', secondary=article_forum, backref='articles_is_posted')
 	wait_post_to = relationship('Forum', secondary=article_forum, backref='articles_wait_to_post')
@@ -82,9 +102,15 @@ class Article(DB_BASE):
 
 	file_link_id = Column(Integer, ForeignKey('file_links.id'))
 	file_link = relationship(FileLink, backref=backref('file_link', order_by=id))
+
+	categories = relationship('Category', secondary=article_category, backref='articles')
+
 	#images 已经在定义在Images 类一对多。
 	#OldDownloadLink 一对多
 	#NewDownloadLink 一对多
+
+	def __unicode__(self):
+		return self.file_name
 
 
 class Tag(DB_BASE):
