@@ -11,12 +11,15 @@ from settings import DB_ENGINE, DB_BASE,logger
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
 #数据库表
-from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag
+from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, Category
 
-from utility import create_session, wp_logging
+from utility import create_session, wp_logging, get_or_create
 
-
+import unicodedata
 import os
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 # logging.config.fileConfig("/home/l/app/learning/wangpan/logging.conf")
 # logger = logging.getLogger("wp")
@@ -176,6 +179,9 @@ class Filmav_Grab():
 
 
 	def grab_article_body(self,url='http://filmav.com/53769.html'):
+		# 建立数据库链接
+		db_session = self.db_session()
+
 
 		r = requests.get(url=url, headers=self.headers)
 
@@ -195,35 +201,58 @@ class Filmav_Grab():
 
 		#抓取文章标题
 		title = h('.title-single')
-		if len(title.html()) < 0:
+		title_unicode = unicode(title.html())
+		title_str = unicode(title.html()).encode('utf-8')
+		if len(title_str) < 0:
 			Msg = "失败! 抓取文章标题!"
 			wp_logging(Msg=Msg)
 			return
-		self.article_files.update(
-			title = title
-		)
 		Msg = "抓取文章标题：" + str(unicode(title.html()).encode('utf-8'))
 		wp_logging(Msg=Msg)
-		#todo 抓取作者，电影分类
+
+		# 创建 文章实例
+		new_article = get_or_create(session=db_session, model=Article,title = title_unicode)[0]
+		Msg =  "创建文章实例（--> 文章标题）" + title_unicode
+		wp_logging(Msg=Msg)
+
+		# 保存文章的来源地址
+		file_link_inst = get_or_create(session=db_session, model=FileLink,url=url,website=self.website)[0]
+		new_article.file_link = file_link_inst
+
+		#todo 抓取作者，拍摄电影的俱乐部
 		#抓取电影分类
 		categories = h('a[rel="category tag"]')
+		categories_text_list = []
 		for category in categories:
-			Msg = "抓取文章分类：" + category.text
-			wp_logging(Msg=Msg)
+			if category is not None:
+				category_text = unicode(category.text)
+				category_instanc = get_or_create(session=db_session,model=Category,name=category_text)[0]
+				new_article.categories.append(category_instanc)
+				Msg = "抓取文章分类：" + category_text
+				wp_logging(Msg=Msg)
+
 		#抓取tag,使用非贪婪模式
 		tags_re_str = r'tag/.*?>(.*?)</a>'
 		tags_re = re.compile(tags_re_str)
 		tags = re.findall(tags_re, old_body_str)
 		for tag in tags:
-			Msg = "抓取文章标签：" + tag
-			wp_logging(Msg=Msg)
+			if tag is not None:
+				tag_unicode = unicode(tag)
+				tag = tag_unicode
+				tag_inst = get_or_create(session=db_session, model=Tag, name=tag)[0]
+				new_article.tags.append(tag_inst)
+				Msg = "抓取文章标签：" + tag
+				wp_logging(Msg=Msg)
 
 		#抓取old_download_links
-		links_re_str = r'(http://www.uploadable.ch/file/.*?)["<]'
-		links_re = re.compile(links_re_str)
-		links = re.findall(links_re, old_body_str)
-		for link in links:
-			print "old download links:",link
+		old_download_links_re_str = r'(http://www.uploadable.ch/file/.*?)["<]'
+		old_download_links_re = re.compile(old_download_links_re_str)
+		old_download_links = re.findall(old_download_links_re, old_body_str)
+		for old_download_link in old_download_links:
+			old_download_link_inst = get_or_create(session=db_session,model=OldDownloadLink,url=old_download_link,website=self.website)[0]
+			new_article.old_download_links.append(old_download_link_inst)
+			Msg = "抓取 old download link: %s" % old_download_link
+			wp_logging(Msg=Msg)
 
 		#抓取文件名
 		file_name=''
@@ -239,16 +268,16 @@ class Filmav_Grab():
 				wp_logging(Msg=Msg)
 				break
 		# 创建 文章实例
-		if len(file_name):
-			self.article_files.update(
-				file_name = file_name,
-				website = self.website,
-				title = ''
-			)
-			new_article = Article(file_name=file_name)
-			Msg =  "创建文章实例： "+ new_article.file_name
-			wp_logging(Msg=Msg)
+		# if len(file_name):
+		# 	self.article_files.update(
+		# 		file_name = file_name,
+		# 		website = self.website,
+		# 	)
+		# 	new_article = Article(**self.article_files)
+		# 	Msg =  "创建文章实例： "+ new_article.title
+		# 	wp_logging(Msg=Msg)
 
+		db_session.commit()
 
 
 	def save_article_url(self, article_urls):

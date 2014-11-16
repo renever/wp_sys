@@ -43,6 +43,9 @@ class CommonLink(DB_BASE):
 
 
 class FileLink(CommonLink):
+	"""
+	用于保存文章的来源地址URL
+	"""
 	__tablename__ = 'file_links'
 
 	id = Column(Integer, primary_key=True, autoincrement=True)
@@ -86,9 +89,9 @@ article_category = Table('article_category',DB_BASE.metadata,
 
 class Article(DB_BASE):
 	__tablename__ = 'articles'
-	id = Column(Integer, primary_key=True, autoincrement=True)
+	id = Column(Integer,primary_key=True, autoincrement=True)
 	website = Column(String(255))
-	title = Column(String(255))
+	title = Column(String(255), unique=True)
 	is_posted = Column(Boolean, default=False)
 	unrar_times = Column(Integer,default=0)
 	can_posted = Column(Boolean, default=False)
@@ -108,6 +111,10 @@ class Article(DB_BASE):
 	#images 已经在定义在Images 类一对多。
 	#OldDownloadLink 一对多
 	#NewDownloadLink 一对多
+
+	def __init__(self, title=''):
+		self.title = title
+		# super(Article, self).__init__(*args, **kwargs)
 
 	def __unicode__(self):
 		return self.file_name
