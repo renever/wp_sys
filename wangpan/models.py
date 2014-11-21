@@ -31,6 +31,7 @@ class Forum(CommonForum):
 class CommonLink(DB_BASE):
 	__abstract__ = True
 
+	file_name = Column(String(255))
 	url = Column(String(255), unique=True)
 	is_done = Column(Boolean, default=False)
 	website = Column(String(255))
