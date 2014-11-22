@@ -13,8 +13,8 @@ from sqlalchemy import exc
 #数据库表
 from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, Category
 
-from utility import create_session, wp_logging, get_or_create
-
+from utility import create_session, wp_logging, get_or_create, FirefoxDriver
+from multiprocessing.dummy import Pool as ThreadPool
 import unicodedata
 import os
 import sys
@@ -52,6 +52,7 @@ class Filmav_Grab():
 				'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36',
 			}
 		self.article_files = {}
+		self.driver = FirefoxDriver()
 
 	def db_session(self):
 		db_session = create_session(DB_ENGINE, DB_BASE)
@@ -245,28 +246,56 @@ class Filmav_Grab():
 				wp_logging(Msg=Msg)
 
 		#抓取old_download_links
+		wp_logging(Msg="开始抓取old download links")
 		old_download_links_re_str = r'(http://www.uploadable.ch/file/.*?)["<]'
 		old_download_links_re = re.compile(old_download_links_re_str)
 		old_download_links = re.findall(old_download_links_re, old_body_str)
+		#todo 临时测试：6个已经上传好的压缩文件
+		old_download_links = [
+			'http://www.uploadable.ch/file/4XBstq46gFbN/chrome.part1.rar',
+			'http://www.uploadable.ch/file/dGV4kpjY4XZ6/chrome.part2.rar',
+			'http://www.uploadable.ch/file/AF3ufw5qsQvp/chrome.part3.rar',
+			'http://www.uploadable.ch/file/FWMcqgNY6BZr/chrome.part4.rar',
+			'http://www.uploadable.ch/file/CtSRpcYSZkqG/chrome.part5.rar',
+			'http://www.uploadable.ch/file/Ud29HCTsFmWu/chrome.part6.rar',
+		]
+		#todo 初始化后台浏览器 准备下载
+		driver = FirefoxDriver()
+		driver.driver = driver.get_new_driver()
+
 		for old_download_link in old_download_links:
-			old_download_link_inst = get_or_create(session=db_session,model=OldDownloadLink,url=old_download_link,website=self.website)[0]
+			#抓取该链接的文件名和文件大小
+			file_name,file_size = self.get_filename_by_url(old_download_link)
+			dict_params = {}
+			dict_params.update(dict(
+				file_name=file_name,
+				file_size=file_size,
+				url=old_download_link,
+				website=self.website,
+				))
+			old_download_link_inst = get_or_create(session=db_session,model=OldDownloadLink,**dict_params)[0]
 			new_article.old_download_links.append(old_download_link_inst)
 			Msg = "抓取 old download link: %s" % old_download_link
 			wp_logging(Msg=Msg)
 
-		#抓取文件名
-		file_name=''
-		file_name_re_strs  = [r'>(.*?).part\d.rar',r'/?([\d\w]*[-]*[\w\d]*)\.wmv']
-		for file_name_re_str in file_name_re_strs:
-			file_name_re = re.compile(file_name_re_str)
-			file_names = re.findall(file_name_re, old_body_str)
-			if len(file_names) == 0:
-				continue
-			for file_name_ in file_names:
-				file_name = file_name_
-				Msg =  "抓取文件名： "+ file_name
-				wp_logging(Msg=Msg)
-				break
+			#todo 测试下载，暂时放在这里,不用使用多线程
+			# download_pool = self.get_download_pool(processes=10)
+			# download_pool.map(driver.download_file,new_article.old_download_links)
+			driver.download_file(old_download_link_inst)
+
+		#取文件名（已经被其他代码替代）
+		# file_name=''
+		# file_name_re_strs  = [r'>(.*?).part\d.rar',r'/?([\d\w]*[-]*[\w\d]*)\.wmv']
+		# for file_name_re_str in file_name_re_strs:
+		# 	file_name_re = re.compile(file_name_re_str)
+		# 	file_names = re.findall(file_name_re, old_body_str)
+		# 	if len(file_names) == 0:
+		# 		continue
+		# 	for file_name_ in file_names:
+		# 		file_name = file_name_
+		# 		Msg =  "抓取文件名： "+ file_name
+		# 		wp_logging(Msg=Msg)
+		# 		break
 		# 创建 文章实例
 		# if len(file_name):
 		# 	self.article_files.update(
@@ -276,9 +305,45 @@ class Filmav_Grab():
 		# 	new_article = Article(**self.article_files)
 		# 	Msg =  "创建文章实例： "+ new_article.title
 		# 	wp_logging(Msg=Msg)
+		#todo 临时查看文章的所有属性
+		# attr_list = dir(new_article)
+		# for attr in attr_list:
+		# 	# ss= 'ss'
+		# 	if not attr.startswith('__'):
+		# 		v = getattr(new_article,attr,'empty')
+		# 		Msg =  "文章-->属性：%s  |  值：%s " % (attr, v)
+		# 		wp_logging(Msg=Msg)
 
-		db_session.commit()
+		#todo 实际操作时，要提交保存到数据库。
+		# db_session.commit()
 
+	def get_filename_by_url(self,url):
+
+		r = requests.get(url=url, headers=self.uploadable_headers)
+
+		if r.status_code is not 200:
+			Msg = "开始抓取指定下载链接的文件名，及大小：%s \r\n \
+				  抓取失败！状态码:%s " % (url, str(r.status_code))
+			wp_logging(Msg=Msg)
+			return
+
+		h = pq(r.content)
+		file_name = h('#file_name').attr('title')
+		file_size = h('.filename_normal').html()
+		Msg = "抓取文件名：%s，文件夹大小：%s " % (file_name,file_size)
+		wp_logging(Msg=Msg)
+		return file_name,file_size
+
+		#匹配中文，记得要进行编码
+		# old_body_str =str(unicode(body).encode('utf-8'))
+
+	def get_download_pool(self, processes=10):
+		'''记得退出pool'''
+		pool = ThreadPool(processes)
+		return pool
+		#
+		# pool.close()
+		# pool.join()
 
 	def save_article_url(self, article_urls):
 		db_session = self.db_session()

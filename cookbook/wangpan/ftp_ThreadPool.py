@@ -88,7 +88,7 @@ def get_all_file_path(base_file_dir=''):
 		full_path_file_name_list.append(full_path_file_name)
 	return full_path_file_name_list
 
-BASE_FILE_DIR = '/home/l/test1/'
+BASE_FILE_DIR = '/home/l/temp'
 ftp_host = 'ftp.uploadable.ch'
 ftp_user = 'lxl001'
 ftp_password = 'f19174de'

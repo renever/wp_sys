@@ -9,7 +9,7 @@ url_login = 'http://www.uploadable.ch/login.php'
 url_download = 'http://www.uploadable.ch/file/SwkwFPd7scRC/123.pdf'
 
 
-ffprofile = webdriver.FirefoxProfile("/home/lotaku/.mozilla/firefox/mwad0hks.default")
+ffprofile = webdriver.FirefoxProfile("/home/l/.mozilla/firefox/mwad0hks.default")
 
 driver = webdriver.Firefox(ffprofile)
 
@@ -35,3 +35,5 @@ time.sleep(3)
 driver.get(url_download)
 time.sleep(3)
 driver.quit()
+
+#todo 如果下载出现HTML文件，cooki过期，或者定义为每20分钟重新登录一次。

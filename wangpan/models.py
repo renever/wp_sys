@@ -32,15 +32,19 @@ class CommonLink(DB_BASE):
 	__abstract__ = True
 
 	file_name = Column(String(255))
+	file_size = Column(String(255))
 	url = Column(String(255), unique=True)
 	is_done = Column(Boolean, default=False)
 	website = Column(String(255))
-	status = Column(String(255))#wait_to_download,is_download,is_unrared,is_rared
+	status = Column(String(255))#wait_to_download,is_downloaded,is_unrared,is_rared,is_uploaded
 	linkbuck = Column(String(255))
 
-	def __init__(self, url, website):
+	def __init__(self, url, website,file_name,file_size):
 		self.url = url
 		self.website = website
+		self.file_name = file_name
+		self.file_size = file_size
+		self.status = 'wait_to_download'
 
 
 class FileLink(CommonLink):
