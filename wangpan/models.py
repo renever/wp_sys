@@ -79,7 +79,9 @@ class Category(Object):
 
 article_tag = Table('article_tag', DB_BASE.metadata,
 					 Column('article_id', Integer, ForeignKey('articles.id')),
-					 Column('tag_id', Integer, ForeignKey('tags.id'))
+					 Column('tag_id', Integer, ForeignKey('tags.id')),
+					 # UniqueKeyConstraint('article_id', 'tag_id'),
+
 )
 
 article_forum = Table('article_forum', DB_BASE.metadata,

@@ -32,3 +32,4 @@ logger = logging.getLogger("wp")
 #图片文件目录
 
 IMG_PATH = BASE_PATH + 'wp_resource/STATIC_FILES/images'
+

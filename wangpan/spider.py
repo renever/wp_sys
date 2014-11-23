@@ -28,6 +28,7 @@ sys.setdefaultencoding("utf-8")
 class Filmav_Grab():
 
 	def __init__(self):
+		db_session = self.db_session()
 		self.headers = {
 			'Host': 'filmav.com',
 			'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0',
@@ -54,6 +55,8 @@ class Filmav_Grab():
 			}
 		self.article_files = {}
 		self.driver = FirefoxDriver()
+
+		self.global_db_session = db_session
 
 
 
@@ -198,7 +201,7 @@ class Filmav_Grab():
 		is_increased = None
 		pre_filelinks_count = db_session.query(FileLink.id).count()
 		for url in article_urls:
-			url_instance,is_existed = get_or_create(db_session, FileLink,url=url,website=self.website)
+			url_instance,is_existed = get_or_create(session=db_session, is_global=True, model=FileLink,url=url,website=self.website)
 			if is_existed:
 				Msg =  "文章url已经存在"
 				wp_logging(Msg=Msg, allow_print=False)
@@ -224,32 +227,33 @@ class Filmav_Grab():
 		return is_increased
 
 	def test(self):
-		file_links_inst_list ,db_session = self.query_not_crawled_article_url()
+		file_links_inst_list = self.query_not_crawled_article_url()
 		file_links_inst = file_links_inst_list[0]
 		print type(file_links_inst)
 		print file_links_inst.id
 		file_links_inst.is_crawled = True
 
-		db_session.add(file_links_inst)
-		db_session.commit()
+		self.global_db_session.add(file_links_inst)
+		self.global_db_session.commit()
 
 	def grab_articles(self):
 		file_links_inst = self.query_not_crawled_article_url()
 
 		grab_articles_pool = ThreadPool(5)
-		try:
-			Msg = '建立抓取文章的线程池...开始抓取'
-			wp_logging(Msg=Msg)
-			grab_articles_pool.map(self.grab_article, file_links_inst)
-		except Exception,e:
-			Msg = '[线程池](抓取文章)-->失败：%s' % e
-			wp_logging(Msg=Msg)
+		# try:
+		Msg = '建立抓取文章的线程池...开始抓取'
+		wp_logging(Msg=Msg)
+		grab_articles_pool.map(self.grab_article, file_links_inst)
+		# except Exception,e:
+		# 	Msg = '[线程池](抓取文章)-->失败：%s' % e
+		# 	wp_logging(Msg=Msg)
+		# 	raise e
 
 	def query_not_crawled_article_url(self):
 		# 建立数据库链接
 		db_session = self.db_session()
 		file_links_inst = db_session.query(FileLink).filter_by(is_crawled=False)
-		return file_links_inst, db_session
+		return file_links_inst
 
 	def grab_article(self,url_inst):
 		# 建立数据库链接
@@ -268,7 +272,7 @@ class Filmav_Grab():
 
 		#抓取主体
 		old_body = re.split('<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br />',old_body_str)
-		old_body = old_body[0][:-53]
+		# old_body = old_body[0][:-53]
 
 		#抓取文章标题
 		title = h('.title-single')
@@ -282,23 +286,27 @@ class Filmav_Grab():
 		wp_logging(Msg=Msg)
 
 		# 创建 文章实例
-		new_article = get_or_create(session=db_session, model=Article,title = title_unicode)[0]
+		# new_article = get_or_create(session=db_session, model=Article,title = title_unicode)[0]
+		new_article = db_session.query(Article).filter_by(title=title_unicode).first()
+		if new_article is None:
+			new_article = Article(title=title_unicode)
 		Msg =  "创建文章实例（--> 文章标题）" + title_unicode
 		wp_logging(Msg=Msg, allow_print=False)
 
 		# 保存文章的来源地址
-		file_link_inst = get_or_create(session=db_session, model=FileLink,url=url_inst.url,website=self.website)[0]
+		file_link_inst = get_or_create(session=db_session, is_global=True, model=FileLink,url=url_inst.url,website=self.website)[0]
 		new_article.file_link = file_link_inst
 
 		#todo 抓取作者，拍摄电影的俱乐部
 		#抓取电影分类
 		categories = h('a[rel="category tag"]')
-		categories_text_list = []
+		# categories_text_list = []
 		for category in categories:
 			if category is not None:
 				category_text = unicode(category.text)
-				category_instanc = get_or_create(session=db_session,model=Category,name=category_text)[0]
-				new_article.categories.append(category_instanc)
+				category_instanc = get_or_create(session=db_session,is_global=True, model=Category,name=category_text)[0]
+				if not(category_instanc in new_article.categories):
+					new_article.categories.append(category_instanc)
 				Msg = "抓取文章分类：" + category_text
 				wp_logging(Msg=Msg, allow_print=False)
 
@@ -307,13 +315,16 @@ class Filmav_Grab():
 		tags_re = re.compile(tags_re_str)
 		tags = re.findall(tags_re, old_body_str)
 		for tag in tags:
+			Msg = "抓取文章标签：" + tag
+			wp_logging(Msg=Msg, allow_print=False)
 			if tag is not None:
 				tag_unicode = unicode(tag)
 				tag = tag_unicode
-				tag_inst = get_or_create(session=db_session, model=Tag, name=tag)[0]
-				new_article.tags.append(tag_inst)
-				Msg = "抓取文章标签：" + tag
-				wp_logging(Msg=Msg, allow_print=False)
+				tag_inst = get_or_create(session=db_session, is_global=True, model=Tag, name=tag)[0]
+				if not(tag_inst in new_article.tags):
+					new_article.tags.append(tag_inst)
+					Msg = "添加文章标签：" + tag
+					wp_logging(Msg=Msg, allow_print=False)
 
 		#抓取old_download_links
 		wp_logging(Msg="开始抓取old download links", allow_print=False)
@@ -344,7 +355,7 @@ class Filmav_Grab():
 				url=old_download_link,
 				website=self.website
 				))
-			old_download_link_inst = get_or_create(session=db_session,model=OldDownloadLink,filter_cond={'url':old_download_link},**dict_params)[0]
+			old_download_link_inst = get_or_create(session=db_session, is_global=True, model=OldDownloadLink,filter_cond={'url':old_download_link},**dict_params)[0]
 			new_article.old_download_links.append(old_download_link_inst)
 			Msg = "抓取 old download link: %s" % old_download_link
 			wp_logging(Msg=Msg, allow_print=False)
@@ -389,8 +400,15 @@ class Filmav_Grab():
 		#todo 实际操作时，要提交保存到数据库。
 
 		#将url状态改成 已经被抓取
-		url_inst.is_crawled = True
-		db_session.add(url_inst)
+		# db_session_1 = self.db_session()
+		# url_inst_ = db_session_1.query(FileLink).filter_by(id=url_inst.id).first()
+		url_inst_ = get_or_create(session=db_session,is_global=True, model=FileLink,id=url_inst.id)[0]
+		url_inst_.is_crawled = True
+		# db_session_1.add(url_inst_)
+		# db_session_1.commit()
+		#提交文章
+		db_session.add(url_inst_)
+		db_session.add(new_article)
 		db_session.commit()
 
 
@@ -429,14 +447,23 @@ class Filmav_Grab():
 if __name__ == '__main__':
 
 	filmav_grab = Filmav_Grab()
-	filmav_grab.test()
-	# while True:
-	# 	#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
-	# 	#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
-	# 	filmav_grab.grab_article_url(page_end=2)
-	# 	#自动抓取未抓取的文章详细内容
-	# 	filmav_grab.grab_articles()
-	# 	time.sleep(3)
+	# filmav_grab.test()
+
+	#本次程序总轮循次数统计
+	for_count = 1
+	while True:
+		Msg = "=====第 %s 次总轮循" %  for_count
+		wp_logging(Msg=Msg)
+
+		#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
+		#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
+		filmav_grab.grab_article_url(page_end=2)
+		#自动抓取未抓取的文章详细内容
+		filmav_grab.grab_articles()
+
+		for_count += 1
+
+		time.sleep(3)
 
 
 

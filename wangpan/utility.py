@@ -23,19 +23,27 @@ def wp_logging(level='debug', Msg='Msg',allow_print=True):
 		logging.debug(Msg)
 		return
 
-def get_or_create(session, model, defaults=None, filter_cond=None,**kwargs):
+def get_or_create(session, model, is_global=False, defaults=None, filter_cond=None,**kwargs):
+	"""
+	@is_global=False #db_session 是不是全局性的，是，则不能在这里关闭。
+	"""
 	if filter_cond is not None:
 		instance = session.query(model).filter_by(**filter_cond).first()
 	else:
 		instance = session.query(model).filter_by(**kwargs).first()
 	if instance:
 		# 文章存在 --> 返回文章实例 ，True
+		if not is_global:
+			session.close()
 		return instance, True
 	else:
 		# params = dict((k, v) for k, v in kwargs.iteritems())
 		# params.update(defaults or {})
 		instance = model(**kwargs)
-		session.add(instance)
+		if not is_global:
+			session.add(instance)
+			session.commit()
+			session.close()
 		# 文章不存在 --> 返回文章实例 ，True
 		return instance, False
 
