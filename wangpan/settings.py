@@ -8,11 +8,12 @@ import logging.config
 import os
 BASE_PATH = os.path.dirname('__file__')
 #XPS
-# DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8",
-# 					   echo=True)  # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
-
-DB_ENGINE = create_engine("sqlite:///wangpan",
+DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8",
 					   echo=True)  # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
+
+#由于存在并发死锁，不再使用。
+# DB_ENGINE = create_engine("sqlite:///wangpan",
+# 					   echo=True)  # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
 
 #公司电脑
 # DB_ENGINE = create_engine("mysql://root:@localhost/wangpan?charset=utf8",

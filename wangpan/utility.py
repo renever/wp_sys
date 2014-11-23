@@ -16,22 +16,28 @@ def create_session(engine, base):
 	return session
 
 
-def wp_logging(level='debug', Msg='Msg'):
+def wp_logging(level='debug', Msg='Msg',allow_print=True):
 	if level=='debug':
-		print Msg
+		if allow_print:
+			print Msg
 		logging.debug(Msg)
 		return
 
-def get_or_create(session, model, defaults=None, **kwargs):
-	instance = session.query(model).filter_by(**kwargs).first()
+def get_or_create(session, model, defaults=None, filter_cond=None,**kwargs):
+	if filter_cond is not None:
+		instance = session.query(model).filter_by(**filter_cond).first()
+	else:
+		instance = session.query(model).filter_by(**kwargs).first()
 	if instance:
-		return instance, False
+		# 文章存在 --> 返回文章实例 ，True
+		return instance, True
 	else:
 		# params = dict((k, v) for k, v in kwargs.iteritems())
 		# params.update(defaults or {})
 		instance = model(**kwargs)
 		session.add(instance)
-		return instance, True
+		# 文章不存在 --> 返回文章实例 ，True
+		return instance, False
 
 
 

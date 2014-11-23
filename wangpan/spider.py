@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import requests
+import time
 from pyquery import PyQuery as pq
 from sqlalchemy import exc
 import logging
@@ -53,6 +54,8 @@ class Filmav_Grab():
 			}
 		self.article_files = {}
 		self.driver = FirefoxDriver()
+
+
 
 	def db_session(self):
 		db_session = create_session(DB_ENGINE, DB_BASE)
@@ -154,37 +157,104 @@ class Filmav_Grab():
 
 
 
-	def grab_article_url(self,website_index="http://filmav.com/"):
+	def grab_article_url(self,page_start=1,page_end=1):
 		"""
 		抓取首页每篇文章链接
 
+
 		"""
+		#todo 抓取制定页面范围的所有文件的链接。
 		#todo 循环各个页面，具体抓取文章内容时，记得根据文章链接最后数字进行排序，另，判断是否有有效的下载地址。
-
-		r = requests.get(url=website_index, headers=self.headers)
-
-		if r.status_code is not 200:
-			Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
-			print Msg
-			logging.debug(Msg)
-			return
-
-		h = pq(r.text)
-		article_urls_htmlelements = h('.more-link')
+		BASE_URL = 'http://filmav.com/page/'
 		article_urls=[]
-		for url in article_urls_htmlelements:
-			u = url.attrib['href'].split("#")[0]
-			article_urls.append(u)
+		for page_number in range(page_start,page_end+1):
+			url = BASE_URL + str(page_number)
+			r = requests.get(url=url, headers=self.headers)
 
-		return article_urls
+			if r.status_code is not 200:
+				Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
+				print Msg
+				logging.debug(Msg)
+				return
 
+			h = pq(r.text)
+			article_urls_htmlelements = h('.more-link')
 
-	def grab_article_body(self,url='http://filmav.com/53769.html'):
+			for article_url in article_urls_htmlelements:
+				article_url_ = article_url.attrib['href'].split("#")[0]
+				article_urls.append(article_url_)
+			# 如果首页有更新，继续抓取下一页，看看是否更新了更多文章。
+			is_increased = self.save_article_url(article_urls)
+
+			if is_increased:
+				continue
+			else:
+				break
+
+		return article_urls, is_increased
+
+	def save_article_url(self, article_urls):
+		db_session = self.db_session()
+		is_increased = None
+		pre_filelinks_count = db_session.query(FileLink.id).count()
+		for url in article_urls:
+			url_instance,is_existed = get_or_create(db_session, FileLink,url=url,website=self.website)
+			if is_existed:
+				Msg =  "文章url已经存在"
+				wp_logging(Msg=Msg, allow_print=False)
+			else:
+				try:
+					db_session.add(url_instance)
+					db_session.commit()
+					Msg =  "已保存文章url： " + url
+					wp_logging(Msg=Msg, allow_print=False)
+				except exc.IntegrityError, e :
+					Msg =  "保存文章url失败： " + e.message
+					wp_logging(Msg=Msg, allow_print=False)
+					#如果db_session.commit() 出现异常，需要手动关闭
+					db_session.close()
+
+		now_filelinks_count = db_session.query(FileLink.id).count()
+		if now_filelinks_count - pre_filelinks_count > 0:
+			is_increased = True
+		else:
+			is_increased = False
+		Msg = '文章链接是否增加：%s ' % is_increased
+		wp_logging(Msg=Msg)
+		return is_increased
+
+	def test(self):
+		file_links_inst_list ,db_session = self.query_not_crawled_article_url()
+		file_links_inst = file_links_inst_list[0]
+		print type(file_links_inst)
+		print file_links_inst.id
+		file_links_inst.is_crawled = True
+
+		db_session.add(file_links_inst)
+		db_session.commit()
+
+	def grab_articles(self):
+		file_links_inst = self.query_not_crawled_article_url()
+
+		grab_articles_pool = ThreadPool(5)
+		try:
+			Msg = '建立抓取文章的线程池...开始抓取'
+			wp_logging(Msg=Msg)
+			grab_articles_pool.map(self.grab_article, file_links_inst)
+		except Exception,e:
+			Msg = '[线程池](抓取文章)-->失败：%s' % e
+			wp_logging(Msg=Msg)
+
+	def query_not_crawled_article_url(self):
 		# 建立数据库链接
 		db_session = self.db_session()
+		file_links_inst = db_session.query(FileLink).filter_by(is_crawled=False)
+		return file_links_inst, db_session
 
-
-		r = requests.get(url=url, headers=self.headers)
+	def grab_article(self,url_inst):
+		# 建立数据库链接
+		db_session = self.db_session()
+		r = requests.get(url_inst.url, headers=self.headers)
 
 		if r.status_code is not 200:
 			Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
@@ -214,10 +284,10 @@ class Filmav_Grab():
 		# 创建 文章实例
 		new_article = get_or_create(session=db_session, model=Article,title = title_unicode)[0]
 		Msg =  "创建文章实例（--> 文章标题）" + title_unicode
-		wp_logging(Msg=Msg)
+		wp_logging(Msg=Msg, allow_print=False)
 
 		# 保存文章的来源地址
-		file_link_inst = get_or_create(session=db_session, model=FileLink,url=url,website=self.website)[0]
+		file_link_inst = get_or_create(session=db_session, model=FileLink,url=url_inst.url,website=self.website)[0]
 		new_article.file_link = file_link_inst
 
 		#todo 抓取作者，拍摄电影的俱乐部
@@ -230,7 +300,7 @@ class Filmav_Grab():
 				category_instanc = get_or_create(session=db_session,model=Category,name=category_text)[0]
 				new_article.categories.append(category_instanc)
 				Msg = "抓取文章分类：" + category_text
-				wp_logging(Msg=Msg)
+				wp_logging(Msg=Msg, allow_print=False)
 
 		#抓取tag,使用非贪婪模式
 		tags_re_str = r'tag/.*?>(.*?)</a>'
@@ -243,45 +313,47 @@ class Filmav_Grab():
 				tag_inst = get_or_create(session=db_session, model=Tag, name=tag)[0]
 				new_article.tags.append(tag_inst)
 				Msg = "抓取文章标签：" + tag
-				wp_logging(Msg=Msg)
+				wp_logging(Msg=Msg, allow_print=False)
 
 		#抓取old_download_links
-		wp_logging(Msg="开始抓取old download links")
+		wp_logging(Msg="开始抓取old download links", allow_print=False)
 		old_download_links_re_str = r'(http://www.uploadable.ch/file/.*?)["<]'
 		old_download_links_re = re.compile(old_download_links_re_str)
 		old_download_links = re.findall(old_download_links_re, old_body_str)
 		#todo 临时测试：6个已经上传好的压缩文件
-		old_download_links = [
-			'http://www.uploadable.ch/file/4XBstq46gFbN/chrome.part1.rar',
-			'http://www.uploadable.ch/file/dGV4kpjY4XZ6/chrome.part2.rar',
-			'http://www.uploadable.ch/file/AF3ufw5qsQvp/chrome.part3.rar',
-			'http://www.uploadable.ch/file/FWMcqgNY6BZr/chrome.part4.rar',
-			'http://www.uploadable.ch/file/CtSRpcYSZkqG/chrome.part5.rar',
-			'http://www.uploadable.ch/file/Ud29HCTsFmWu/chrome.part6.rar',
-		]
+		# old_download_links = [
+		# 	'http://www.uploadable.ch/file/4XBstq46gFbN/chrome.part1.rar',
+		# 	'http://www.uploadable.ch/file/dGV4kpjY4XZ6/chrome.part2.rar',
+		# 	'http://www.uploadable.ch/file/AF3ufw5qsQvp/chrome.part3.rar',
+		# 	'http://www.uploadable.ch/file/FWMcqgNY6BZr/chrome.part4.rar',
+		# 	'http://www.uploadable.ch/file/CtSRpcYSZkqG/chrome.part5.rar',
+		# 	'http://www.uploadable.ch/file/Ud29HCTsFmWu/chrome.part6.rar',
+		# ]
 		#todo 初始化后台浏览器 准备下载
-		driver = FirefoxDriver()
-		driver.driver = driver.get_new_driver()
+		# driver = FirefoxDriver()
+		# driver.driver = driver.get_new_driver()
 
 		for old_download_link in old_download_links:
 			#抓取该链接的文件名和文件大小
 			file_name,file_size = self.get_filename_by_url(old_download_link)
 			dict_params = {}
 			dict_params.update(dict(
+				status='waiting_download',
 				file_name=file_name,
 				file_size=file_size,
 				url=old_download_link,
-				website=self.website,
+				website=self.website
 				))
-			old_download_link_inst = get_or_create(session=db_session,model=OldDownloadLink,**dict_params)[0]
+			old_download_link_inst = get_or_create(session=db_session,model=OldDownloadLink,filter_cond={'url':old_download_link},**dict_params)[0]
 			new_article.old_download_links.append(old_download_link_inst)
 			Msg = "抓取 old download link: %s" % old_download_link
-			wp_logging(Msg=Msg)
+			wp_logging(Msg=Msg, allow_print=False)
 
 			#todo 测试下载，暂时放在这里,不用使用多线程
+			# driver.download_file(old_download_link_inst)
 			# download_pool = self.get_download_pool(processes=10)
 			# download_pool.map(driver.download_file,new_article.old_download_links)
-			driver.download_file(old_download_link_inst)
+
 
 		#取文件名（已经被其他代码替代）
 		# file_name=''
@@ -315,7 +387,12 @@ class Filmav_Grab():
 		# 		wp_logging(Msg=Msg)
 
 		#todo 实际操作时，要提交保存到数据库。
-		# db_session.commit()
+
+		#将url状态改成 已经被抓取
+		url_inst.is_crawled = True
+		db_session.add(url_inst)
+		db_session.commit()
+
 
 	def get_filename_by_url(self,url):
 
@@ -331,7 +408,7 @@ class Filmav_Grab():
 		file_name = h('#file_name').attr('title')
 		file_size = h('.filename_normal').html()
 		Msg = "抓取文件名：%s，文件夹大小：%s " % (file_name,file_size)
-		wp_logging(Msg=Msg)
+		wp_logging(Msg=Msg, allow_print=False)
 		return file_name,file_size
 
 		#匹配中文，记得要进行编码
@@ -345,30 +422,31 @@ class Filmav_Grab():
 		# pool.close()
 		# pool.join()
 
-	def save_article_url(self, article_urls):
-		db_session = self.db_session()
-		model_url = self.FileLink
-		for url in article_urls:
-			url_instance = model_url(url=url,website=self.website)
-			db_session.add(url_instance)
-			try:
-				db_session.commit()
-				Msg =  "已保存文件链接： "+url
-				logging.debug(Msg)
-			except exc.IntegrityError, e :
-				Msg =  "捕获异常(链接已经存在）： "+e.message
-				logging.debug(Msg)
-				db_session.close()
+
 
 	# def grap_atrical_details(self):
 
 if __name__ == '__main__':
+
 	filmav_grab = Filmav_Grab()
+	filmav_grab.test()
+	# while True:
+	# 	#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
+	# 	#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
+	# 	filmav_grab.grab_article_url(page_end=2)
+	# 	#自动抓取未抓取的文章详细内容
+	# 	filmav_grab.grab_articles()
+	# 	time.sleep(3)
+
+
+
+
+
 	# filmav_grab.get(url='http://filmav.com/53049.html')
 	# filmav_grab.get_image(url='http://filmav.com/52792.html')
 	# article_urls = filmav_grab.grab_article_url()
 	# filmav_grab.save_article_url(article_urls)
-	filmav_grab.grab_article_body()
+	# filmav_grab.grab_article_body()
 
 
 

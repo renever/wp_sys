@@ -36,15 +36,15 @@ class CommonLink(DB_BASE):
 	url = Column(String(255), unique=True)
 	is_done = Column(Boolean, default=False)
 	website = Column(String(255))
-	status = Column(String(255))#wait_to_download,is_downloaded,is_unrared,is_rared,is_uploaded
+	status = Column(String(255))#waiting_download,downloading,downloaded,unraring,unrared,raring,rared,uploading,uploaded
 	linkbuck = Column(String(255))
 
-	def __init__(self, url, website,file_name,file_size):
+	def __init__(self, url, website,file_name,file_size, status):
 		self.url = url
 		self.website = website
 		self.file_name = file_name
 		self.file_size = file_size
-		self.status = 'wait_to_download'
+		self.status = status
 
 
 class FileLink(CommonLink):
@@ -54,7 +54,7 @@ class FileLink(CommonLink):
 	__tablename__ = 'file_links'
 
 	id = Column(Integer, primary_key=True, autoincrement=True)
-	have_crawled = Column(Boolean, default=False)
+	is_crawled = Column(Boolean, default=False)
 
 
 	def __init__(self,url,website):
