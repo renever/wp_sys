@@ -8,15 +8,15 @@ import logging.config
 import os
 BASE_PATH = os.path.dirname('__file__')
 #XPS
-# DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8",
-# 					   echo=True)  # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
+DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8",pool_size=100, max_overflow=200,echo=True)
+# 					     # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
 
 #由于SQLite存在并发死锁，不再使用。# 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
 # DB_ENGINE = create_engine("sqlite:///wangpan", echo=True)
 
 
 #公司电脑 # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
-DB_ENGINE = create_engine("mysql://root:@localhost/wangpan?charset=utf8",echo=True)
+# DB_ENGINE = create_engine("mysql://root:@localhost/wangpan?charset=utf8",echo=True)
 
 
 DB_BASE = declarative_base()  # 生成了declarative基类, 以后的model继承此类
@@ -33,3 +33,10 @@ logger = logging.getLogger("wp")
 
 IMG_PATH = BASE_PATH + 'wp_resource/STATIC_FILES/images'
 
+# 各种线程池大小
+GRAB_ARTICLES_POOL_SIZE = 300
+
+
+GRAB_ARTICLE_URL_POOL_SIZE = 300
+
+SAVE_ARTICLE_URL_POOL_SIZE = 300

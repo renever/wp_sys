@@ -9,6 +9,8 @@ import logging.config
 from contextlib import closing
 from settings import CHUNK_SIZE,IMG_PATH
 from settings import DB_ENGINE, DB_BASE,logger
+#线程池大小
+from settings import SAVE_ARTICLE_URL_POOL_SIZE,GRAB_ARTICLE_URL_POOL_SIZE, GRAB_ARTICLES_POOL_SIZE
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
 #数据库表
@@ -24,17 +26,28 @@ sys.setdefaultencoding("utf-8")
 
 # logging.config.fileConfig("/home/l/app/learning/wangpan/logging.conf")
 # logger = logging.getLogger("wp")
+#已经在当前DB_SESSION 创建会更新的TAG
+TAG_LIST_IN_DB_SESSION = []
+CATEGORY_LIST_IN_DB_SESSION = []
 
 class Filmav_Grab():
 
 	def __init__(self):
 		db_session = self.db_session()
 		self.headers = {
+			# 'Host': 'filmav.com',
+			# 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0',
+			# 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+			# 'Accept-Language': 'zh-cn,en;q=0.7,en-us;q=0.3',
+			# 'Accept-Encoding': 'gzip, deflate',
+			# 'Connection': 'keep-alive',
 			'Host': 'filmav.com',
-			'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0',
+			'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0',
 			'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 			'Accept-Language': 'zh-cn,en;q=0.7,en-us;q=0.3',
 			'Accept-Encoding': 'gzip, deflate',
+			'Referer': 'http://filmav.com/',
+			'Cookie': 'HstCfa2322499=1413801408469; HstCla2322499=1416845473653; HstCmu2322499=1416643008866; HstPn2322499=12; HstPt2322499=155; HstCnv2322499=40; HstCns2322499=65',
 			'Connection': 'keep-alive',
 			}
 		self.requests = requests
@@ -162,70 +175,105 @@ class Filmav_Grab():
 
 
 	def grab_article_url(self,page_start=1,page_end=1):
+		'''
+		计算待抓取的所有页面，存在一个列表里，并传递给一个线程池
+		'''
+		page_number_list = [page_number for page_number in range(page_start,page_end+1)]
+
+		#同时抓取多少网页的文章URL
+		pool = ThreadPool(GRAB_ARTICLE_URL_POOL_SIZE)
+		try:
+			pool.map(self.grab_article_url_of_per_page, page_number_list)
+		except Exception,e:
+			Msg = '开始新线程报错：%s' % e
+			wp_logging(Msg=Msg,allow_print=True)
+
+	def grab_article_url_of_per_page(self,page_number):
 		"""
 		抓取首页每篇文章链接
-
-
 		"""
 		#todo 抓取制定页面范围的所有文件的链接。
 		#todo 循环各个页面，具体抓取文章内容时，记得根据文章链接最后数字进行排序，另，判断是否有有效的下载地址。
 		BASE_URL = 'http://filmav.com/page/'
 		article_urls=[]
-		for page_number in range(page_start,page_end+1):
-			url = BASE_URL + str(page_number)
+		# is_increased =None
+		# for page_number in range(page_start,page_end+1):
+		url = BASE_URL + str(page_number)
+		r = None
+		try:
 			r = requests.get(url=url, headers=self.headers)
+		except Exception,e:
+			Msg = '链接到网页失败：%s ' % e
+			wp_logging(Msg=Msg)
+			return
 
-			if r.status_code is not 200:
-				Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
-				print Msg
-				logging.debug(Msg)
-				return
 
-			h = pq(r.text)
-			article_urls_htmlelements = h('.more-link')
+		if r.status_code is not 200:
+			Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
+			print Msg
+			logging.debug(Msg)
+			return
 
-			for article_url in article_urls_htmlelements:
-				article_url_ = article_url.attrib['href'].split("#")[0]
-				article_urls.append(article_url_)
-			# 如果首页有更新，继续抓取下一页，看看是否更新了更多文章。
-			is_increased = self.save_article_url(article_urls)
+		h = pq(r.text)
+		article_urls_htmlelements = h('.more-link')
 
-			if is_increased:
-				continue
-			else:
-				break
+		for article_url in article_urls_htmlelements:
+			article_url_ = article_url.attrib['href'].split("#")[0]
+			article_urls.append(article_url_)
+		# 如果首页有更新，继续抓取下一页，看看是否更新了更多文章。
+		# is_increased = self.save_article_url(article_urls)
+		pool = ThreadPool(SAVE_ARTICLE_URL_POOL_SIZE)
+		try:
+			pool.map(self.save_article_url, article_urls)
+		except Exception,e:
+			Msg = '开始新线程报错：%s' % e
+			wp_logging(Msg=Msg,allow_print=True)
 
-		return article_urls, is_increased
 
-	def save_article_url(self, article_urls):
+
+		# if is_increased:
+		# 	continue
+		# else:
+		# 	break
+
+		# return article_urls
+
+	def save_article_url(self, article_url):
 		db_session = self.db_session()
-		is_increased = None
-		pre_filelinks_count = db_session.query(FileLink.id).count()
-		for url in article_urls:
-			url_instance,is_existed = get_or_create(session=db_session, is_global=True, model=FileLink,url=url,website=self.website)
-			if is_existed:
-				Msg =  "文章url已经存在"
-				wp_logging(Msg=Msg, allow_print=False)
-			else:
-				try:
-					db_session.add(url_instance)
-					db_session.commit()
-					Msg =  "已保存文章url： " + url
-					wp_logging(Msg=Msg, allow_print=False)
-				except exc.IntegrityError, e :
-					Msg =  "保存文章url失败： " + e.message
-					wp_logging(Msg=Msg, allow_print=False)
-					#如果db_session.commit() 出现异常，需要手动关闭
-					db_session.close()
+		# is_increased = None
+		# pre_filelinks_count = db_session.query(FileLink.id).count()
+		# for url in article_url:
+		url_instance,created = get_or_create(session=db_session, is_global=True, model=FileLink,url=article_url,website=self.website)
+		if created:
+			try:
+				db_session.add(url_instance)
+				db_session.commit()
+				Msg =  "已保存文章url： " + article_url
+				wp_logging(Msg=Msg, allow_print=True)
 
-		now_filelinks_count = db_session.query(FileLink.id).count()
-		if now_filelinks_count - pre_filelinks_count > 0:
-			is_increased = True
+			except exc.IntegrityError, e :
+				Msg =  "保存文章url失败： " + e.message
+				wp_logging(Msg=Msg, allow_print=False)
+				#如果db_session.commit() 出现异常，需要手动关闭
+
 		else:
-			is_increased = False
-		Msg = '文章链接是否增加：%s ' % is_increased
-		wp_logging(Msg=Msg)
-		return is_increased
+			Msg =  "文章url已经存在"
+			wp_logging(Msg=Msg, allow_print=True)
+
+		#独立性的db_session要记得关闭
+		db_session.close()
+
+
+		# now_filelinks_count = db_session.query(FileLink.id).count()
+		# if now_filelinks_count - pre_filelinks_count > 0:
+		# 	is_increased = True
+		# else:
+		# 	is_increased = False
+		# Msg = '文章链接是否增加：%s ' % is_increased
+		# wp_logging(Msg=Msg)
+		# #todo 临时改成每次都全部抓取
+		# is_increased = True
+		# return is_increased
 
 	def test(self):
 		pass
@@ -248,11 +296,11 @@ class Filmav_Grab():
 			for name in list:
 				need_to_create = False
 				# print 'x..'
-				lock.acquire()
+				# lock.acquire()
 				if not(name in is_creading_list):
 					is_creading_list.append(name)
 					need_to_create = True
-				lock.release()
+				# lock.release()
 				if need_to_create:
 				# tag_inst = get_or_create(new_scoped_session,Tag, is_global=True, name=name)[0]
 					tag_inst = get_or_create(session=self.db_session(),model=Tag, is_global=False, name=name)[0]
@@ -270,9 +318,14 @@ class Filmav_Grab():
 
 					# print type(tag_inst),name
 
-		pool = ThreadPool(50000)
+		pool = ThreadPool(10)
 		start_time = time.clock()
-		pool.map(create_tag_from_list, l_all)
+		try:
+			pool.map(create_tag_from_list, l_all)
+		except Exception,e:
+			Msg = '开始新线程报错：%s' % e
+			wp_logging(Msg=Msg,allow_print=True)
+
 		end_time = time.clock()
 		exc_time = end_time - start_time
 		print len(l)
@@ -283,11 +336,22 @@ class Filmav_Grab():
 	def grab_articles(self):
 		file_links_inst = self.query_not_crawled_article_url()
 
-		grab_articles_pool = ThreadPool(5)
+		grab_articles_pool = ThreadPool(GRAB_ARTICLES_POOL_SIZE)
 		# try:
-		Msg = '建立抓取文章的线程池...开始抓取'
-		wp_logging(Msg=Msg)
-		grab_articles_pool.map(self.grab_article, file_links_inst)
+		new_articles_count =  file_links_inst.count()
+		if new_articles_count > 0:
+			Msg = '建立抓取文章的线程池...开始抓取'
+			wp_logging(Msg=Msg)
+			try:
+				grab_articles_pool.map(self.grab_article, file_links_inst)
+			except Exception,e:
+				Msg = '开始新线程报错：%s' % e
+				wp_logging(Msg=Msg,allow_print=True)
+
+		else:
+			Msg = '没有新文章更新...'
+			wp_logging(Msg=Msg)
+
 		# except Exception,e:
 		# 	Msg = '[线程池](抓取文章)-->失败：%s' % e
 		# 	wp_logging(Msg=Msg)
@@ -302,11 +366,19 @@ class Filmav_Grab():
 	def grab_article(self,url_inst):
 		# 建立数据库链接
 		db_session = self.db_session()
-		r = requests.get(url_inst.url, headers=self.headers)
+		r = None
+		try:
+			r = requests.get(url_inst.url, headers=self.headers)
+		except Exception, e:
+			Msg = '链接到文件URL时出现异常(下次再抓取）：%s' % e
+			wp_logging(Msg=Msg)
+			db_session.close()
 
+			return
 		if r.status_code is not 200:
 			Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
 			wp_logging(Msg=Msg)
+			db_session.close()
 			return
 
 		h = pq(r.content)
@@ -325,6 +397,7 @@ class Filmav_Grab():
 		if len(title_str) < 0:
 			Msg = "失败! 抓取文章标题!"
 			wp_logging(Msg=Msg)
+			db_session.close()
 			return
 		Msg = "抓取文章标题：" + str(unicode(title.html()).encode('utf-8'))
 		wp_logging(Msg=Msg)
@@ -348,9 +421,11 @@ class Filmav_Grab():
 		for category in categories:
 			if category is not None:
 				category_text = unicode(category.text)
-				category_instanc = get_or_create(session=db_session,is_global=True, model=Category,name=category_text)[0]
-				if not(category_instanc in new_article.categories):
-					new_article.categories.append(category_instanc)
+				if not(category_text in CATEGORY_LIST_IN_DB_SESSION):
+					CATEGORY_LIST_IN_DB_SESSION.append(category_text)
+					category_instanc = get_or_create(session=db_session,is_global=True, model=Category,name=category_text)[0]
+					if not(category_instanc in new_article.categories):
+						new_article.categories.append(category_instanc)
 				Msg = "抓取文章分类：" + category_text
 				wp_logging(Msg=Msg, allow_print=False)
 
@@ -362,13 +437,14 @@ class Filmav_Grab():
 			Msg = "抓取文章标签：" + tag
 			wp_logging(Msg=Msg, allow_print=False)
 			if tag is not None:
-				tag_unicode = unicode(tag)
-				tag = tag_unicode
-				tag_inst = get_or_create(session=db_session, is_global=True, model=Tag, name=tag)[0]
-				if not(tag_inst in new_article.tags):
-					new_article.tags.append(tag_inst)
-					Msg = "添加文章标签：" + tag
-					wp_logging(Msg=Msg, allow_print=False)
+				tag = unicode(tag)
+				if not(tag in TAG_LIST_IN_DB_SESSION):
+					TAG_LIST_IN_DB_SESSION.append(tag)
+					tag_inst = get_or_create(session=db_session, is_global=True, model=Tag, name=tag)[0]
+					if not(tag_inst in new_article.tags):
+						new_article.tags.append(tag_inst)
+						Msg = "添加文章标签：" + tag
+						wp_logging(Msg=Msg, allow_print=False)
 
 		#抓取old_download_links
 		wp_logging(Msg="开始抓取old download links", allow_print=False)
@@ -390,19 +466,26 @@ class Filmav_Grab():
 
 		for old_download_link in old_download_links:
 			#抓取该链接的文件名和文件大小
-			file_name,file_size = self.get_filename_by_url(old_download_link)
-			dict_params = {}
-			dict_params.update(dict(
-				status='waiting_download',
-				file_name=file_name,
-				file_size=file_size,
-				url=old_download_link,
-				website=self.website
-				))
-			old_download_link_inst = get_or_create(session=db_session, is_global=True, model=OldDownloadLink,filter_cond={'url':old_download_link},**dict_params)[0]
-			new_article.old_download_links.append(old_download_link_inst)
-			Msg = "抓取 old download link: %s" % old_download_link
-			wp_logging(Msg=Msg, allow_print=False)
+			file_name = ''
+			file_size = ''
+			content = self.get_filename_by_url(old_download_link)
+			if content.get('status'):
+				dict_params = {}
+				dict_params.update(dict(
+					status='waiting_download',
+					file_name=file_name,
+					file_size=file_size,
+					url=old_download_link,
+					website=self.website
+					))
+				old_download_link_inst = get_or_create(session=db_session, is_global=True, model=OldDownloadLink,filter_cond={'url':old_download_link},**dict_params)[0]
+				new_article.old_download_links.append(old_download_link_inst)
+				Msg = "抓取 old download link: %s" % old_download_link
+				wp_logging(Msg=Msg, allow_print=False)
+			else:
+				db_session.close()
+				return
+
 
 			#todo 测试下载，暂时放在这里,不用使用多线程
 			# driver.download_file(old_download_link_inst)
@@ -451,27 +534,43 @@ class Filmav_Grab():
 		# db_session_1.add(url_inst_)
 		# db_session_1.commit()
 		#提交文章
-		db_session.add(url_inst_)
+
 		db_session.add(new_article)
+		db_session.add(url_inst_)
 		db_session.commit()
+		db_session.close()
 
 
 	def get_filename_by_url(self,url):
 
-		r = requests.get(url=url, headers=self.uploadable_headers)
+		content = dict(
+			status = True,
+			file_name ='',
+			file_size = ''
+		)
+		r = None
+		try:
+			r = requests.get(url=url, headers=self.uploadable_headers)
+		except Exception,e:
+			Msg = "链接到URL失败（%s）：%s" % (url,e)
+			wp_logging(Msg=Msg)
+			content.update(status=False)
+			return content
 
 		if r.status_code is not 200:
 			Msg = "开始抓取指定下载链接的文件名，及大小：%s \r\n \
 				  抓取失败！状态码:%s " % (url, str(r.status_code))
 			wp_logging(Msg=Msg)
-			return
+			content.update(status=False)
+			return content
 
 		h = pq(r.content)
 		file_name = h('#file_name').attr('title')
 		file_size = h('.filename_normal').html()
 		Msg = "抓取文件名：%s，文件夹大小：%s " % (file_name,file_size)
 		wp_logging(Msg=Msg, allow_print=False)
-		return file_name,file_size
+		content.update(file_name=file_name,file_size=file_size)
+		return content
 
 		#匹配中文，记得要进行编码
 		# old_body_str =str(unicode(body).encode('utf-8'))
@@ -491,23 +590,23 @@ class Filmav_Grab():
 if __name__ == '__main__':
 
 	filmav_grab = Filmav_Grab()
-	filmav_grab.a_wait_to_pull_wiki()
+	# filmav_grab.a_wait_to_pull_wiki()
 
-	#本次程序总轮循次数统计
-	# for_count = 1
-	# while True:
-	# 	Msg = "=====第 %s 次总轮循" %  for_count
-	# 	wp_logging(Msg=Msg)
-	#
-	# 	#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
-	# 	#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
-	# 	filmav_grab.grab_article_url(page_end=2)
-	# 	#自动抓取未抓取的文章详细内容
-	# 	filmav_grab.grab_articles()
-	#
-	# 	for_count += 1
-	#
-	# 	time.sleep(3)
+	# 本次程序总轮循次数统计
+	for_count = 1
+	while True:
+		Msg = "=====第 %s 次总轮循" %  for_count
+		wp_logging(Msg=Msg)
+
+		#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
+		#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
+		filmav_grab.grab_article_url(page_end=1654)
+		#自动抓取未抓取的文章详细内容
+		filmav_grab.grab_articles()
+
+		for_count += 1
+
+		time.sleep(10)
 
 
 
