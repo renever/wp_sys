@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session
 import logging
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
@@ -14,7 +15,12 @@ def create_session(engine, base):
 	session = Session()  # 生成一个Session实例
 
 	return session
+#scoped_session 线程安全
+def create_scoped_session(engine, base):
+	Session = sessionmaker(bind=engine)  # 创建一个Session类
+	session = scoped_session(Session)  # 生成一个Session实例
 
+	return session
 
 def wp_logging(level='debug', Msg='Msg',allow_print=True):
 	if level=='debug':
@@ -27,16 +33,19 @@ def get_or_create(session, model, is_global=False, defaults=None, filter_cond=No
 	"""
 	@is_global=False #db_session 是不是全局性的，是，则不能在这里关闭。
 	"""
+	created = None
 	if filter_cond is not None:
 		instance = session.query(model).filter_by(**filter_cond).first()
 	else:
 		instance = session.query(model).filter_by(**kwargs).first()
 	if instance:
-		# 文章存在 --> 返回文章实例 ，True
+		created = False
+		# 文章存在 --> 返回文章实例 ，(没有新建）False
 		if not is_global:
 			session.close()
-		return instance, True
+		return instance,created
 	else:
+		created = True
 		# params = dict((k, v) for k, v in kwargs.iteritems())
 		# params.update(defaults or {})
 		instance = model(**kwargs)
@@ -44,8 +53,8 @@ def get_or_create(session, model, is_global=False, defaults=None, filter_cond=No
 			session.add(instance)
 			session.commit()
 			session.close()
-		# 文章不存在 --> 返回文章实例 ，True
-		return instance, False
+		# 文章不存在 --> 返回文章实例 ，(有新建）True
+		return instance, created
 
 
 

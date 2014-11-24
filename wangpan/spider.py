@@ -54,7 +54,8 @@ class Filmav_Grab():
 				'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36',
 			}
 		self.article_files = {}
-		self.driver = FirefoxDriver()
+		#todo 暂时屏蔽 driver 的初始化
+		# self.driver = FirefoxDriver()
 
 		self.global_db_session = db_session
 
@@ -227,14 +228,57 @@ class Filmav_Grab():
 		return is_increased
 
 	def test(self):
-		file_links_inst_list = self.query_not_crawled_article_url()
-		file_links_inst = file_links_inst_list[0]
-		print type(file_links_inst)
-		print file_links_inst.id
-		file_links_inst.is_crawled = True
+		pass
+	def a_wait_to_pull_wiki(self):
+		"""有关线程安全的测试，避免了 数据库创建出现 实例重复创建的错误。"""
+		import threading
+		lock = threading.Lock()
 
-		self.global_db_session.add(file_links_inst)
-		self.global_db_session.commit()
+		l = [name for name in 'abcdefghijklmnopqrst!@#$%^&*()_+=-']
+		l_all = []
+		is_creading_list=list()
+		for i in range(50000):
+			l_all.append(l)
+
+
+		from utility import create_scoped_session
+		new_scoped_session = create_scoped_session(DB_ENGINE, DB_BASE)
+
+		def create_tag_from_list(list):
+			for name in list:
+				need_to_create = False
+				# print 'x..'
+				lock.acquire()
+				if not(name in is_creading_list):
+					is_creading_list.append(name)
+					need_to_create = True
+				lock.release()
+				if need_to_create:
+				# tag_inst = get_or_create(new_scoped_session,Tag, is_global=True, name=name)[0]
+					tag_inst = get_or_create(session=self.db_session(),model=Tag, is_global=False, name=name)[0]
+				# tag_inst = Tag.get_unique(session=new_scoped_session,name=name)
+				# new_scoped_session.add(tag_inst)
+				# try:
+				# 	new_scoped_session.commit()
+				# 	print 'create：%s ' % name
+				# # except exc.IntegrityError,e:
+				# # 	print 'tag:%s exist; error_msg:%s' % (tag_inst.name,e)
+				# # except exc.InvalidRequestError,e:
+				# # 	print 'tag:%s exist; error_msg:%s' % (tag_inst.name,e)
+				# except Exception, e:
+				# 	print e
+
+					# print type(tag_inst),name
+
+		pool = ThreadPool(50000)
+		start_time = time.clock()
+		pool.map(create_tag_from_list, l_all)
+		end_time = time.clock()
+		exc_time = end_time - start_time
+		print len(l)
+		print len(l_all)
+		print 'exc_time: %s ' % exc_time
+
 
 	def grab_articles(self):
 		file_links_inst = self.query_not_crawled_article_url()
@@ -447,23 +491,23 @@ class Filmav_Grab():
 if __name__ == '__main__':
 
 	filmav_grab = Filmav_Grab()
-	# filmav_grab.test()
+	filmav_grab.a_wait_to_pull_wiki()
 
 	#本次程序总轮循次数统计
-	for_count = 1
-	while True:
-		Msg = "=====第 %s 次总轮循" %  for_count
-		wp_logging(Msg=Msg)
-
-		#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
-		#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
-		filmav_grab.grab_article_url(page_end=2)
-		#自动抓取未抓取的文章详细内容
-		filmav_grab.grab_articles()
-
-		for_count += 1
-
-		time.sleep(3)
+	# for_count = 1
+	# while True:
+	# 	Msg = "=====第 %s 次总轮循" %  for_count
+	# 	wp_logging(Msg=Msg)
+	#
+	# 	#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
+	# 	#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
+	# 	filmav_grab.grab_article_url(page_end=2)
+	# 	#自动抓取未抓取的文章详细内容
+	# 	filmav_grab.grab_articles()
+	#
+	# 	for_count += 1
+	#
+	# 	time.sleep(3)
 
 
 

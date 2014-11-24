@@ -135,9 +135,24 @@ class Tag(DB_BASE):
 	def __init__(self, name):
 		self.name = name
 
-
-
-
+	@classmethod
+	def get_unique(cls, session, name):
+		# get the session cache, creating it if necessary
+		cache = session._unique_cache = getattr(session, '_unique_cache', {})
+		# create a key for memoizing
+		key = (cls, name)
+		# check the cache first
+		o = cache.get(key)
+		if o is None:
+			# check the database if it's not in the cache
+			o = session.query(cls).filter_by(name=name).first()
+			if o is None:
+				# create a new one if it's not in the database
+				o = cls(name=name)
+				session.add(o)
+			# update the cache
+			cache[key] = o
+		return o
 
 class OldDownloadLink(CommonLink):
 	__tablename__ = 'old_download_links'
