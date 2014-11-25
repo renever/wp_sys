@@ -19,6 +19,7 @@ from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, 
 from utility import create_session, wp_logging, get_or_create, FirefoxDriver
 from multiprocessing.dummy import Pool as ThreadPool
 import unicodedata
+from datetime import datetime
 import os
 import sys
 reload(sys)
@@ -29,9 +30,13 @@ sys.setdefaultencoding("utf-8")
 #已经在当前DB_SESSION 创建会更新的TAG
 TAG_LIST_IN_DB_SESSION = []
 CATEGORY_LIST_IN_DB_SESSION = []
-IS_DOWNLOADING_LIST = [] # 同时下载量10
-IS_RARING_LIST = [] #同时压缩数量 1
-IS_UNRARING_LIST = [] #同时解压数量 1
+WAITING_DOWNLOAD_LIST = [] #如果正在下载量少于10，并且该列表为空，则从数据库取得未下载的URL
+DOWNLOADING_LIST = [] # 同时下载量5
+RARING_LIST = [] #同时压缩数量 1
+UNRARING_LIST = [] #同时解压数量 1
+
+#
+MAX_DOWNLOADING_NUMBER = 5
 
 class Filmav_Grab():
 
@@ -71,7 +76,10 @@ class Filmav_Grab():
 			}
 		self.article_files = {}
 		#todo 暂时屏蔽 driver 的初始化
-		# self.driver = FirefoxDriver()
+		self.driver = FirefoxDriver()
+
+		self.driver_login_time = None
+
 
 		self.global_db_session = db_session
 
@@ -378,6 +386,11 @@ class Filmav_Grab():
 		#匹配中文，记得要进行编码
 		old_body_str =str(unicode(body).encode('utf-8'))
 
+		#todo 抓取文章的发布时间
+
+
+		#todo 排除没有包含所需要的网盘资源地址的文件。
+
 		#抓取主体
 		old_body = re.split('<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br />',old_body_str)
 		# old_body = old_body[0][:-53]
@@ -465,7 +478,7 @@ class Filmav_Grab():
 				dict_params = {}
 				dict_params.update(dict(
 					status='waiting_download',
-					file_name=file_name,
+					file_name=file_name[1:-1],#不要包括括号
 					file_size=file_size,
 					url=old_download_link,
 					website=self.website
@@ -575,23 +588,79 @@ class Filmav_Grab():
 		# pool.join()
 		return pool
 
-	def test(self):
+	def temp_make_s_links(self):
+		#把文章ID=1的 旧下载链接换成 测试的6个下载链接
 		db_sesion = self.db_session()
-		article = db_sesion.query(Article).filter_by(id=2).first()
+		article = db_sesion.query(Article).filter_by(id=1).first()
 		odls = article.old_download_links
 		print len(odls)
-		# from settings import s_links
-		# #change to test links
-		# for odl in odls:
-		# 	odl.url = s_links.pop()
-		# 	print "odl:%s" % odl.url
-		# 	db_sesion.add(odl)
-		# 	db_sesion.commit()
-		#打印赋值后的结果
-		# for odl in odls:
-		# 	print "odl:%s" % odl.url
+		#删除旧链接
+		for odl in odls:
+			db_sesion.delete(odl)
+		db_sesion.commit()
+
+		from settings import s_links
+		#change to test links
+		for s_link in s_links:
+			file_name = s_link.split('/')[-1]
+			link_inst = OldDownloadLink(url=s_link,file_name=file_name,file_size=1.00)
+			article.old_download_links.append(link_inst)
+		db_sesion.add(article)
+		db_sesion.commit()
+		for odl_inst in article.old_download_links:
+			print 'old:%s' % odl_inst.url
+
 
 		db_sesion.close()
+
+	def file_download_system(self):
+
+		#todo 如果打开下载链接后，“Download Now”没有出现，需要重新登录或者重新载入
+		#正在下载的文件小于设定数（5），并且等待下载的列表为空
+		if len(DOWNLOADING_LIST) < MAX_DOWNLOADING_NUMBER and len(WAITING_DOWNLOAD_LIST) < 0:
+			self.get_wait_to_download_urls() #已经加入待下载列表
+
+		if len(DOWNLOADING_LIST) < MAX_DOWNLOADING_NUMBER:
+			url_inst = WAITING_DOWNLOAD_LIST.pop()
+			DOWNLOADING_LIST.append(url_inst)
+			self.download_file(url_inst)
+
+
+
+	def download_file(self,url_inst):
+
+		if self.driver.login_time is None:
+			self.get_firefox_driver()
+		#登录超时检测
+		self.check_login_expire()
+		#todo 直接做成 链接下载链接，判断 立即下载 按钮是否出现。没有就重新登录。
+		self.driver.download_file(url_inst)
+
+	def check_login_expire(self):
+		#登录时间超过30分钟
+		logon_time = datetime.now() - self.driver.login_time
+		logon_time_minutes = (logon_time.seconds//60)%60
+		#todo 根据文章的发布时间，下载最新发布的3部电影。
+		if logon_time_minutes >30:
+			self.get_firefox_driver()
+
+	def get_firefox_driver(self):
+		#todo 记得重新处理异常
+		try:
+			self.driver.driver = self.driver.get_new_driver()
+		except Exception,e:
+			raise e
+
+	def get_wait_to_download_urls(self):
+		db_session = self.db_session()
+		#实际情况，过滤条件改成含有未下载地址的，最新发布的一篇文章
+		article = db_session.query(Article).filter_by(id=2).first()
+
+		for url_inst in article.old_download_links:
+			if url_inst.status == 'waiting_download':
+				WAITING_DOWNLOAD_LIST.append(url_inst)
+				print url_inst.url
+		return WAITING_DOWNLOAD_LIST
 
 if __name__ == '__main__':
 
@@ -604,8 +673,25 @@ if __name__ == '__main__':
 		Msg = "=====第 %s 次总轮循" %  for_count
 		wp_logging(Msg=Msg)
 
+		#temp 创建测试数据等。
+		# filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
 		#todo test
-		filmav_grab.test()
+
+		#文件下载，解压，压缩，上传 轮循
+		while True:
+			print "x?"
+			#todo 文件下载，处理3篇文章，正在下载列表小于10时，添加新的文件地址
+			filmav_grab.file_download_system()
+			# filmav_grab.get_wait_to_download_urll()
+			# filmav_grab.dowload_file()
+			print 'x2?'
+			#todo 文件解压，正在解压/正在压缩列表小于1时，处理新的解压任务
+
+			#todo 文件压缩，正在解压/正在压缩列表小于1时，不处理新的解压任务
+
+			#todo 文件上传，待正在上传列表小于10时，添加新的待上传文件地址
+
+			time.sleep(3600)
 
 		#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
 		#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
@@ -614,7 +700,7 @@ if __name__ == '__main__':
 		# filmav_grab.grab_articles()
 
 		for_count += 1
-		time.sleep(10)
+		time.sleep(3600)
 
 	# filmav_grab.get(url='http://filmav.com/53049.html')
 	# filmav_grab.get_image(url='http://filmav.com/52792.html')

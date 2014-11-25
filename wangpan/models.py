@@ -39,7 +39,7 @@ class CommonLink(DB_BASE):
 	status = Column(String(255))#waiting_download,downloading,downloaded,unraring,unrared,raring,rared,uploading,uploaded
 	linkbuck = Column(String(255))
 
-	def __init__(self, url, website,file_name,file_size, status):
+	def __init__(self, url,file_name='',file_size='', status='waiting_download',website='filmav.com'):
 		self.url = url
 		self.website = website
 		self.file_name = file_name

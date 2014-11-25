@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait  # available since 2.4.0
 from selenium.webdriver.support import expected_conditions as EC  # available since 2.26.0
 import time
 from datetime import datetime
+from settings import FirefoxProfilePath
 
 def create_session(engine, base):
 	Session = sessionmaker(bind=engine)  # 创建一个Session类
@@ -56,8 +57,6 @@ def get_or_create(session, model, is_global=False, defaults=None, filter_cond=No
 		# 文章不存在 --> 返回文章实例 ，(有新建）True
 		return instance, created
 
-
-
 class FirefoxDriver():
 
 	def __init__(self):
@@ -66,9 +65,10 @@ class FirefoxDriver():
 	# url_download = 'http://www.uploadable.ch/file/SwkwFPd7scRC/123.pdf'
 
 
-		self.ffprofile = webdriver.FirefoxProfile("/home/l/.mozilla/firefox/mwad0hks.default")
+		self.ffprofile = webdriver.FirefoxProfile(FirefoxProfilePath)
 		self.driver = None
 		self.create_time = datetime.now()
+		self.login_time = None
 	def get_new_driver(self):
 		driver =  webdriver.Firefox(self.ffprofile)
 		driver.get(self.login_url)
