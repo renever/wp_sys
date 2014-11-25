@@ -46,6 +46,9 @@ class CommonLink(DB_BASE):
 		self.file_size = file_size
 		self.status = status
 
+	def __unicode__(self):
+		return self.file_name
+
 
 class FileLink(CommonLink):
 	"""
@@ -160,6 +163,7 @@ class OldDownloadLink(CommonLink):
 	id = Column(Integer, primary_key=True, autoincrement=True)
 	article_id = Column(Integer, ForeignKey('articles.id'))
 	article = relationship(Article, backref=backref('old_download_links', order_by=id))
+
 
 
 class NewDownloadLink(CommonLink):
