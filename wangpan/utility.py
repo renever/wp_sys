@@ -88,16 +88,19 @@ class FirefoxDriver():
 		return driver
 
 	def download_file(self,url_inst):
+		status = False      #True表示程序已经成功开始下载文件
 		try:
 			self.driver.get(url_inst.url)
 			time.sleep(3)
 			Msg = "开始下载文件：%s" % url_inst.url
 			wp_logging(Msg=Msg)
+			status = True
+
 		except Exception,e:
 			Msg = 'Error(下载文件)--> 异常信息（%s);文章ID（%s）;下载链接（%s） ' % (e, url_inst.article_id, url_inst.url)
 			wp_logging(Msg=Msg)
 			raise e
-
+		return status
 
 	def driver_quit(self):
 		self.driver.quit()

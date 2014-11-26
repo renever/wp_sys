@@ -35,7 +35,11 @@ logging_fileConfig_path = BASE_PATH + 'logging.conf'
 logging.config.fileConfig(logging_fileConfig_path)
 logger = logging.getLogger("wp")
 
+#文件下载目录，级浏览器默认保存文件的地址
+
 #图片文件目录
+#公司PC
+DOWNLOAD_DIR = '/home/lotaku/wangpan/downloaded_files'
 
 IMG_PATH = BASE_PATH + 'wp_resource/STATIC_FILES/images'
 

@@ -1,29 +1,36 @@
 # -*- coding: utf-8 -*-
-import re
+#第三方包
 import requests
-import time
 from pyquery import PyQuery as pq
 from sqlalchemy import exc
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import exc
+#自定义settings
+#-----线程池大小
+from settings import SAVE_ARTICLE_URL_POOL_SIZE,GRAB_ARTICLE_URL_POOL_SIZE, GRAB_ARTICLES_POOL_SIZE
+
+from settings import CHUNK_SIZE,IMG_PATH
+from settings import DB_ENGINE, DB_BASE
+#-----文件夹目录
+from settings import DOWNLOAD_DIR
+#数据库表
+from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, Category
+from utility import create_session, wp_logging, get_or_create, FirefoxDriver
+import unicodedata
+#系统包
 import logging
 import logging.config
 from contextlib import closing
-from settings import CHUNK_SIZE,IMG_PATH
-from settings import DB_ENGINE, DB_BASE,logger
-#线程池大小
-from settings import SAVE_ARTICLE_URL_POOL_SIZE,GRAB_ARTICLE_URL_POOL_SIZE, GRAB_ARTICLES_POOL_SIZE
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import exc
-#数据库表
-from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, Category
-
-from utility import create_session, wp_logging, get_or_create, FirefoxDriver
 from multiprocessing.dummy import Pool as ThreadPool
-import unicodedata
 from datetime import datetime
+import re
+import time
 import os
+import thread
+import threading
 import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
+# reload(sys)
+# sys.setdefaultencoding("utf-8")
 
 # logging.config.fileConfig("/home/l/app/learning/wangpan/logging.conf")
 # logger = logging.getLogger("wp")
@@ -572,10 +579,12 @@ class Filmav_Grab():
 
 		h = pq(r.content)
 		file_name = h('#file_name').attr('title')
-		file_size = h('.filename_normal').html()
-		Msg = "抓取文件名：%s，文件夹大小：%s " % (file_name,file_size)
+		file_size_and_unit = h('.filename_normal').html()
+		file_size = file_size_and_unit[1:-4]
+		file_size_unit = file_size_and_unit[-3:-1]
+		Msg = "抓取文件名：%s，文件夹大小：%s " % (file_name, file_size)
 		wp_logging(Msg=Msg, allow_print=False)
-		content.update(file_name=file_name,file_size=file_size)
+		content.update(file_name=file_name,file_size=file_size,file_size_unit=file_size_unit)
 		#匹配中文，记得要进行编码
 		# old_body_str =str(unicode(body).encode('utf-8'))
 		return content
@@ -637,7 +646,25 @@ class Filmav_Grab():
 		#登录超时检测
 		self.check_login_expire()
 		#todo 直接做成 链接下载链接，判断 立即下载 按钮是否出现。没有就重新登录。
-		self.driver.download_file(url_inst)
+		been_download =  self.driver.download_file(url_inst)
+		#todo 跟踪文件是否成功下载，文件存在，并且大小正确
+		# thread.s
+
+	def check_file_is_downloaded(self,url_inst):
+		'''跟踪文件是否成功下载，文件存在，并且大小正确'''
+		while True:
+			file_names = os.listdir(DOWNLOAD_DIR)
+			if url_inst.file_name in file_names:
+				print 'yes'
+
+
+				break
+			time.sleep(3)
+
+
+
+
+
 
 	def check_login_expire(self):
 		#登录时间超过30分钟
@@ -677,14 +704,14 @@ if __name__ == '__main__':
 		wp_logging(Msg=Msg)
 
 		#temp 创建测试数据等。
-		filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
+		# filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
 		#todo test
 
 		#文件下载，解压，压缩，上传 轮循
 		while True:
 
 			#todo 文件下载，处理3篇文章，正在下载列表小于10时，添加新的文件地址
-			# filmav_grab.file_download_system()
+			filmav_grab.file_download_system()
 			# filmav_grab.get_wait_to_download_urll()
 			# filmav_grab.dowload_file()
 

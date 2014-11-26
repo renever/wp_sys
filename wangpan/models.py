@@ -33,6 +33,7 @@ class CommonLink(DB_BASE):
 
 	file_name = Column(String(255))
 	file_size = Column(String(255))
+	file_size_unit = Column(String(20))
 	url = Column(String(255), unique=True)
 	is_done = Column(Boolean, default=False)
 	website = Column(String(255))
