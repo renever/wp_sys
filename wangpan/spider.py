@@ -631,18 +631,28 @@ class Filmav_Grab():
 		db_sesion.close()
 
 	def file_download_system(self):
+		print "here?"
+		while True:
+			#todo 如果打开下载链接后，“Download Now”没有出现，需要重新登录或者重新载入
+			#正在下载的文件小于设定数（5），并且等待下载的列表为空
+			if len(WAITING_DOWNLOAD_LIST) <= 0:
+				#查询最新文章的status = waiting_download 的URL并加入待下载列表
+				self.get_wait_to_download_urls()
 
-		#todo 如果打开下载链接后，“Download Now”没有出现，需要重新登录或者重新载入
-		#正在下载的文件小于设定数（5），并且等待下载的列表为空
-		if len(DOWNLOADING_LIST) < MAX_DOWNLOADING_NUMBER and len(WAITING_DOWNLOAD_LIST) < 0:
-			self.get_wait_to_download_urls() #已经加入待下载列表
+			if len(DOWNLOADING_LIST) < MAX_DOWNLOADING_NUMBER and len(WAITING_DOWNLOAD_LIST) > 0:
+				url_inst = WAITING_DOWNLOAD_LIST.pop()
+				DOWNLOADING_LIST.append(url_inst)
+				url_inst.status = 'downloading'
+				#todo try...
+				self.update_inst(url_inst)
+				self.download_file(url_inst)
+			time.sleep(3)
 
-		if len(DOWNLOADING_LIST) < MAX_DOWNLOADING_NUMBER:
-			url_inst = WAITING_DOWNLOAD_LIST.pop()
-			DOWNLOADING_LIST.append(url_inst)
-			self.download_file(url_inst)
-
-
+	def update_inst(self,inst):
+		db_session = self.db_session()
+		db_session.add(inst)
+		db_session.commit()
+		db_session.close()
 
 	def download_file(self,url_inst):
 
@@ -650,25 +660,27 @@ class Filmav_Grab():
 			self.get_firefox_driver()
 		#登录超时检测
 		self.check_login_expire()
-		#todo 直接做成 链接下载链接，判断 立即下载 按钮是否出现。没有就重新登录。
+		#todo 直接做成 连接“下载链接”，判断 “立即下载” 按钮是否出现。没有就重新登录。
 		been_download =  self.driver.download_file(url_inst)
 		#todo 跟踪文件是否成功下载，文件存在，并且大小正确
-		# thread.s
+		thread.start_new_thread(self.check_file_is_downloaded, (url_inst,))
 
 	def check_file_is_downloaded(self,url_inst):
 		'''跟踪文件是否成功下载，文件存在，并且大小正确'''
+		db_session = self.db_session()
 		while True:
 			file_names = os.listdir(DOWNLOAD_DIR)
 			if url_inst.file_name in file_names:
-				print 'yes'
-
-
+				print "start new thread %s" % datetime.now()
+				url_inst.status = 'downloaded'
+				# self.update_inst(url_inst)
+				db_session.add(url_inst)
+				db_session.commit()
+				Msg = 'have download ：%s' % url_inst.file_name.encode('utf8')
+				wp_logging(Msg=Msg)
 				break
 			time.sleep(3)
-
-
-
-
+			#todo 根据文件大小，下载速度，得到时间+5分钟，超时，则改url状态为等待下载，下次再下载
 
 
 	def check_login_expire(self):
@@ -683,20 +695,23 @@ class Filmav_Grab():
 		#todo 记得重新处理异常
 		try:
 			self.driver.driver = self.driver.get_new_driver()
+			self.driver.login_time = datetime.now()
 		except Exception,e:
 			raise e
 
 	def get_wait_to_download_urls(self):
 		db_session = self.db_session()
 		#实际情况，过滤条件改成含有未下载地址的，最新发布的一篇文章
-		article = db_session.query(Article).filter_by(id=2).first()
-
+		article = db_session.query(Article).filter_by(id=1).first()
 		for url_inst in article.old_download_links:
 			if url_inst.status == 'waiting_download':
 				WAITING_DOWNLOAD_LIST.append(url_inst)
-				print url_inst.url
-		return WAITING_DOWNLOAD_LIST
-
+		db_session.close()
+		# for inst in WAITING_DOWNLOAD_LIST:
+		# 	self.test_print_inst(inst)
+		# return db_session
+	def test_print_inst(self,inst):
+		print inst.url
 if __name__ == '__main__':
 
 	filmav_grab = Filmav_Grab()
@@ -709,25 +724,28 @@ if __name__ == '__main__':
 		wp_logging(Msg=Msg)
 
 		#temp 创建测试数据等。
-		filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
+		# filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
 		#todo test
 
 		#文件下载，解压，压缩，上传 轮循
-		while True:
+		#todo 文件下载，处理3篇文章，正在下载列表小于10时，添加新的文件地址
+		download_thread = threading.Thread(target=filmav_grab.file_download_system)
+		download_thread.start()
+		# thread.start_new_thread(filmav_grab.file_download_system, ())
+		print 'start download system... '
+		# filmav_grab.get_wait_to_download_urls()
+		# filmav_grab.dowload_file()
 
-			#todo 文件下载，处理3篇文章，正在下载列表小于10时，添加新的文件地址
-			# filmav_grab.file_download_system()
-			# filmav_grab.get_wait_to_download_urll()
-			# filmav_grab.dowload_file()
 
-			#todo 文件解压，正在解压/正在压缩列表小于1时，处理新的解压任务
+		#todo 文件解压，正在解压/正在压缩列表小于1时，处理新的解压任务
+		print 'start unrar system... '
 
-			#todo 文件压缩，正在解压/正在压缩列表小于1时，不处理新的解压任务
+		#todo 文件压缩，正在解压/正在压缩列表小于1时，不处理新的解压任务
+		print 'start rar system... '
+		#todo 文件上传，待正在上传列表小于10时，添加新的待上传文件地址
+		print 'start upload system... '
 
-			#todo 文件上传，待正在上传列表小于10时，添加新的待上传文件地址
-
-			time.sleep(3600)
-
+		print 'man process sleep 3600... '
 		#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
 		#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
 		# filmav_grab.grab_article_url(page_end=1)

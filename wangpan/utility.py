@@ -9,9 +9,9 @@ from selenium.webdriver.support.ui import WebDriverWait  # available since 2.4.0
 from selenium.webdriver.support import expected_conditions as EC  # available since 2.26.0
 import time
 from datetime import datetime
-from settings import FirefoxProfilePath
+from settings import FirefoxProfilePath,DB_ENGINE, DB_BASE
 
-def create_session(engine, base):
+def create_session(engine=DB_ENGINE, base=DB_BASE):
 	Session = sessionmaker(bind=engine)  # 创建一个Session类
 	session = Session()  # 生成一个Session实例
 
@@ -89,17 +89,19 @@ class FirefoxDriver():
 
 	def download_file(self,url_inst):
 		status = False      #True表示程序已经成功开始下载文件
+		db_session = create_session()
+		db_session.add(url_inst)
 		try:
 			self.driver.get(url_inst.url)
-			time.sleep(3)
-			Msg = "开始下载文件：%s" % url_inst.url
-			wp_logging(Msg=Msg)
+			# time.sleep(3)
+			# Msg = "开始下载文件：%s" % url_inst.url
+			# wp_logging(Msg=Msg)
 			status = True
-
 		except Exception,e:
 			Msg = 'Error(下载文件)--> 异常信息（%s);文章ID（%s）;下载链接（%s） ' % (e, url_inst.article_id, url_inst.url)
 			wp_logging(Msg=Msg)
 			raise e
+		db_session.close()
 		return status
 
 	def driver_quit(self):
