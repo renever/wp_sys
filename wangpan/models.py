@@ -40,12 +40,13 @@ class CommonLink(DB_BASE):
 	status = Column(String(255))#waiting_download,downloading,downloaded,unraring,unrared,raring,rared,uploading,uploaded
 	linkbuck = Column(String(255))
 
-	def __init__(self, url,file_name='',file_size='', status='waiting_download',website='filmav.com'):
+	def __init__(self, url,file_name='',file_size='', status='waiting_download',website='filmav.com',file_size_unit=''):
 		self.url = url
 		self.website = website
 		self.file_name = file_name
 		self.file_size = file_size
 		self.status = status
+		self.file_size_unit=file_size_unit
 
 	def __unicode__(self):
 		return self.file_name
