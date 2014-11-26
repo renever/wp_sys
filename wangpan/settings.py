@@ -8,7 +8,7 @@ import logging.config
 import os
 BASE_PATH = os.path.dirname('__file__')
 #XPS
-DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
+# DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
 # 					     # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
 
 #由于SQLite存在并发死锁，不再使用。# 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
@@ -16,14 +16,17 @@ DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", 
 
 
 #公司电脑 # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
-# DB_ENGINE = create_engine("mysql://root:@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
+DB_ENGINE = create_engine("mysql://root:@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
 
 
 DB_BASE = declarative_base()  # 生成了declarative基类, 以后的model继承此类
 
 #浏览器配置地址
 #xps
-FirefoxProfilePath = '/home/l/.mozilla/firefox/mwad0hks.default'
+# FirefoxProfilePath = '/home/l/.mozilla/firefox/mwad0hks.default'
+#公司
+FirefoxProfilePath = '/home/lotaku/.mozilla/firefox/mwad0hks.default'
+
 
 CHUNK_SIZE = 8192
 

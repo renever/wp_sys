@@ -603,7 +603,10 @@ class Filmav_Grab():
 		#change to test links
 		for s_link in s_links:
 			file_name = s_link.split('/')[-1]
-			link_inst = OldDownloadLink(url=s_link,file_name=file_name,file_size=1.00)
+			# link_inst = OldDownloadLink(url=s_link,file_name=file_name,file_size=1.00)
+			filter_cond = dict(url=s_link)
+			kwargs_dict = dict(url=s_link, file_name=file_name, file_size='1.00 MB')
+			link_inst = get_or_create(session=db_sesion,is_global=True, model=OldDownloadLink, filter_cond=filter_cond,**kwargs_dict)[0]
 			article.old_download_links.append(link_inst)
 		db_sesion.add(article)
 		db_sesion.commit()
@@ -674,17 +677,17 @@ if __name__ == '__main__':
 		wp_logging(Msg=Msg)
 
 		#temp 创建测试数据等。
-		# filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
+		filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
 		#todo test
 
 		#文件下载，解压，压缩，上传 轮循
 		while True:
-			print "x?"
+
 			#todo 文件下载，处理3篇文章，正在下载列表小于10时，添加新的文件地址
-			filmav_grab.file_download_system()
+			# filmav_grab.file_download_system()
 			# filmav_grab.get_wait_to_download_urll()
 			# filmav_grab.dowload_file()
-			print 'x2?'
+
 			#todo 文件解压，正在解压/正在压缩列表小于1时，处理新的解压任务
 
 			#todo 文件压缩，正在解压/正在压缩列表小于1时，不处理新的解压任务
