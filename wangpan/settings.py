@@ -6,26 +6,30 @@ from sqlalchemy.ext.declarative import declarative_base
 import logging
 import logging.config
 import os
+import pwd
 BASE_PATH = os.path.dirname('__file__')
-#XPS
-# DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
-# 					     # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
+if pwd.getpwuid(os.getuid())[0]=='l':
+	#XPS
+	DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
+	# 					     # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
+	#浏览器配置地址
+	#xps
+	FirefoxProfilePath = '/home/l/.mozilla/firefox/mwad0hks.default'
+	#图片文件目录
+	# DOWNLOAD_DIR = BASE_PATH + 'downloaded_files/'
+else:#公司PC
+	#由于SQLite存在并发死锁，不再使用。# 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
+	# DB_ENGINE = create_engine("sqlite:///wangpan", echo=True)
 
-#由于SQLite存在并发死锁，不再使用。# 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
-# DB_ENGINE = create_engine("sqlite:///wangpan", echo=True)
+	DB_ENGINE = create_engine("mysql://root:@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
+	FirefoxProfilePath = '/home/lotaku/.mozilla/firefox/mwad0hks.default'
 
-
-#公司电脑 # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
-DB_ENGINE = create_engine("mysql://root:@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
-
+	# DOWNLOAD_DIR = '/home/lotaku/wangpan/downloaded_files'
 
 DB_BASE = declarative_base()  # 生成了declarative基类, 以后的model继承此类
 
-#浏览器配置地址
-#xps
-# FirefoxProfilePath = '/home/l/.mozilla/firefox/mwad0hks.default'
-#公司
-FirefoxProfilePath = '/home/lotaku/.mozilla/firefox/mwad0hks.default'
+#图片文件目录
+DOWNLOAD_DIR = BASE_PATH + 'downloaded_files/'
 
 
 CHUNK_SIZE = 8192
@@ -37,9 +41,7 @@ logger = logging.getLogger("wp")
 
 #文件下载目录，级浏览器默认保存文件的地址
 
-#图片文件目录
-#公司PC
-DOWNLOAD_DIR = '/home/lotaku/wangpan/downloaded_files'
+
 
 IMG_PATH = BASE_PATH + 'wp_resource/STATIC_FILES/images'
 
