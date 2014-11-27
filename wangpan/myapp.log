@@ -633,3 +633,219 @@ Wed, 26 Nov 2014 17:56:05 utility.py[line:30] DEBUG have download ：chrome.part
 Wed, 26 Nov 2014 18:05:07 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:49828/hub/session/b3e30d82-7ae2-4217-9fce-5528ad3164c8/url {"url": "http://www.uploadable.ch/file/FWMcqgNY6BZr/chrome.part4.rar", "sessionId": "b3e30d82-7ae2-4217-9fce-5528ad3164c8"}
 Wed, 26 Nov 2014 18:05:12 remote_connection.py[line:458] DEBUG Finished Request
 Wed, 26 Nov 2014 18:05:12 utility.py[line:30] DEBUG have download ：chrome.part4.rar
+Thu, 27 Nov 2014 09:46:15 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 09:46:20 utility.py[line:30] DEBUG =====第 2 次总轮循
+Thu, 27 Nov 2014 09:46:25 utility.py[line:30] DEBUG =====第 3 次总轮循
+Thu, 27 Nov 2014 09:46:30 utility.py[line:30] DEBUG =====第 4 次总轮循
+Thu, 27 Nov 2014 09:46:35 utility.py[line:30] DEBUG =====第 5 次总轮循
+Thu, 27 Nov 2014 09:46:54 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 09:46:57 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:60703/hub/session {"desiredCapabilities": {"platform": "ANY", "browserName": "firefox", "version": "", "javascriptEnabled": true}}
+Thu, 27 Nov 2014 09:46:59 utility.py[line:30] DEBUG =====第 2 次总轮循
+Thu, 27 Nov 2014 09:47:04 utility.py[line:30] DEBUG =====第 3 次总轮循
+Thu, 27 Nov 2014 09:49:25 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 09:49:28 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session {"desiredCapabilities": {"platform": "ANY", "browserName": "firefox", "version": "", "javascriptEnabled": true}}
+Thu, 27 Nov 2014 09:49:28 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:49:28 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/url {"url": "http://www.uploadable.ch/login.php", "sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf"}
+Thu, 27 Nov 2014 09:49:30 utility.py[line:30] DEBUG =====第 2 次总轮循
+Thu, 27 Nov 2014 09:49:35 utility.py[line:30] DEBUG =====第 3 次总轮循
+Thu, 27 Nov 2014 09:49:40 utility.py[line:30] DEBUG =====第 4 次总轮循
+Thu, 27 Nov 2014 09:49:45 utility.py[line:30] DEBUG =====第 5 次总轮循
+Thu, 27 Nov 2014 09:49:50 utility.py[line:30] DEBUG =====第 6 次总轮循
+Thu, 27 Nov 2014 09:49:55 utility.py[line:30] DEBUG =====第 7 次总轮循
+Thu, 27 Nov 2014 09:50:00 utility.py[line:30] DEBUG =====第 8 次总轮循
+Thu, 27 Nov 2014 09:50:05 utility.py[line:30] DEBUG =====第 9 次总轮循
+Thu, 27 Nov 2014 09:50:10 utility.py[line:30] DEBUG =====第 10 次总轮循
+Thu, 27 Nov 2014 09:50:13 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:13 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/element {"using": "name", "sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf", "value": "userName"}
+Thu, 27 Nov 2014 09:50:13 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:13 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/element {"using": "name", "sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf", "value": "userPassword"}
+Thu, 27 Nov 2014 09:50:13 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:13 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/element/{b5696cd2-6eb1-4908-b774-8d7e656448e3}/clear {"sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf", "id": "{b5696cd2-6eb1-4908-b774-8d7e656448e3}"}
+Thu, 27 Nov 2014 09:50:13 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:13 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/element/{188a9b40-a773-46a3-a6e1-da4b965e2d8b}/clear {"sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf", "id": "{188a9b40-a773-46a3-a6e1-da4b965e2d8b}"}
+Thu, 27 Nov 2014 09:50:13 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:13 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/element/{b5696cd2-6eb1-4908-b774-8d7e656448e3}/value {"sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf", "id": "{b5696cd2-6eb1-4908-b774-8d7e656448e3}", "value": ["l", "x", "l", "0", "0", "1"]}
+Thu, 27 Nov 2014 09:50:14 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:14 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/element/{188a9b40-a773-46a3-a6e1-da4b965e2d8b}/value {"sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf", "id": "{188a9b40-a773-46a3-a6e1-da4b965e2d8b}", "value": ["q", "Q", "2", "@", "w", "W"]}
+Thu, 27 Nov 2014 09:50:14 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:14 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/element {"using": "id", "sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf", "value": "loginFormSubmit"}
+Thu, 27 Nov 2014 09:50:14 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:14 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/element/{d015249f-2a8c-4390-ad1e-5ddb1da5a723}/click {"sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf", "id": "{d015249f-2a8c-4390-ad1e-5ddb1da5a723}"}
+Thu, 27 Nov 2014 09:50:15 utility.py[line:30] DEBUG =====第 11 次总轮循
+Thu, 27 Nov 2014 09:50:16 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:16 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/element {"using": "class name", "sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf", "value": "dashboard_button"}
+Thu, 27 Nov 2014 09:50:20 utility.py[line:30] DEBUG =====第 12 次总轮循
+Thu, 27 Nov 2014 09:50:25 utility.py[line:30] DEBUG =====第 13 次总轮循
+Thu, 27 Nov 2014 09:50:30 utility.py[line:30] DEBUG =====第 14 次总轮循
+Thu, 27 Nov 2014 09:50:32 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:32 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:35652/hub/session/e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf/url {"url": "http://www.uploadable.ch/file/4XBstq46gFbN/chrome.part1.rar", "sessionId": "e91361c2-5a0b-4d66-9fab-bbb11ad7ceaf"}
+Thu, 27 Nov 2014 09:50:35 utility.py[line:30] DEBUG =====第 15 次总轮循
+Thu, 27 Nov 2014 09:50:37 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 09:50:40 utility.py[line:30] DEBUG =====第 16 次总轮循
+Thu, 27 Nov 2014 09:50:45 utility.py[line:30] DEBUG =====第 17 次总轮循
+Thu, 27 Nov 2014 09:50:50 utility.py[line:30] DEBUG =====第 18 次总轮循
+Thu, 27 Nov 2014 10:22:57 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:23:02 utility.py[line:30] DEBUG =====第 2 次总轮循
+Thu, 27 Nov 2014 10:23:07 utility.py[line:30] DEBUG =====第 3 次总轮循
+Thu, 27 Nov 2014 10:23:12 utility.py[line:30] DEBUG =====第 4 次总轮循
+Thu, 27 Nov 2014 10:23:17 utility.py[line:30] DEBUG =====第 5 次总轮循
+Thu, 27 Nov 2014 10:23:22 utility.py[line:30] DEBUG =====第 6 次总轮循
+Thu, 27 Nov 2014 10:23:27 utility.py[line:30] DEBUG =====第 7 次总轮循
+Thu, 27 Nov 2014 10:23:32 utility.py[line:30] DEBUG =====第 8 次总轮循
+Thu, 27 Nov 2014 10:23:37 utility.py[line:30] DEBUG =====第 9 次总轮循
+Thu, 27 Nov 2014 10:23:42 utility.py[line:30] DEBUG =====第 10 次总轮循
+Thu, 27 Nov 2014 10:23:47 utility.py[line:30] DEBUG =====第 11 次总轮循
+Thu, 27 Nov 2014 10:23:52 utility.py[line:30] DEBUG =====第 12 次总轮循
+Thu, 27 Nov 2014 10:23:57 utility.py[line:30] DEBUG =====第 13 次总轮循
+Thu, 27 Nov 2014 10:24:02 utility.py[line:30] DEBUG =====第 14 次总轮循
+Thu, 27 Nov 2014 10:24:07 utility.py[line:30] DEBUG =====第 15 次总轮循
+Thu, 27 Nov 2014 10:24:12 utility.py[line:30] DEBUG =====第 16 次总轮循
+Thu, 27 Nov 2014 10:24:17 utility.py[line:30] DEBUG =====第 17 次总轮循
+Thu, 27 Nov 2014 10:24:22 utility.py[line:30] DEBUG =====第 18 次总轮循
+Thu, 27 Nov 2014 10:24:27 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:24:32 utility.py[line:30] DEBUG =====第 2 次总轮循
+Thu, 27 Nov 2014 10:24:37 utility.py[line:30] DEBUG =====第 3 次总轮循
+Thu, 27 Nov 2014 10:24:42 utility.py[line:30] DEBUG =====第 4 次总轮循
+Thu, 27 Nov 2014 10:24:47 utility.py[line:30] DEBUG =====第 5 次总轮循
+Thu, 27 Nov 2014 10:24:52 utility.py[line:30] DEBUG =====第 6 次总轮循
+Thu, 27 Nov 2014 10:24:57 utility.py[line:30] DEBUG =====第 7 次总轮循
+Thu, 27 Nov 2014 10:25:01 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:25:14 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:25:19 utility.py[line:30] DEBUG =====第 2 次总轮循
+Thu, 27 Nov 2014 10:25:24 utility.py[line:30] DEBUG =====第 3 次总轮循
+Thu, 27 Nov 2014 10:25:29 utility.py[line:30] DEBUG =====第 4 次总轮循
+Thu, 27 Nov 2014 10:25:34 utility.py[line:30] DEBUG =====第 5 次总轮循
+Thu, 27 Nov 2014 10:25:38 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:26:11 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:27:10 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:27:17 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session {"desiredCapabilities": {"platform": "ANY", "browserName": "firefox", "version": "", "javascriptEnabled": true}}
+Thu, 27 Nov 2014 10:27:17 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:54052/hub/session {"desiredCapabilities": {"platform": "ANY", "browserName": "firefox", "version": "", "javascriptEnabled": true}}
+Thu, 27 Nov 2014 10:27:17 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:17 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/url {"url": "http://www.uploadable.ch/login.php", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd"}
+Thu, 27 Nov 2014 10:27:18 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:18 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:54052/hub/session/6d5d7b7d-9f34-4ca7-aedb-c18939fe5766/url {"url": "http://www.uploadable.ch/login.php", "sessionId": "6d5d7b7d-9f34-4ca7-aedb-c18939fe5766"}
+Thu, 27 Nov 2014 10:27:20 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:20 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "userName"}
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "userPassword"}
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element/{545b7ed7-b7df-424e-b1d3-b887cdda9c04}/clear {"sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "id": "{545b7ed7-b7df-424e-b1d3-b887cdda9c04}"}
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element/{845b4772-4e8f-40f5-b493-0086ddf0e4d0}/clear {"sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "id": "{845b4772-4e8f-40f5-b493-0086ddf0e4d0}"}
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element/{545b7ed7-b7df-424e-b1d3-b887cdda9c04}/value {"sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "id": "{545b7ed7-b7df-424e-b1d3-b887cdda9c04}", "value": ["l", "x", "l", "0", "0", "1"]}
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element/{845b4772-4e8f-40f5-b493-0086ddf0e4d0}/value {"sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "id": "{845b4772-4e8f-40f5-b493-0086ddf0e4d0}", "value": ["q", "Q", "2", "@", "w", "W"]}
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "id", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "loginFormSubmit"}
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:21 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element/{9e95ba77-6b25-4bb4-9920-baa060215238}/click {"sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "id": "{9e95ba77-6b25-4bb4-9920-baa060215238}"}
+Thu, 27 Nov 2014 10:27:23 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:23 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:24 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:25 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:25 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:25 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:25 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:26 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:26 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:26 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:26 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:27 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:27 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:27 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:27 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:28 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:28 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:28 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:28 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:29 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:29 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:27:29 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:41841/hub/session/59884dc3-e7e3-49b6-a01b-24a7992da1bd/element {"using": "class name", "sessionId": "59884dc3-e7e3-49b6-a01b-24a7992da1bd", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:27:40 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:28:01 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:28:04 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:50723/hub/session {"desiredCapabilities": {"platform": "ANY", "browserName": "firefox", "version": "", "javascriptEnabled": true}}
+Thu, 27 Nov 2014 10:28:05 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:28:05 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:50723/hub/session/7a89b6c3-6f2e-4429-98fd-24b1a6ddeeb4/url {"url": "http://www.uploadable.ch/login.php", "sessionId": "7a89b6c3-6f2e-4429-98fd-24b1a6ddeeb4"}
+Thu, 27 Nov 2014 10:28:57 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:29:16 utility.py[line:30] DEBUG =====第 1 次总轮循
+Thu, 27 Nov 2014 10:29:19 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session {"desiredCapabilities": {"platform": "ANY", "browserName": "firefox", "version": "", "javascriptEnabled": true}}
+Thu, 27 Nov 2014 10:29:19 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:29:19 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/url {"url": "http://www.uploadable.ch/login.php", "sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f"}
+Thu, 27 Nov 2014 10:29:21 utility.py[line:30] DEBUG =====第 2 次总轮循
+Thu, 27 Nov 2014 10:29:26 utility.py[line:30] DEBUG =====第 3 次总轮循
+Thu, 27 Nov 2014 10:29:31 utility.py[line:30] DEBUG =====第 4 次总轮循
+Thu, 27 Nov 2014 10:29:36 utility.py[line:30] DEBUG =====第 5 次总轮循
+Thu, 27 Nov 2014 10:29:41 utility.py[line:30] DEBUG =====第 6 次总轮循
+Thu, 27 Nov 2014 10:29:46 utility.py[line:30] DEBUG =====第 7 次总轮循
+Thu, 27 Nov 2014 10:29:51 utility.py[line:30] DEBUG =====第 8 次总轮循
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/element {"using": "name", "sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f", "value": "userName"}
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/element {"using": "name", "sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f", "value": "userPassword"}
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/element/{4ca61aa9-b20e-4b65-9365-cb8d479fec4b}/clear {"sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f", "id": "{4ca61aa9-b20e-4b65-9365-cb8d479fec4b}"}
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/element/{7b3c0a30-2b8d-4447-a635-e567bb829239}/clear {"sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f", "id": "{7b3c0a30-2b8d-4447-a635-e567bb829239}"}
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/element/{4ca61aa9-b20e-4b65-9365-cb8d479fec4b}/value {"sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f", "id": "{4ca61aa9-b20e-4b65-9365-cb8d479fec4b}", "value": ["l", "x", "l", "0", "0", "1"]}
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:29:54 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/element/{7b3c0a30-2b8d-4447-a635-e567bb829239}/value {"sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f", "id": "{7b3c0a30-2b8d-4447-a635-e567bb829239}", "value": ["q", "Q", "2", "@", "w", "W"]}
+Thu, 27 Nov 2014 10:29:55 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:29:55 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/element {"using": "id", "sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f", "value": "loginFormSubmit"}
+Thu, 27 Nov 2014 10:29:55 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:29:55 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/element/{53a2a3de-69c9-40fa-bf2d-e734e28168aa}/click {"sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f", "id": "{53a2a3de-69c9-40fa-bf2d-e734e28168aa}"}
+Thu, 27 Nov 2014 10:29:56 utility.py[line:30] DEBUG =====第 9 次总轮循
+Thu, 27 Nov 2014 10:29:57 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:29:57 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/element {"using": "class name", "sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f", "value": "dashboard_button"}
+Thu, 27 Nov 2014 10:30:01 utility.py[line:30] DEBUG =====第 10 次总轮循
+Thu, 27 Nov 2014 10:30:06 utility.py[line:30] DEBUG =====第 11 次总轮循
+Thu, 27 Nov 2014 10:30:11 utility.py[line:30] DEBUG =====第 12 次总轮循
+Thu, 27 Nov 2014 10:30:16 utility.py[line:30] DEBUG =====第 13 次总轮循
+Thu, 27 Nov 2014 10:30:21 utility.py[line:30] DEBUG =====第 14 次总轮循
+Thu, 27 Nov 2014 10:30:26 utility.py[line:30] DEBUG =====第 15 次总轮循
+Thu, 27 Nov 2014 10:30:31 utility.py[line:30] DEBUG =====第 16 次总轮循
+Thu, 27 Nov 2014 10:30:36 utility.py[line:30] DEBUG =====第 17 次总轮循
+Thu, 27 Nov 2014 10:30:40 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:30:40 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/url {"url": "http://www.uploadable.ch/file/Ud29HCTsFmWu/chrome.part6.rar", "sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f"}
+Thu, 27 Nov 2014 10:30:41 utility.py[line:30] DEBUG =====第 18 次总轮循
+Thu, 27 Nov 2014 10:30:46 utility.py[line:30] DEBUG =====第 19 次总轮循
+Thu, 27 Nov 2014 10:30:48 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:30:51 utility.py[line:30] DEBUG =====第 20 次总轮循
+Thu, 27 Nov 2014 10:30:51 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/url {"url": "http://www.uploadable.ch/file/CtSRpcYSZkqG/chrome.part5.rar", "sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f"}
+Thu, 27 Nov 2014 10:30:53 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:30:55 utility.py[line:30] DEBUG have download ：chrome.part6.rar
+Thu, 27 Nov 2014 10:30:56 utility.py[line:30] DEBUG =====第 21 次总轮循
+Thu, 27 Nov 2014 10:30:56 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/url {"url": "http://www.uploadable.ch/file/FWMcqgNY6BZr/chrome.part4.rar", "sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f"}
+Thu, 27 Nov 2014 10:30:59 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:31:01 utility.py[line:30] DEBUG =====第 22 次总轮循
+Thu, 27 Nov 2014 10:31:02 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/url {"url": "http://www.uploadable.ch/file/AF3ufw5qsQvp/chrome.part3.rar", "sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f"}
+Thu, 27 Nov 2014 10:31:04 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:31:06 utility.py[line:30] DEBUG =====第 23 次总轮循
+Thu, 27 Nov 2014 10:31:07 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:43442/hub/session/ef5fb44e-de01-4873-94ef-d6f457cd848f/url {"url": "http://www.uploadable.ch/file/dGV4kpjY4XZ6/chrome.part2.rar", "sessionId": "ef5fb44e-de01-4873-94ef-d6f457cd848f"}
+Thu, 27 Nov 2014 10:31:08 remote_connection.py[line:458] DEBUG Finished Request
+Thu, 27 Nov 2014 10:31:11 utility.py[line:30] DEBUG =====第 24 次总轮循
+Thu, 27 Nov 2014 10:31:13 utility.py[line:30] DEBUG have download ：chrome.part3.rar
+Thu, 27 Nov 2014 10:31:14 utility.py[line:30] DEBUG have download ：chrome.part2.rar
+Thu, 27 Nov 2014 10:31:16 utility.py[line:30] DEBUG =====第 25 次总轮循
+Thu, 27 Nov 2014 10:31:17 utility.py[line:30] DEBUG have download ：chrome.part5.rar
+Thu, 27 Nov 2014 10:31:17 utility.py[line:30] DEBUG have download ：chrome.part4.rar
+Thu, 27 Nov 2014 10:31:21 utility.py[line:30] DEBUG =====第 26 次总轮循
+Thu, 27 Nov 2014 10:31:26 utility.py[line:30] DEBUG =====第 27 次总轮循
+Thu, 27 Nov 2014 10:31:31 utility.py[line:30] DEBUG =====第 28 次总轮循
+Thu, 27 Nov 2014 10:31:36 utility.py[line:30] DEBUG =====第 29 次总轮循
+Thu, 27 Nov 2014 10:31:41 utility.py[line:30] DEBUG =====第 30 次总轮循
+Thu, 27 Nov 2014 10:31:46 utility.py[line:30] DEBUG =====第 31 次总轮循
+Thu, 27 Nov 2014 10:31:51 utility.py[line:30] DEBUG =====第 32 次总轮循
+Thu, 27 Nov 2014 10:31:56 utility.py[line:30] DEBUG =====第 33 次总轮循
+Thu, 27 Nov 2014 10:32:01 utility.py[line:30] DEBUG =====第 34 次总轮循
+Thu, 27 Nov 2014 10:32:06 utility.py[line:30] DEBUG =====第 35 次总轮循
+Thu, 27 Nov 2014 10:32:11 utility.py[line:30] DEBUG =====第 36 次总轮循
+Thu, 27 Nov 2014 10:32:16 utility.py[line:30] DEBUG =====第 37 次总轮循
+Thu, 27 Nov 2014 10:32:21 utility.py[line:30] DEBUG =====第 38 次总轮循
+Thu, 27 Nov 2014 10:32:26 utility.py[line:30] DEBUG =====第 39 次总轮循
+Thu, 27 Nov 2014 10:32:31 utility.py[line:30] DEBUG =====第 40 次总轮循
+Thu, 27 Nov 2014 10:32:36 utility.py[line:30] DEBUG =====第 41 次总轮循
+Thu, 27 Nov 2014 10:32:41 utility.py[line:30] DEBUG =====第 42 次总轮循
+Thu, 27 Nov 2014 10:32:46 utility.py[line:30] DEBUG =====第 43 次总轮循
+Thu, 27 Nov 2014 10:32:51 utility.py[line:30] DEBUG =====第 44 次总轮循

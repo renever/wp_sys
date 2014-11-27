@@ -7,7 +7,8 @@ import logging
 import logging.config
 import os
 import pwd
-BASE_PATH = os.path.dirname('__file__')
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+# print BASE_PATH
 if pwd.getpwuid(os.getuid())[0]=='l':
 	#XPS
 	DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
@@ -29,13 +30,15 @@ else:#公司PC
 DB_BASE = declarative_base()  # 生成了declarative基类, 以后的model继承此类
 
 #图片文件目录
-DOWNLOAD_DIR = BASE_PATH + 'downloaded_files/'
-
+DOWNLOAD_DIR = BASE_PATH + '/wp_resource/downloaded_files'
+print DOWNLOAD_DIR
+if not os.path.exists(DOWNLOAD_DIR):
+	os.mkdir(DOWNLOAD_DIR)
 
 CHUNK_SIZE = 8192
 
 #日志配置
-logging_fileConfig_path = BASE_PATH + 'logging.conf'
+logging_fileConfig_path = BASE_PATH + '/logging.conf'
 logging.config.fileConfig(logging_fileConfig_path)
 logger = logging.getLogger("wp")
 
@@ -43,8 +46,9 @@ logger = logging.getLogger("wp")
 
 
 
-IMG_PATH = BASE_PATH + 'wp_resource/STATIC_FILES/images'
-
+IMG_PATH = BASE_PATH + '/wp_resource/images'
+if not os.path.exists(IMG_PATH):
+	os.makedirs(IMG_PATH)
 # 各种线程池大小
 GRAB_ARTICLES_POOL_SIZE = 300
 
@@ -62,3 +66,6 @@ s_links = [
 		'http://www.uploadable.ch/file/CtSRpcYSZkqG/chrome.part5.rar',
 		'http://www.uploadable.ch/file/Ud29HCTsFmWu/chrome.part6.rar',
 	]
+
+#全局变量：
+DOWNLOAD_SYSTEM_IS_RUNNING = False

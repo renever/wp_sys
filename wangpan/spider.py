@@ -13,6 +13,8 @@ from settings import CHUNK_SIZE,IMG_PATH
 from settings import DB_ENGINE, DB_BASE
 #-----文件夹目录
 from settings import DOWNLOAD_DIR
+#-----全局变量
+from settings import DOWNLOAD_SYSTEM_IS_RUNNING
 #数据库表
 from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, Category
 from utility import create_session, wp_logging, get_or_create, FirefoxDriver
@@ -86,9 +88,8 @@ class Filmav_Grab():
 		self.driver = FirefoxDriver()
 
 		self.driver_login_time = None
-
-
 		self.global_db_session = db_session
+		self.DOWNLOAD_SYSTEM_IS_RUNNING = False
 
 	def db_session(self):
 		db_session = create_session(DB_ENGINE, DB_BASE)
@@ -631,7 +632,6 @@ class Filmav_Grab():
 		db_sesion.close()
 
 	def file_download_system(self):
-		print "here?"
 		while True:
 			#todo 如果打开下载链接后，“Download Now”没有出现，需要重新登录或者重新载入
 			#正在下载的文件小于设定数（5），并且等待下载的列表为空
@@ -646,6 +646,7 @@ class Filmav_Grab():
 				#todo try...
 				self.update_inst(url_inst)
 				self.download_file(url_inst)
+
 			time.sleep(3)
 
 	def update_inst(self,inst):
@@ -724,14 +725,15 @@ if __name__ == '__main__':
 		wp_logging(Msg=Msg)
 
 		#temp 创建测试数据等。
+
 		# filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
 		#todo test
 
 		#文件下载，解压，压缩，上传 轮循
-		#todo 文件下载，处理3篇文章，正在下载列表小于10时，添加新的文件地址
-		download_thread = threading.Thread(target=filmav_grab.file_download_system)
-		download_thread.start()
-		# thread.start_new_thread(filmav_grab.file_download_system, ())
+		if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
+			filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
+			download_thread = threading.Thread(target=filmav_grab.file_download_system)
+			download_thread.start()
 		print 'start download system... '
 		# filmav_grab.get_wait_to_download_urls()
 		# filmav_grab.dowload_file()
@@ -745,7 +747,7 @@ if __name__ == '__main__':
 		#todo 文件上传，待正在上传列表小于10时，添加新的待上传文件地址
 		print 'start upload system... '
 
-		print 'man process sleep 3600... '
+		print 'man process sleep 5... '
 		#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
 		#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
 		# filmav_grab.grab_article_url(page_end=1)
@@ -753,7 +755,7 @@ if __name__ == '__main__':
 		# filmav_grab.grab_articles()
 
 		for_count += 1
-		time.sleep(3600)
+		time.sleep(5)
 
 	# filmav_grab.get(url='http://filmav.com/53049.html')
 	# filmav_grab.get_image(url='http://filmav.com/52792.html')
