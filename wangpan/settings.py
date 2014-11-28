@@ -69,3 +69,9 @@ s_links = [
 
 #全局变量：
 DOWNLOAD_SYSTEM_IS_RUNNING = False
+
+# 文件大小单位 ： 转换比率
+FILE_UNIT_CONVERSION={
+	'MB': 1048576,
+	'KB': 1024,
+}

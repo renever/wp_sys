@@ -15,6 +15,7 @@ from settings import DB_ENGINE, DB_BASE
 from settings import DOWNLOAD_DIR
 #-----全局变量
 from settings import DOWNLOAD_SYSTEM_IS_RUNNING
+from settings import FILE_UNIT_CONVERSION
 #数据库表
 from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, Category
 from utility import create_session, wp_logging, get_or_create, FirefoxDriver
@@ -158,7 +159,7 @@ class Filmav_Grab():
 						if chunk:  # filter out keep-alive new chunks
 							f.write(chunk)
 							f.flush()
-							percent_completeness = 100*counter*CHUNK_SIZE/int(file_total_size)
+							percent_completeness = 100*counter*CHUNK_SIZE/float(file_total_size)
 							Msg =  '{0}% 已下载 --（图片名：{1})'.format(percent_completeness,img_filename)
 							print Msg
 							logging.debug(Msg)
@@ -428,6 +429,8 @@ class Filmav_Grab():
 		Msg =  "创建文章实例（--> 文章标题）" + title_unicode
 		wp_logging(Msg=Msg, allow_print=False)
 
+		#todo 抓取文章发布时间
+
 		# 保存文章的来源地址
 		file_link_inst = get_or_create(session=db_session, is_global=True, model=FileLink,url=url_inst.url,website=self.website)[0]
 		new_article.file_link = file_link_inst
@@ -638,6 +641,7 @@ class Filmav_Grab():
 
 	def file_download_system(self):
 		while True:
+			self.check_pre_downloading_file()
 			#todo 如果打开下载链接后，“Download Now”没有出现，需要重新登录或者重新载入
 			#正在下载的文件小于设定数（5），并且等待下载的列表为空
 			if len(WAITING_DOWNLOAD_LIST) <= 0:
@@ -652,7 +656,7 @@ class Filmav_Grab():
 				self.update_inst(url_inst)
 				self.download_file(url_inst)
 
-			time.sleep(3)
+			time.sleep(5)
 
 	def update_inst(self,inst):
 		db_session = self.db_session()
@@ -676,19 +680,39 @@ class Filmav_Grab():
 	def check_file_is_downloaded(self,url_inst):
 		'''跟踪文件是否成功下载，文件存在，并且大小正确'''
 		db_session = self.db_session()
+		file_path = DOWNLOAD_DIR + "/" + url_inst.file_name
+		file_real_size = float(url_inst.file_size) * FILE_UNIT_CONVERSION.get(url_inst.file_size_unit)
+		# 每5秒检查一次，超时，则文件状态改成waiting_download.
+		# loop_count > 120 表示超时10分钟,实际环境用
+		# loop_count > 6 表示超时30秒,测试用
+		loop_count = 0
 		while True:
-			file_names = os.listdir(DOWNLOAD_DIR)
-			if url_inst.file_name in file_names:
-				print "start new thread %s" % datetime.now()
-				url_inst.status = 'downloaded'
+			# file_names = os.listdir(DOWNLOAD_DIR)
+
+			if os.path.exists(file_path):
+				downloaded_file_size = os.path.getsize(file_path)
+				if downloaded_file_size == file_real_size:
+				# if url_inst.file_name in file_names:
+					# print "start new thread %s" % datetime.now()
+					url_inst.status = 'downloaded'
+					db_session.add(url_inst)
+					db_session.commit()
+					Msg = 'have download ：%s' % url_inst.file_name.encode('utf8')
+					wp_logging(Msg=Msg)
+					DOWNLOADING_LIST.remove(url_inst)
+				break
+			if loop_count > 6:
+				url_inst.status = 'waiting_download'
 				# self.update_inst(url_inst)
 				db_session.add(url_inst)
 				db_session.commit()
-				Msg = 'have download ：%s' % url_inst.file_name.encode('utf8')
+				Msg = 'download time out： ：%s ，file changed to waiting_download.' % url_inst.file_name.encode('utf8')
 				wp_logging(Msg=Msg)
 				DOWNLOADING_LIST.remove(url_inst)
 				break
-			time.sleep(3)
+			time.sleep(5)
+			loop_count += 1
+
 			#todo 根据文件大小，下载速度，得到时间+5分钟，超时，则改url状态为等待下载，下次再下载
 
 
@@ -706,11 +730,38 @@ class Filmav_Grab():
 			self.driver.driver = self.driver.get_new_driver()
 			self.driver.login_time = datetime.now()
 		except Exception,e:
-			raise e
+			# raise e
+			try:
+				self.driver.driver.close()
+			except:
+				pass
+			self.get_firefox_driver()
 
-	def get_wait_to_download_urls(self):
+	def check_pre_downloading_file(self):
 		db_session = self.db_session()
+		# 先判断那些 downloading 状态的文件（不在downloading_list里） 是否已经下载好。
+		odl_insts = db_session.query(OldDownloadLink).filter(OldDownloadLink.status=='downloading').all()
+		for odl_inst in odl_insts:
+			file_path = DOWNLOAD_DIR + "/" + odl_inst.file_name
+			file_real_size = float(odl_inst.file_size) * FILE_UNIT_CONVERSION.get(odl_inst.file_size_unit)
+			if os.path.exists(file_path):
+				downloaded_file_size = os.path.getsize(file_path)
+				if downloaded_file_size == file_real_size:
+					odl_inst.status = 'downloaded'
+					db_session.add(odl_inst)
+					db_session.commit()
+					Msg = '没有在downloading_list里的文件：%s，已经下载好了。' % odl_inst.file_name.encode('utf8')
+					wp_logging(Msg=Msg)
+			else:
+				odl_inst.status = 'waiting_download'
+				db_session.add(odl_inst)
+				db_session.commit()
+				Msg = '文件状态为downloading却没有下载完整的文件：%s，已经改成waiting_download状态。' % odl_inst.file_name.encode('utf8')
+				wp_logging(Msg=Msg)
+	def get_wait_to_download_urls(self):
+
 		#实际情况，过滤条件改成含有未下载地址的，最新发布的一篇文章
+		db_session = self.db_session()
 		article = db_session.query(Article).filter_by(id=1).first()
 		for url_inst in article.old_download_links:
 			if url_inst.status == 'waiting_download':
@@ -738,7 +789,7 @@ class Filmav_Grab():
 				self.update_inst(url_inst)
 				self.download_file(url_inst)
 
-			time.sleep(3)
+			time.sleep(5)
 	def get_wait_to_unrar_urls(self):
 		db_session = self.db_session()
 		#
@@ -765,12 +816,14 @@ if __name__ == '__main__':
 	# 本次程序总轮循次数统计
 	for_count = 1
 	#test
-	filmav_grab.get_wait_to_unrar_urls()
-	while False:
+	# filmav_grab.get_wait_to_unrar_urls()
+	while True:
 		Msg = "=====第 %s 次总轮循" %  for_count
 		wp_logging(Msg=Msg)
 
+		print 'DOWNLOADING_LIST : %s ' % DOWNLOADING_LIST
 		#temp 创建测试数据等。
+
 		if test:
 			filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
 		#todo test
@@ -787,8 +840,8 @@ if __name__ == '__main__':
 
 		#todo 文件解压，正在解压/正在压缩列表小于1时，处理新的解压任务
 		print 'start unrar system... '
-		unrar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
-		unrar_thread.start()
+		# unrar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
+		# unrar_thread.start()
 
 		#todo 文件压缩，正在解压/正在压缩列表小于1时，不处理新的解压任务
 		print 'start rar system... '
