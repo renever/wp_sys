@@ -5,10 +5,10 @@ from pyquery import PyQuery as pq
 from sqlalchemy import exc
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
+from sqlalchemy.sql import func
 #自定义settings
 #-----线程池大小
 from settings import SAVE_ARTICLE_URL_POOL_SIZE,GRAB_ARTICLE_URL_POOL_SIZE, GRAB_ARTICLES_POOL_SIZE
-
 from settings import CHUNK_SIZE,IMG_PATH
 from settings import DB_ENGINE, DB_BASE
 #-----文件夹目录
@@ -40,12 +40,17 @@ import sys
 TAG_LIST_IN_DB_SESSION = []
 CATEGORY_LIST_IN_DB_SESSION = []
 WAITING_DOWNLOAD_LIST = [] #如果正在下载量少于10，并且该列表为空，则从数据库取得未下载的URL
+WAITING_RAR_LIST = []
+WAITING_UNRAR_LIST = []
+
 DOWNLOADING_LIST = [] # 同时下载量5
-RARING_LIST = [] #同时压缩数量 1
+RARING_LIST = [] #同时压缩数量 1 优先处理压缩，可以就接着上传
 UNRARING_LIST = [] #同时解压数量 1
 
-#
+#最大限制数
 MAX_DOWNLOADING_NUMBER = 5
+MAX_RAR_AND_UNRAR_NUMBER = 1
+
 
 class Filmav_Grab():
 
@@ -81,8 +86,8 @@ class Filmav_Grab():
 				'Connection': 'keep-alive',
 				'Host': 'www.uploadable.ch',
 				'Referer': 'http://www.uploadable.ch/login.php',
-				'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36',
-			}
+				'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 \(KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36',
+		}
 		self.article_files = {}
 		#todo 暂时屏蔽 driver 的初始化
 		self.driver = FirefoxDriver()
@@ -206,11 +211,11 @@ class Filmav_Grab():
 		"""
 		#todo 抓取制定页面范围的所有文件的链接。
 		#todo 循环各个页面，具体抓取文章内容时，记得根据文章链接最后数字进行排序，另，判断是否有有效的下载地址。
-		BASE_URL = 'http://filmav.com/page/'
-		article_urls=[]
+		base_url = 'http://filmav.com/page/'
+		article_urls = []
 		# is_increased =None
 		# for page_number in range(page_start,page_end+1):
-		url = BASE_URL + str(page_number)
+		url = base_url + str(page_number)
 		r = None
 		try:
 			r = requests.get(url=url, headers=self.headers)
@@ -664,7 +669,9 @@ class Filmav_Grab():
 		#todo 直接做成 连接“下载链接”，判断 “立即下载” 按钮是否出现。没有就重新登录。
 		been_download =  self.driver.download_file(url_inst)
 		#todo 跟踪文件是否成功下载，文件存在，并且大小正确
-		thread.start_new_thread(self.check_file_is_downloaded, (url_inst,))
+		check_downloaded = threading.Thread(target=self.check_file_is_downloaded, args=(url_inst,))
+		check_downloaded.start()
+
 
 	def check_file_is_downloaded(self,url_inst):
 		'''跟踪文件是否成功下载，文件存在，并且大小正确'''
@@ -679,6 +686,7 @@ class Filmav_Grab():
 				db_session.commit()
 				Msg = 'have download ：%s' % url_inst.file_name.encode('utf8')
 				wp_logging(Msg=Msg)
+				DOWNLOADING_LIST.remove(url_inst)
 				break
 			time.sleep(3)
 			#todo 根据文件大小，下载速度，得到时间+5分钟，超时，则改url状态为等待下载，下次再下载
@@ -713,27 +721,65 @@ class Filmav_Grab():
 		# return db_session
 	def test_print_inst(self,inst):
 		print inst.url
+
+	def file_unrar_system(self):
+		while True:
+			#todo 如果打开下载链接后，“Download Now”没有出现，需要重新登录或者重新载入
+			#正在下载的文件小于设定数（5），并且等待下载的列表为空
+			if len(UNRARING_LIST) + len(RARING_LIST) < MAX_RAR_AND_UNRAR_NUMBER:
+				#查询最新文章的status = waiting_download 的URL并加入待下载列表
+				self.get_wait_to_unrar_urls()
+
+			if len(DOWNLOADING_LIST) < MAX_DOWNLOADING_NUMBER and len(WAITING_DOWNLOAD_LIST) > 0:
+				url_inst = WAITING_DOWNLOAD_LIST.pop()
+				DOWNLOADING_LIST.append(url_inst)
+				url_inst.status = 'downloading'
+				#todo try...
+				self.update_inst(url_inst)
+				self.download_file(url_inst)
+
+			time.sleep(3)
+	def get_wait_to_unrar_urls(self):
+		db_session = self.db_session()
+		#
+		# article = db_session.query(Article).join(OldDownloadLink).filter(OldDownloadLink.any(OldDownloadLink.status == 'downloaded')).first()
+		# article = db_session.query(Article).filter(Article.old_download_links.any(OldDownloadLink.status.in_(['downloaded']))).first()
+		article = db_session.query(Article).join(Article.old_download_links).filter(OldDownloadLink.status=='downloaded').all()
+		# for url_inst in article.old_download_links:
+		# 	if url_inst.status == 'waiting_download':
+		# 		WAITING_DOWNLOAD_LIST.append(url_inst)
+
+		print len(article)
+		for a in article:
+			for l in a.old_download_links:
+				print l.status
+		# print article.id
+		db_session.close()
+
+
 if __name__ == '__main__':
 
 	filmav_grab = Filmav_Grab()
 	# filmav_grab.a_wait_to_pull_wiki()
-
+	test = False
 	# 本次程序总轮循次数统计
 	for_count = 1
-	while True:
+	#test
+	filmav_grab.get_wait_to_unrar_urls()
+	while False:
 		Msg = "=====第 %s 次总轮循" %  for_count
 		wp_logging(Msg=Msg)
 
 		#temp 创建测试数据等。
-
-		# filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
+		if test:
+			filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
 		#todo test
 
 		#文件下载，解压，压缩，上传 轮循
 		if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
-			filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
 			download_thread = threading.Thread(target=filmav_grab.file_download_system)
 			download_thread.start()
+			filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
 		print 'start download system... '
 		# filmav_grab.get_wait_to_download_urls()
 		# filmav_grab.dowload_file()
@@ -741,6 +787,8 @@ if __name__ == '__main__':
 
 		#todo 文件解压，正在解压/正在压缩列表小于1时，处理新的解压任务
 		print 'start unrar system... '
+		unrar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
+		unrar_thread.start()
 
 		#todo 文件压缩，正在解压/正在压缩列表小于1时，不处理新的解压任务
 		print 'start rar system... '
@@ -753,7 +801,7 @@ if __name__ == '__main__':
 		# filmav_grab.grab_article_url(page_end=1)
 		#自动抓取未抓取的文章详细内容
 		# filmav_grab.grab_articles()
-
+		test = False
 		for_count += 1
 		time.sleep(5)
 
