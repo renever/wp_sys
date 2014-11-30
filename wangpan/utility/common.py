@@ -122,3 +122,60 @@ class CommonUtility():
 		shutil.move(file_path,dir)
 
 common_utility = CommonUtility()
+
+import subprocess, threading
+
+class ShellCommand(object):
+	def __init__(self, cmd):
+		self.cmd = cmd
+		self.process = None
+
+	def run(self, timeout):
+		def target():
+			print 'Shell Thread started'
+			self.process = subprocess.Popen(self.cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			out, err = self.process.communicate()
+			print 'Shell Thread finished'
+		thread = threading.Thread(target=target)
+		thread.start()
+
+		thread.join(timeout)
+		if thread.is_alive():
+			print 'Terminating Shell process'
+			self.process.terminate()
+			return {'status': 'Time Out'}
+		s =  self.process.returncode
+		# print s
+		#成功时，s==0
+		return {'status': s}
+
+	def check_stdout(self,str,out):
+		#可以判断返回信息包含哪些信息
+		import re
+		result = re.findall(str,out,re.MULTILINE)
+		if result:
+			return u'成功的out里找到str'
+		else:
+			return u'在out里面找不到str'
+
+
+# 测试
+# file_path = '/home/l/app/learning/wangpan/wp_resource/articles_file/1/downloaded_files/chrome.part4.rar'
+#
+# dir = '/home/l/app/learning/wangpan/wp_resource/articles_file/1/unrared_files'
+#
+# cmd = '/usr/bin/unrar x ' + file_path +' ' + dir
+#
+# command = ShellCommand(cmd)
+# # command.run(timeout=10)
+# # command.run(timeout=1)
+#
+#
+# thread = threading.Thread(target=command.run,kwargs={'timeout':3})
+# thread.setDaemon(True)
+# thread.start()
+# print 'a'
+# time.sleep(1)
+# print '1'
+# thread.join(2)
+# print '2'

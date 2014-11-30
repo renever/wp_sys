@@ -20,6 +20,7 @@ from settings import FILE_UNIT_CONVERSION
 #数据库表
 from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, Category
 from utility.common import create_session, wp_logging, get_or_create, FirefoxDriver, common_utility
+from utility.common import ShellCommand
 import unicodedata
 #系统包
 import logging
@@ -97,6 +98,7 @@ class Filmav_Grab():
 		self.driver_login_time = None
 		self.global_db_session = db_session
 		self.DOWNLOAD_SYSTEM_IS_RUNNING = False
+		self.UNRAR_SYSTEM_IS_RUNNING = False
 
 	def db_session(self):
 		db_session = create_session(DB_ENGINE, DB_BASE)
@@ -754,8 +756,8 @@ class Filmav_Grab():
 	def get_file_path_and_real_size(self,url_inst):
 		file_path = DOWNLOAD_DIR + "/" + url_inst.file_name
 		file_real_size = url_inst.file_size + url_inst.file_size_unit[0]
-
 		return (file_path, file_real_size)
+
 	def check_pre_downloading_file(self):
 		db_session = self.db_session()
 
@@ -814,40 +816,87 @@ class Filmav_Grab():
 		print inst.url
 
 	def file_unrar_system(self):
-		# while True:
-		# 	#todo 如果打开下载链接后，“Download Now”没有出现，需要重新登录或者重新载入
-		# 	#正在下载的文件小于设定数（5），并且等待下载的列表为空
-		# 	if len(UNRARING_LIST) + len(RARING_LIST) < MAX_RAR_AND_UNRAR_NUMBER:
-		# 		#查询最新文章的status = waiting_download 的URL并加入待下载列表
-		# 		self.get_wait_to_unrar_urls()
-		#
-		# 	if len(DOWNLOADING_LIST) < MAX_DOWNLOADING_NUMBER and len(WAITING_DOWNLOAD_LIST) > 0:
-		# 		url_inst = WAITING_DOWNLOAD_LIST.pop()
-		# 		DOWNLOADING_LIST.append(url_inst)
-		# 		url_inst.status = 'downloading'
-		# 		#todo try...
-		# 		self.update_inst(url_inst)
-		# 		self.download_file(url_inst)
-		#
-		# 	time.sleep(5)
-		pass
-	def get_wait_to_unrar_urls(self):
-		db_session = self.db_session()
-		#
-		# article = db_session.query(Article).join(OldDownloadLink).filter(OldDownloadLink.any(OldDownloadLink.status == 'downloaded')).first()
-		# article = db_session.query(Article).filter(Article.old_download_links.any(OldDownloadLink.status.in_(['downloaded']))).first()
-		article = db_session.query(Article).join(Article.old_download_links).filter(OldDownloadLink.status=='downloaded').all()
-		# for url_inst in article.old_download_links:
-		# 	if url_inst.status == 'waiting_download':
-		# 		WAITING_DOWNLOAD_LIST.append(url_inst)
+		while True:
+			#todo 如果打开下载链接后，“Download Now”没有出现，需要重新登录或者重新载入
+			#正在下载的文件小于设定数（5），并且等待下载的列表为空
+			if len(UNRARING_LIST) + len(RARING_LIST) < MAX_RAR_AND_UNRAR_NUMBER:
+				#查询最新文章的status = waiting_download 的URL并加入待下载列表
+				if len(WAITING_UNRAR_LIST) <= 0:
+					self.get_wait_to_unrar_urls()
 
-		print len(article)
-		for a in article:
-			for l in a.old_download_links:
-				print l.status
+			if len(UNRARING_LIST) + len(RARING_LIST) < MAX_RAR_AND_UNRAR_NUMBER and len(WAITING_UNRAR_LIST) > 0:
+				article_inst = WAITING_UNRAR_LIST.pop()
+				UNRARING_LIST.append(article_inst)
+				# url_inst.status = 'downloading'
+				#todo try...
+				# self.update_inst(url_inst)
+				self.unrar_file(article_inst)
+
+			time.sleep(5)
+
+
+	def get_wait_to_unrar_urls(self):
+
+		db_session = self.db_session()
+		articles = db_session.query(Article).join(Article.old_download_links).filter(OldDownloadLink.status=='downloaded').all()
+		if len(articles) < 0:
+			return
+
+		for article in articles:
+			all_be_downloaded = True
+			for odl in article.old_download_links:
+				if odl.status != 'downloaded':
+					all_be_downloaded = False
+			if all_be_downloaded:
+				WAITING_UNRAR_LIST.append(article)
+
 		# print article.id
 		db_session.close()
 
+	def unrar_file(self, article_inst):
+		check_unrared = threading.Thread(target=self.check_file_is_unrared, args=(article_inst,))
+		check_unrared.start()
+		Msg = '启动新线程：check_unrared'
+		wp_logging(Msg=Msg)
+
+	def check_file_is_unrared(self,article_inst):
+		db_session = self.db_session()
+		db_session.add(article_inst)
+		url_inst = article_inst.old_download_links[0]
+
+		file_path = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'downloaded_files/'+ url_inst.file_name
+		print file_path
+		dir = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'unrared_files/'
+		if not os.path.exists(file_path):
+			Msg =  '%s 文件不存在，无法解压！' % url_inst.file_name.encode('utf8')
+			wp_logging(Msg=Msg)
+			return
+		if not os.path.exists(dir):
+			os.makedirs(dir)
+
+		cmd = '/usr/bin/unrar x ' + file_path +' ' + dir
+
+		command = ShellCommand(cmd)
+		result_dic = command.run(timeout=10)
+		#状态改成正在解压中
+		q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
+		q.update({'status': 'unraring'})
+		db_session.commit()
+		if result_dic.get('status') == 0:
+			Msg = '%s 解压成功!' % url_inst.file_name.encode('utf8')
+			wp_logging(Msg=Msg)
+			q.update({'status': 'unrared'})
+			db_session.commit()
+		elif result_dic.get('status') == 'Time Out':
+			Msg = '%s 解压超时!' % url_inst.file_name.encode('utf8')
+			wp_logging(Msg=Msg)
+			#改成unrared状态
+			q.update({'status': 'downloaded'})
+			db_session.commit()
+		else:
+			raise Exception,'解压发生为止错误：%s ' % result_dic.get('status')
+		UNRARING_LIST.remove(article_inst)
+		db_session.close()
 
 if __name__ == '__main__':
 
@@ -881,17 +930,23 @@ if __name__ == '__main__':
 
 
 		#todo 文件解压，正在解压/正在压缩列表小于1时，处理新的解压任务
-		print 'start unrar system... '
-		unrar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
-		unrar_thread.start()
+		if not filmav_grab.UNRAR_SYSTEM_IS_RUNNING:
+			print 'start unrar system... '
+			print 'UNRARING_LIST %s ' % UNRARING_LIST
+			unrar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
+			unrar_thread.start()
+			filmav_grab.UNRAR_SYSTEM_IS_RUNNING = True
 
-		#todo 文件压缩，正在解压/正在压缩列表小于1时，不处理新的解压任务
-		print 'start rar system... '
-		#todo 文件上传，待正在上传列表小于10时，添加新的待上传文件地址
-		print 'start upload system... '
 
-		print 'man process sleep 5... '
-		#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
+
+		# #todo 文件压缩，正在解压/正在压缩列表小于1时，不处理新的解压任务
+		# print 'start rar system... '
+		# #todo 文件上传，待正在上传列表小于10时，添加新的待上传文件地址
+		# print 'start upload system... '
+		#
+		# print 'man process sleep 5... '
+		# #todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
+
 		#自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
 		# filmav_grab.grab_article_url(page_end=1)
 		#自动抓取未抓取的文章详细内容

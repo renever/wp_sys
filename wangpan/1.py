@@ -35,15 +35,24 @@ def get_wait_to_download_urls():
 	# article = db_session.query(Article).join(Article.old_download_links).options(contains_eager('old_download_links')).filter(OldDownloadLink.status=='downloaded').first()
 	# article = db_session.query(Article).join(Article.old_download_links).filter(OldDownloadLink.status=='downloaded').first()
 	# article = db_session.query(Article).join(OldDownloadLink).options(subqueryload(Article.old_download_links)).filter(OldDownloadLink.status=='downloaded').first()
-	article2 = db_session.query(Article).filter(Article.all_url_downloaded == '480')
-	# print article
-	print article2
-
+	# article2 = db_session.query(Article).filter(Article.all_url_downloaded == '480')
+	# # print article
+	# print article2
+	q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==1)
+	# q = db_session.query(OldDownloadLink)
+	# q.update({'status': 'unrared2'})
+	#
+	# # db_session.add(q)
+	# db_session.commit()
+	q.update({'status': 'downloaded'})
+	# q.update({'status': 'waiting_download'})
+	db_session.commit()
 	db_session.close()
 
-# get_wait_to_download_urls()
-import shutil
-file_path = '/home/l/app/learning/wangpan/wp_resource/downloaded_files/chrome.part1.rar'
-dir = '/home/l/app/learning/wangpan/wp_resource/articles_file/123/downloaded_files'
-# shutil.move(,)
-common_utility.move_file_to_dir(file_path,dir)
+get_wait_to_download_urls()
+
+# import shutil
+# file_path = '/home/l/app/learning/wangpan/wp_resource/downloaded_files/chrome.part1.rar'
+# dir = '/home/l/app/learning/wangpan/wp_resource/articles_file/123/downloaded_files'
+# # shutil.move(,)
+# common_utility.move_file_to_dir(file_path,dir)
