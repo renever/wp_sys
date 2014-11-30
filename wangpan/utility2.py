@@ -10,6 +10,8 @@ from selenium.webdriver.support import expected_conditions as EC  # available si
 import time
 from datetime import datetime
 from settings import FirefoxProfilePath,DB_ENGINE, DB_BASE
+import humanize
+import os
 
 def create_session(engine=DB_ENGINE, base=DB_BASE):
 	Session = sessionmaker(bind=engine)  # 创建一个Session类
@@ -108,3 +110,10 @@ class FirefoxDriver():
 		self.driver.quit()
 
 	#todo 如果下载出现HTML文件，cooki过期，或者定义为每20分钟重新登录一次。
+
+class CommonUtility():
+
+	def get_file_size(self, file_path, gnu=True, format='%.2f'):
+		return humanize.naturalsize(os.path.getsize(file_path),gnu=True,format=format)
+
+common_utility = CommonUtility()

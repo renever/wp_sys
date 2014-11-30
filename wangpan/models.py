@@ -6,10 +6,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Table, Text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import exc
+from sqlalchemy import exc,select, func
 
 from settings import DB_ENGINE, DB_BASE
-
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 
@@ -49,8 +49,10 @@ class CommonLink(DB_BASE):
 		self.file_size_unit=file_size_unit
 
 	def __unicode__(self):
-		return self.file_name
+		return unicode(self.file_name.encode('utf-8'))
 
+	def __str__(self):
+		return unicode(self.file_name.encode('utf-8'))
 
 class FileLink(CommonLink):
 	"""
@@ -66,6 +68,12 @@ class FileLink(CommonLink):
 		super(CommonLink,self).__init__()
 		self.url = url
 		self.website = website
+
+	# def __unicode__(self):
+	# 	return self.file_name.encode('utf-8')
+	#
+	# def __str__(self):
+	# 	return unicode(self).encode('utf-8')
 
 class Object(DB_BASE):
 	__abstract__ = True
@@ -123,14 +131,46 @@ class Article(DB_BASE):
 	#images 已经在定义在Images 类一对多。
 	#OldDownloadLink 一对多
 	#NewDownloadLink 一对多
+	#
+	# waiting_download = relationship("OldDownloadLink", primaryjoin="and_(Article.id==OldDownloadLink.article_id, OldDownloadLink.status==waiting_download)")
+	# @hybrid_property
+	# def all_url_downloaded(self):
+	# 	all_url_downloaded = True
+	# 	# self.old_download_links
+	# 	for inst in self.old_download_links:
+	# 		if inst.status != 'downloaded':
+	# 			all_url_downloaded = False
+	# 	return 1200
+	#
+	#
+	# @all_url_downloaded.expression
+	# def all_url_downloaded(cls):
+	# 	return select([OldDownloadLink]).\
+	# 			where(OldDownloadLink.article_id==cls.id).where(OldDownloadLink.status=='downloaded')
+	# 			# label('label_all_url_downloaded')
+		# return OldDownloadLink.status
+		# print r
+		# if r is not None:
+		# 	return True
+		# else:
+		# 	return False
+		# return r
+		# return 'ss2s'
+
+
+
 
 	def __init__(self, title=''):
 		self.title = title
 		# super(Article, self).__init__(*args, **kwargs)
 
 	def __unicode__(self):
-		return self.file_name
+		return self.title
 
+	def __str__(self):
+		# return self.title.encode('utf8')
+		print self.id
+		return str(self.id)
 
 class Tag(DB_BASE):
 	__tablename__ = 'tags'
@@ -159,6 +199,13 @@ class Tag(DB_BASE):
 			cache[key] = o
 		return o
 
+
+	def __unicode__(self):
+		return self.name.encode('utf-8')
+
+	def __str__(self):
+		return unicode(self.name.encode('utf-8'))
+
 class OldDownloadLink(CommonLink):
 	__tablename__ = 'old_download_links'
 
@@ -166,6 +213,11 @@ class OldDownloadLink(CommonLink):
 	article_id = Column(Integer, ForeignKey('articles.id'))
 	article = relationship(Article, backref=backref('old_download_links', order_by=id))
 
+	# def __unicode__(self):
+	# 	return self.file_name.encode('utf-8')
+	#
+	# def __str__(self):
+	# 	return unicode(self.file_name.encode('utf-8'))
 
 
 class NewDownloadLink(CommonLink):
@@ -174,6 +226,12 @@ class NewDownloadLink(CommonLink):
 	id = Column(Integer, primary_key=True, autoincrement=True)
 	article_id = Column(Integer, ForeignKey('articles.id'))
 	article = relationship(Article, backref=backref('new_download_links', order_by=id))
+	#
+	# def __unicode__(self):
+	# 	return self.file_name.encode('utf-8')
+	#
+	# def __str__(self):
+	# 	return unicode(self.file_name.encode('utf-8'))
 
 class Image(DB_BASE):
 	__tablename__ = 'images'
@@ -184,6 +242,12 @@ class Image(DB_BASE):
 	article_id = Column(Integer, ForeignKey('articles.id'))
 	article = relationship(Article, backref=backref('images', order_by=id))
 	img_type =  Column(String(255)) # 'main'-->文章主图，'normal' -->文章普通图片
+
+	def __unicode__(self):
+		return self.name.encode('utf-8')
+
+	def __str__(self):
+		return unicode(self.name.encode('utf-8'))
 
 if __name__ == '__main__':
 	DB_BASE.metadata.create_all(DB_ENGINE)

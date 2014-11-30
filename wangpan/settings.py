@@ -31,6 +31,7 @@ DB_BASE = declarative_base()  # 生成了declarative基类, 以后的model继承
 
 #图片文件目录
 DOWNLOAD_DIR = BASE_PATH + '/wp_resource/downloaded_files'
+ARTICLE_FILES_DIR = BASE_PATH + '/wp_resource/articles_file'
 print DOWNLOAD_DIR
 if not os.path.exists(DOWNLOAD_DIR):
 	os.mkdir(DOWNLOAD_DIR)
