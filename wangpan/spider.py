@@ -99,6 +99,7 @@ class Filmav_Grab():
 		self.global_db_session = db_session
 		self.DOWNLOAD_SYSTEM_IS_RUNNING = False
 		self.UNRAR_SYSTEM_IS_RUNNING = False
+		self.RAR_SYSTEM_IS_RUNNING = False
 
 	def db_session(self):
 		db_session = create_session(DB_ENGINE, DB_BASE)
@@ -890,12 +891,101 @@ class Filmav_Grab():
 		elif result_dic.get('status') == 'Time Out':
 			Msg = '%s 解压超时!' % url_inst.file_name.encode('utf8')
 			wp_logging(Msg=Msg)
-			#改成unrared状态
+			#改成downloaded状态
 			q.update({'status': 'downloaded'})
 			db_session.commit()
 		else:
 			raise Exception,'解压发生为止错误：%s ' % result_dic.get('status')
 		UNRARING_LIST.remove(article_inst)
+		db_session.close()
+	def file_rar_system(self):
+		while True:
+			#todo 如果打开下载链接后，“Download Now”没有出现，需要重新登录或者重新载入
+			#正在下载的文件小于设定数（5），并且等待下载的列表为空
+			if len(UNRARING_LIST) + len(RARING_LIST) < MAX_RAR_AND_UNRAR_NUMBER:
+				#查询最新文章的status = waiting_download 的URL并加入待下载列表
+				if len(WAITING_RAR_LIST) <= 0:
+					self.get_wait_to_rar_urls()
+
+			if len(UNRARING_LIST) + len(RARING_LIST) < MAX_RAR_AND_UNRAR_NUMBER and len(WAITING_RAR_LIST) > 0:
+				article_inst = WAITING_RAR_LIST.pop()
+				RARING_LIST.append(article_inst)
+				# url_inst.status = 'downloading'
+				#todo try...
+				# self.update_inst(url_inst)
+				self.rar_file(article_inst)
+
+			time.sleep(5)
+	def get_wait_to_rar_urls(self):
+		db_session = self.db_session()
+		articles = db_session.query(Article).join(Article.old_download_links).filter(OldDownloadLink.status=='unrared').all()
+		if len(articles) < 0:
+			return
+
+		for article in articles:
+			all_be_unrared = True
+			for odl in article.old_download_links:
+				if odl.status != 'unrared':
+					all_be_unrared = False
+			if all_be_unrared:
+				WAITING_RAR_LIST.append(article)
+
+		# print article.id
+		db_session.close()
+	def rar_file(self, article_inst):
+		check_rared = threading.Thread(target=self.check_file_is_rared, args=(article_inst,))
+		check_rared.start()
+		Msg = '启动新线程：check_rared'
+		wp_logging(Msg=Msg)
+
+	def check_file_is_rared(self,article_inst):
+		db_session = self.db_session()
+		db_session.add(article_inst)
+		url_inst = article_inst.old_download_links[0]
+
+		# file_path = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'unrared_files/'+ url_inst.file_name
+		unrared_dir = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'unrared_files/'
+		rared_dir = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'rared_files/'
+
+		file_names = common_utility.get_files_in_dir(unrared_dir)
+		# if not os.path.exists(file_path):
+		# 	Msg =  '%s 文件不存在，无法解压！' % url_inst.file_name.encode('utf8')
+		# 	wp_logging(Msg=Msg)
+		# 	return
+		if not os.path.exists(rared_dir):
+			os.makedirs(rared_dir)
+		#-v10m 分卷大小1m , -ep 表示：不要把文件的路径层也照样复制进去
+		cmd = '/usr/bin/rar a -m0 -v10m -ep ' + rared_dir +'/' +str(url_inst.file_name)
+		#指定压缩哪些文件
+		if file_names <=0:
+			RARING_LIST.remove(article_inst)
+			return
+		for name in file_names:
+			print 'name%s' % name
+			cmd += ' ' + unrared_dir+'/'+str(name)
+
+		print cmd
+
+		command = ShellCommand(cmd)
+		result_dic = command.run(timeout=10)
+		#状态改成正在压缩中
+		q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
+		q.update({'status': 'raring'})
+		db_session.commit()
+		if result_dic.get('status') == 0:
+			Msg = '%s 压缩成功!' % url_inst.file_name.encode('utf8')
+			wp_logging(Msg=Msg)
+			q.update({'status': 'rared'})
+			db_session.commit()
+		elif result_dic.get('status') == 'Time Out':
+			Msg = '%s 压缩超时!' % url_inst.file_name.encode('utf8')
+			wp_logging(Msg=Msg)
+			#改成unrared状态
+			q.update({'status': 'unrared'})
+			db_session.commit()
+		else:
+			raise Exception,'压缩发生为止错误：%s ' % result_dic.get('status')
+		RARING_LIST.remove(article_inst)
 		db_session.close()
 
 if __name__ == '__main__':
@@ -918,28 +1008,30 @@ if __name__ == '__main__':
 			filmav_grab.temp_make_s_links() # 创建6个测试下载链接 记得最后一个文件大小改成255.10 KB
 		#todo test
 
-		#文件下载，解压，压缩，上传 轮循
+		# #文件下载，解压，压缩，上传 轮循
 		# if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
 		# 	download_thread = threading.Thread(target=filmav_grab.file_download_system)
 		# 	download_thread.start()
 		# 	filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
-		# print 'start download system... '
-
-		# filmav_grab.get_wait_to_download_urls()
-		# filmav_grab.dowload_file()
-
-
-		#todo 文件解压，正在解压/正在压缩列表小于1时，处理新的解压任务
-		if not filmav_grab.UNRAR_SYSTEM_IS_RUNNING:
-			print 'start unrar system... '
-			print 'UNRARING_LIST %s ' % UNRARING_LIST
-			unrar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
-			unrar_thread.start()
-			filmav_grab.UNRAR_SYSTEM_IS_RUNNING = True
+		# 	print 'start download system... '
+		#
+		# #todo 文件解压，正在解压/正在压缩列表小于1时，处理新的解压任务
+		# if not filmav_grab.UNRAR_SYSTEM_IS_RUNNING:
+		# 	print 'start rar system... '
+		# 	print 'RARING_LIST %s ' % RARING_LIST
+		# 	rar_thread = threading.Thread(target=filmav_grab.file_rar_system)
+		# 	rar_thread.start()
+		# 	filmav_grab.RAR_SYSTEM_IS_RUNNING = True
 
 
 
 		# #todo 文件压缩，正在解压/正在压缩列表小于1时，不处理新的解压任务
+		if not filmav_grab.RAR_SYSTEM_IS_RUNNING:
+			print 'start rar system... '
+			print 'RARING_LIST %s ' % RARING_LIST
+			rar_thread = threading.Thread(target=filmav_grab.file_rar_system)
+			rar_thread.start()
+			filmav_grab.RAR_SYSTEM_IS_RUNNING = True
 		# print 'start rar system... '
 		# #todo 文件上传，待正在上传列表小于10时，添加新的待上传文件地址
 		# print 'start upload system... '

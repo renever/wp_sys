@@ -18753,3 +18753,193 @@ Mon, 01 Dec 2014 01:22:05 common.py[line:32] DEBUG =====第 3 次总轮循
 Mon, 01 Dec 2014 01:22:10 common.py[line:32] DEBUG =====第 4 次总轮循
 Mon, 01 Dec 2014 01:22:15 common.py[line:32] DEBUG =====第 5 次总轮循
 Mon, 01 Dec 2014 01:22:20 common.py[line:32] DEBUG =====第 6 次总轮循
+Mon, 01 Dec 2014 11:41:22 common.py[line:32] DEBUG =====第 1 次总轮循
+Mon, 01 Dec 2014 11:41:26 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:59133/hub/session {"desiredCapabilities": {"platform": "ANY", "browserName": "firefox", "version": "", "javascriptEnabled": true}}
+Mon, 01 Dec 2014 11:41:26 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 11:41:26 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:59133/hub/session/5cc51f70-5174-4eb6-b7ac-75af59de54a3/url {"url": "http://www.uploadable.ch/login.php", "sessionId": "5cc51f70-5174-4eb6-b7ac-75af59de54a3"}
+Mon, 01 Dec 2014 11:41:27 common.py[line:32] DEBUG =====第 2 次总轮循
+Mon, 01 Dec 2014 11:41:32 common.py[line:32] DEBUG =====第 3 次总轮循
+Mon, 01 Dec 2014 11:41:37 common.py[line:32] DEBUG =====第 4 次总轮循
+Mon, 01 Dec 2014 11:41:42 common.py[line:32] DEBUG =====第 5 次总轮循
+Mon, 01 Dec 2014 11:41:47 common.py[line:32] DEBUG =====第 6 次总轮循
+Mon, 01 Dec 2014 15:16:20 common.py[line:32] DEBUG =====第 1 次总轮循
+Mon, 01 Dec 2014 15:16:24 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session {"desiredCapabilities": {"platform": "ANY", "browserName": "firefox", "version": "", "javascriptEnabled": true}}
+Mon, 01 Dec 2014 15:16:24 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:24 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/url {"url": "http://www.uploadable.ch/login.php", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb"}
+Mon, 01 Dec 2014 15:16:25 common.py[line:32] DEBUG =====第 2 次总轮循
+Mon, 01 Dec 2014 15:16:30 common.py[line:32] DEBUG =====第 3 次总轮循
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "name", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "userName"}
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "name", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "userPassword"}
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element/{371a48d1-676e-4510-8326-1d222d8e0902}/clear {"sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "id": "{371a48d1-676e-4510-8326-1d222d8e0902}"}
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element/{5b44c1f0-523a-4377-8929-900ba4419cb4}/clear {"sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "id": "{5b44c1f0-523a-4377-8929-900ba4419cb4}"}
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element/{371a48d1-676e-4510-8326-1d222d8e0902}/value {"sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "id": "{371a48d1-676e-4510-8326-1d222d8e0902}", "value": ["l", "x", "l", "0", "0", "1"]}
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:33 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element/{5b44c1f0-523a-4377-8929-900ba4419cb4}/value {"sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "id": "{5b44c1f0-523a-4377-8929-900ba4419cb4}", "value": ["q", "Q", "2", "@", "w", "W"]}
+Mon, 01 Dec 2014 15:16:34 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:34 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "id", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "loginFormSubmit"}
+Mon, 01 Dec 2014 15:16:34 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:34 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element/{ee594ee9-2330-424a-8a7d-291cebedcb65}/click {"sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "id": "{ee594ee9-2330-424a-8a7d-291cebedcb65}"}
+Mon, 01 Dec 2014 15:16:35 common.py[line:32] DEBUG =====第 4 次总轮循
+Mon, 01 Dec 2014 15:16:36 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:36 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "class name", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "dashboard_button"}
+Mon, 01 Dec 2014 15:16:40 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:40 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "class name", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "dashboard_button"}
+Mon, 01 Dec 2014 15:16:40 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:40 common.py[line:32] DEBUG =====第 5 次总轮循
+Mon, 01 Dec 2014 15:16:41 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "class name", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "dashboard_button"}
+Mon, 01 Dec 2014 15:16:41 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:41 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "class name", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "dashboard_button"}
+Mon, 01 Dec 2014 15:16:41 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:42 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "class name", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "dashboard_button"}
+Mon, 01 Dec 2014 15:16:42 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:42 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "class name", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "dashboard_button"}
+Mon, 01 Dec 2014 15:16:42 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:43 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "class name", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "dashboard_button"}
+Mon, 01 Dec 2014 15:16:43 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:43 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/element {"using": "class name", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb", "value": "dashboard_button"}
+Mon, 01 Dec 2014 15:16:45 common.py[line:32] DEBUG =====第 6 次总轮循
+Mon, 01 Dec 2014 15:16:47 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:47 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/url {"url": "http://www.uploadable.ch/file/Ud29HCTsFmWu/chrome.part6.rar", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb"}
+Mon, 01 Dec 2014 15:16:50 common.py[line:32] DEBUG =====第 7 次总轮循
+Mon, 01 Dec 2014 15:16:55 common.py[line:32] DEBUG =====第 8 次总轮循
+Mon, 01 Dec 2014 15:16:56 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:16:56 common.py[line:32] DEBUG file_name: chrome.part6.rar 
+downloaded_file_size:255.10K , file_real_size:255.10K 
+Mon, 01 Dec 2014 15:16:56 common.py[line:32] DEBUG 启动新线程：check_file_is_downloaded
+Mon, 01 Dec 2014 15:16:56 common.py[line:32] DEBUG have download ：chrome.part6.rar
+Mon, 01 Dec 2014 15:17:00 common.py[line:32] DEBUG =====第 9 次总轮循
+Mon, 01 Dec 2014 15:17:01 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/url {"url": "http://www.uploadable.ch/file/CtSRpcYSZkqG/chrome.part5.rar", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb"}
+Mon, 01 Dec 2014 15:17:02 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:17:02 common.py[line:32] DEBUG 启动新线程：check_file_is_downloaded
+Mon, 01 Dec 2014 15:17:02 common.py[line:32] DEBUG file_name: chrome.part5.rar 
+downloaded_file_size:1.00M , file_real_size:1.00M 
+Mon, 01 Dec 2014 15:17:02 common.py[line:32] DEBUG have download ：chrome.part5.rar
+Mon, 01 Dec 2014 15:17:05 common.py[line:32] DEBUG =====第 10 次总轮循
+Mon, 01 Dec 2014 15:17:07 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/url {"url": "http://www.uploadable.ch/file/FWMcqgNY6BZr/chrome.part4.rar", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb"}
+Mon, 01 Dec 2014 15:17:08 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:17:08 common.py[line:32] DEBUG 启动新线程：check_file_is_downloaded
+Mon, 01 Dec 2014 15:17:08 common.py[line:32] DEBUG file_name: chrome.part4.rar 
+downloaded_file_size:1.00M , file_real_size:1.00M 
+Mon, 01 Dec 2014 15:17:08 common.py[line:32] DEBUG have download ：chrome.part4.rar
+Mon, 01 Dec 2014 15:17:10 common.py[line:32] DEBUG =====第 11 次总轮循
+Mon, 01 Dec 2014 15:17:13 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/url {"url": "http://www.uploadable.ch/file/AF3ufw5qsQvp/chrome.part3.rar", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb"}
+Mon, 01 Dec 2014 15:17:15 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:17:15 common.py[line:32] DEBUG 启动新线程：check_file_is_downloaded
+Mon, 01 Dec 2014 15:17:15 common.py[line:32] DEBUG file_name: chrome.part3.rar 
+downloaded_file_size:1.00M , file_real_size:1.00M 
+Mon, 01 Dec 2014 15:17:15 common.py[line:32] DEBUG have download ：chrome.part3.rar
+Mon, 01 Dec 2014 15:17:15 common.py[line:32] DEBUG =====第 12 次总轮循
+Mon, 01 Dec 2014 15:17:20 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/url {"url": "http://www.uploadable.ch/file/dGV4kpjY4XZ6/chrome.part2.rar", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb"}
+Mon, 01 Dec 2014 15:17:20 common.py[line:32] DEBUG =====第 13 次总轮循
+Mon, 01 Dec 2014 15:17:21 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:17:21 common.py[line:32] DEBUG 启动新线程：check_file_is_downloaded
+Mon, 01 Dec 2014 15:17:21 common.py[line:32] DEBUG file_name: chrome.part2.rar 
+downloaded_file_size:1.00M , file_real_size:1.00M 
+Mon, 01 Dec 2014 15:17:21 common.py[line:32] DEBUG have download ：chrome.part2.rar
+Mon, 01 Dec 2014 15:17:25 common.py[line:32] DEBUG =====第 14 次总轮循
+Mon, 01 Dec 2014 15:17:26 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/url {"url": "http://www.uploadable.ch/file/4XBstq46gFbN/chrome.part1.rar", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb"}
+Mon, 01 Dec 2014 15:17:28 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:17:28 common.py[line:32] DEBUG 启动新线程：check_file_is_downloaded
+Mon, 01 Dec 2014 15:17:30 common.py[line:32] DEBUG =====第 15 次总轮循
+Mon, 01 Dec 2014 15:17:33 common.py[line:32] DEBUG chrome.part1.rar 正在下载...不需要在这里检查是否下载成功。
+Mon, 01 Dec 2014 15:17:35 common.py[line:32] DEBUG =====第 16 次总轮循
+Mon, 01 Dec 2014 15:17:38 common.py[line:32] DEBUG chrome.part1.rar 正在下载...不需要在这里检查是否下载成功。
+Mon, 01 Dec 2014 15:17:40 common.py[line:32] DEBUG =====第 17 次总轮循
+Mon, 01 Dec 2014 15:17:43 common.py[line:32] DEBUG chrome.part1.rar 正在下载...不需要在这里检查是否下载成功。
+Mon, 01 Dec 2014 15:17:45 common.py[line:32] DEBUG =====第 18 次总轮循
+Mon, 01 Dec 2014 15:17:48 common.py[line:32] DEBUG 下载超时！： ：chrome.part1.rar ，file changed to waiting_download.
+Mon, 01 Dec 2014 15:17:48 common.py[line:32] DEBUG 目前正在下载列表的状态：[<models.OldDownloadLink object at 0x7f2a55780710>, <models.OldDownloadLink object at 0x7f2a552e86d0>] 
+移除 chrome.part1.rar ，现在正在下载列表状态：[<models.OldDownloadLink object at 0x7f2a552e86d0>] 
+第 4 次检查下载文件：chrome.part1.rar 
+Mon, 01 Dec 2014 15:17:48 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/url {"url": "http://www.uploadable.ch/file/4XBstq46gFbN/chrome.part1.rar", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb"}
+Mon, 01 Dec 2014 15:17:49 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:17:49 common.py[line:32] DEBUG 启动新线程：check_file_is_downloaded
+Mon, 01 Dec 2014 15:17:50 common.py[line:32] DEBUG =====第 19 次总轮循
+Mon, 01 Dec 2014 15:17:54 common.py[line:32] DEBUG chrome.part1.rar 正在下载...不需要在这里检查是否下载成功。
+Mon, 01 Dec 2014 15:17:55 common.py[line:32] DEBUG =====第 20 次总轮循
+Mon, 01 Dec 2014 15:17:59 common.py[line:32] DEBUG chrome.part1.rar 正在下载...不需要在这里检查是否下载成功。
+Mon, 01 Dec 2014 15:18:00 common.py[line:32] DEBUG =====第 21 次总轮循
+Mon, 01 Dec 2014 15:18:04 common.py[line:32] DEBUG chrome.part1.rar 正在下载...不需要在这里检查是否下载成功。
+Mon, 01 Dec 2014 15:18:05 common.py[line:32] DEBUG =====第 22 次总轮循
+Mon, 01 Dec 2014 15:18:09 common.py[line:32] DEBUG 下载超时！： ：chrome.part1.rar ，file changed to waiting_download.
+Mon, 01 Dec 2014 15:18:09 common.py[line:32] DEBUG 目前正在下载列表的状态：[<models.OldDownloadLink object at 0x7f2a552e86d0>] 
+移除 chrome.part1.rar ，现在正在下载列表状态：[] 
+第 4 次检查下载文件：chrome.part1.rar 
+Mon, 01 Dec 2014 15:18:09 remote_connection.py[line:363] DEBUG POST http://127.0.0.1:57738/hub/session/b0bb930f-bbae-47a6-b08a-ae6917531deb/url {"url": "http://www.uploadable.ch/file/4XBstq46gFbN/chrome.part1.rar", "sessionId": "b0bb930f-bbae-47a6-b08a-ae6917531deb"}
+Mon, 01 Dec 2014 15:18:10 common.py[line:32] DEBUG =====第 23 次总轮循
+Mon, 01 Dec 2014 15:18:15 common.py[line:32] DEBUG =====第 24 次总轮循
+Mon, 01 Dec 2014 15:18:20 common.py[line:32] DEBUG =====第 25 次总轮循
+Mon, 01 Dec 2014 15:18:25 common.py[line:32] DEBUG =====第 26 次总轮循
+Mon, 01 Dec 2014 15:18:31 common.py[line:32] DEBUG =====第 27 次总轮循
+Mon, 01 Dec 2014 15:18:36 common.py[line:32] DEBUG =====第 28 次总轮循
+Mon, 01 Dec 2014 15:18:41 common.py[line:32] DEBUG =====第 29 次总轮循
+Mon, 01 Dec 2014 15:18:46 common.py[line:32] DEBUG =====第 30 次总轮循
+Mon, 01 Dec 2014 15:18:51 common.py[line:32] DEBUG =====第 31 次总轮循
+Mon, 01 Dec 2014 15:18:56 common.py[line:32] DEBUG =====第 32 次总轮循
+Mon, 01 Dec 2014 15:19:01 common.py[line:32] DEBUG =====第 33 次总轮循
+Mon, 01 Dec 2014 15:19:02 remote_connection.py[line:458] DEBUG Finished Request
+Mon, 01 Dec 2014 15:19:02 common.py[line:32] DEBUG 启动新线程：check_file_is_downloaded
+Mon, 01 Dec 2014 15:19:02 common.py[line:32] DEBUG file_name: chrome.part1.rar 
+downloaded_file_size:1.00M , file_real_size:1.00M 
+Mon, 01 Dec 2014 15:19:02 common.py[line:32] DEBUG have download ：chrome.part1.rar
+Mon, 01 Dec 2014 15:19:06 common.py[line:32] DEBUG =====第 34 次总轮循
+Mon, 01 Dec 2014 15:19:06 common.py[line:32] DEBUG 启动新线程：check_unrared
+Mon, 01 Dec 2014 15:19:06 common.py[line:32] DEBUG chrome.part1.rar 解压成功!
+Mon, 01 Dec 2014 15:19:11 common.py[line:32] DEBUG =====第 35 次总轮循
+Mon, 01 Dec 2014 15:19:16 common.py[line:32] DEBUG =====第 36 次总轮循
+Mon, 01 Dec 2014 15:19:21 common.py[line:32] DEBUG =====第 37 次总轮循
+Mon, 01 Dec 2014 15:19:26 common.py[line:32] DEBUG =====第 38 次总轮循
+Mon, 01 Dec 2014 15:19:31 common.py[line:32] DEBUG =====第 39 次总轮循
+Mon, 01 Dec 2014 15:19:36 common.py[line:32] DEBUG =====第 40 次总轮循
+Mon, 01 Dec 2014 15:19:41 common.py[line:32] DEBUG =====第 41 次总轮循
+Mon, 01 Dec 2014 15:19:46 common.py[line:32] DEBUG =====第 42 次总轮循
+Mon, 01 Dec 2014 15:19:51 common.py[line:32] DEBUG =====第 43 次总轮循
+Mon, 01 Dec 2014 15:19:56 common.py[line:32] DEBUG =====第 44 次总轮循
+Mon, 01 Dec 2014 15:20:01 common.py[line:32] DEBUG =====第 45 次总轮循
+Mon, 01 Dec 2014 15:20:06 common.py[line:32] DEBUG =====第 46 次总轮循
+Mon, 01 Dec 2014 15:20:11 common.py[line:32] DEBUG =====第 47 次总轮循
+Mon, 01 Dec 2014 15:20:16 common.py[line:32] DEBUG =====第 48 次总轮循
+Mon, 01 Dec 2014 15:20:21 common.py[line:32] DEBUG =====第 49 次总轮循
+Mon, 01 Dec 2014 15:20:26 common.py[line:32] DEBUG =====第 50 次总轮循
+Mon, 01 Dec 2014 15:20:31 common.py[line:32] DEBUG =====第 51 次总轮循
+Mon, 01 Dec 2014 15:20:36 common.py[line:32] DEBUG =====第 52 次总轮循
+Mon, 01 Dec 2014 15:20:41 common.py[line:32] DEBUG =====第 53 次总轮循
+Mon, 01 Dec 2014 15:20:46 common.py[line:32] DEBUG =====第 54 次总轮循
+Mon, 01 Dec 2014 15:41:54 common.py[line:32] DEBUG =====第 1 次总轮循
+Mon, 01 Dec 2014 15:41:54 common.py[line:32] DEBUG 启动新线程：check_rared
+Mon, 01 Dec 2014 15:41:54 common.py[line:32] DEBUG chrome.part1.rar 文件不存在，无法解压！
+Mon, 01 Dec 2014 15:41:59 common.py[line:32] DEBUG =====第 2 次总轮循
+Mon, 01 Dec 2014 17:57:40 common.py[line:32] DEBUG =====第 1 次总轮循
+Mon, 01 Dec 2014 17:57:40 common.py[line:32] DEBUG 启动新线程：check_rared
+Mon, 01 Dec 2014 17:57:40 common.py[line:32] DEBUG chrome.part1.rar 压缩成功!
+Mon, 01 Dec 2014 17:57:45 common.py[line:32] DEBUG =====第 2 次总轮循
+Mon, 01 Dec 2014 17:57:50 common.py[line:32] DEBUG =====第 3 次总轮循
+Mon, 01 Dec 2014 17:57:55 common.py[line:32] DEBUG =====第 4 次总轮循
+Mon, 01 Dec 2014 17:58:00 common.py[line:32] DEBUG =====第 5 次总轮循
+Mon, 01 Dec 2014 17:58:05 common.py[line:32] DEBUG =====第 6 次总轮循
+Mon, 01 Dec 2014 17:58:10 common.py[line:32] DEBUG =====第 7 次总轮循
+Mon, 01 Dec 2014 17:58:15 common.py[line:32] DEBUG =====第 8 次总轮循
+Mon, 01 Dec 2014 18:06:17 common.py[line:32] DEBUG =====第 1 次总轮循
+Mon, 01 Dec 2014 18:06:22 common.py[line:32] DEBUG =====第 2 次总轮循
+Mon, 01 Dec 2014 18:06:27 common.py[line:32] DEBUG =====第 3 次总轮循
+Mon, 01 Dec 2014 18:07:17 common.py[line:32] DEBUG 启动新线程：check_rared
+Mon, 01 Dec 2014 18:07:17 common.py[line:32] DEBUG chrome.part1.rar 压缩成功!
+Mon, 01 Dec 2014 18:07:42 common.py[line:32] DEBUG 启动新线程：check_rared
+Mon, 01 Dec 2014 18:07:42 common.py[line:32] DEBUG chrome.part1.rar 压缩成功!
+Mon, 01 Dec 2014 18:08:17 common.py[line:32] DEBUG 启动新线程：check_rared
+Mon, 01 Dec 2014 18:08:17 common.py[line:32] DEBUG chrome.part1.rar 压缩成功!
+Mon, 01 Dec 2014 18:09:12 common.py[line:32] DEBUG =====第 1 次总轮循
+Mon, 01 Dec 2014 18:09:12 common.py[line:32] DEBUG 启动新线程：check_rared
+Mon, 01 Dec 2014 18:09:12 common.py[line:32] DEBUG chrome.part1.rar 压缩成功!
+Mon, 01 Dec 2014 18:12:29 common.py[line:32] DEBUG =====第 1 次总轮循
+Mon, 01 Dec 2014 18:12:29 common.py[line:32] DEBUG 启动新线程：check_rared
+Mon, 01 Dec 2014 18:12:29 common.py[line:32] DEBUG chrome.part1.rar 压缩成功!
+Mon, 01 Dec 2014 18:12:34 common.py[line:32] DEBUG =====第 2 次总轮循
+Mon, 01 Dec 2014 18:12:39 common.py[line:32] DEBUG =====第 3 次总轮循
+Mon, 01 Dec 2014 18:12:44 common.py[line:32] DEBUG =====第 4 次总轮循
+Mon, 01 Dec 2014 18:12:49 common.py[line:32] DEBUG =====第 5 次总轮循

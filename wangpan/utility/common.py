@@ -115,11 +115,30 @@ class CommonUtility():
 
 	def get_file_size(self, file_path, gnu=True, format='%.2f'):
 		return humanize.naturalsize(os.path.getsize(file_path),gnu=True,format=format)
+
 	def move_file_to_dir(self,file_path,dir):
 		if not os.path.exists(dir):
 			os.makedirs(dir)
 		# os.rename(file_path,dir)
 		shutil.move(file_path,dir)
+
+	def get_files_in_dir(self, dir_path):
+		# dir_path = '/home/lotaku/app/learning/wangpan/wp_resource/articles_file/1/unrared_files'
+		file_names = os.listdir(dir_path)
+		# print type(l)
+		# print l
+		filtered_file_name = []
+		for name in filtered_file_name:
+			try:
+				# print name.encode('utf8')
+				ext = name.split('.')[1].lower()
+				# print ext.encode('utf8')
+				if ext.encode('utf8') in ['avi','mp4']:
+
+					filtered_file_name.append(name.encode('utf8'))
+			except:
+				pass
+		return filtered_file_name
 
 common_utility = CommonUtility()
 

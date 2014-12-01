@@ -44,7 +44,8 @@ def get_wait_to_download_urls():
 	#
 	# # db_session.add(q)
 	# db_session.commit()
-	q.update({'status': 'downloaded'})
+	q.update({'status': 'unrared'})
+	# q.update({'status': 'downloaded'})
 	# q.update({'status': 'waiting_download'})
 	db_session.commit()
 	db_session.close()
@@ -56,3 +57,20 @@ get_wait_to_download_urls()
 # dir = '/home/l/app/learning/wangpan/wp_resource/articles_file/123/downloaded_files'
 # # shutil.move(,)
 # common_utility.move_file_to_dir(file_path,dir)
+
+# dir_path = '/home/lotaku/app/learning/wangpan/wp_resource/articles_file/1/unrared_files'
+# l = os.listdir(dir_path)
+# print type(l)
+# print l
+# new_l = []
+# for name in l:
+# 	try:
+# 		print name.encode('utf8')
+# 		ext = name.split('.')[1].lower()
+# 		print ext.encode('utf8')
+# 		if ext.encode('utf8') in ['avi','mp4','txt',u'未命名文件夹']:
+#
+# 			new_l.append(name.encode('utf8'))
+# 	except:
+# 		pass
+# print new_l
