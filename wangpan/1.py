@@ -50,7 +50,7 @@ def get_wait_to_download_urls():
 	db_session.commit()
 	db_session.close()
 
-get_wait_to_download_urls()
+# get_wait_to_download_urls()
 
 # import shutil
 # file_path = '/home/l/app/learning/wangpan/wp_resource/downloaded_files/chrome.part1.rar'
@@ -74,3 +74,18 @@ get_wait_to_download_urls()
 # 	except:
 # 		pass
 # print new_l
+dir_path = '/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files'
+for dirname, dirnames, filenames in os.walk(dir_path):
+	# print path to all subdirectories first.
+	for subdirname in dirnames:
+		print os.path.join(dirname, subdirname)
+
+	# print path to all filenames.
+	for filename in filenames:
+		print os.path.join(dirname, filename)
+
+	# Advanced usage:
+	# editing the 'dirnames' list will stop os.walk() from recursing into there.
+	if '.git' in dirnames:
+		# don't go into any .git directories.
+		dirnames.remove('.git')

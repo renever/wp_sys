@@ -18943,3 +18943,20 @@ Mon, 01 Dec 2014 18:12:34 common.py[line:32] DEBUG =====第 2 次总轮循
 Mon, 01 Dec 2014 18:12:39 common.py[line:32] DEBUG =====第 3 次总轮循
 Mon, 01 Dec 2014 18:12:44 common.py[line:32] DEBUG =====第 4 次总轮循
 Mon, 01 Dec 2014 18:12:49 common.py[line:32] DEBUG =====第 5 次总轮循
+Mon, 01 Dec 2014 22:23:18 common.py[line:32] DEBUG =====第 1 次总轮循
+Mon, 01 Dec 2014 22:23:18 common.py[line:32] DEBUG 启动新线程：check_rared
+Mon, 01 Dec 2014 22:23:18 common.py[line:32] DEBUG chrome.part1.rar 压缩成功!
+Mon, 01 Dec 2014 22:23:23 common.py[line:32] DEBUG =====第 2 次总轮循
+Mon, 01 Dec 2014 22:23:28 common.py[line:32] DEBUG =====第 3 次总轮循
+Mon, 01 Dec 2014 22:23:33 common.py[line:32] DEBUG =====第 4 次总轮循
+Mon, 01 Dec 2014 22:23:38 common.py[line:32] DEBUG =====第 5 次总轮循
+Mon, 01 Dec 2014 22:23:43 common.py[line:32] DEBUG =====第 6 次总轮循
+Mon, 01 Dec 2014 22:23:48 common.py[line:32] DEBUG =====第 7 次总轮循
+Mon, 01 Dec 2014 22:23:53 common.py[line:32] DEBUG =====第 8 次总轮循
+Mon, 01 Dec 2014 22:23:58 common.py[line:32] DEBUG =====第 9 次总轮循
+Mon, 01 Dec 2014 22:24:37 common.py[line:32] DEBUG =====第 1 次总轮循
+Mon, 01 Dec 2014 22:24:52 common.py[line:32] DEBUG =====第 1 次总轮循
+Mon, 01 Dec 2014 22:24:52 common.py[line:32] DEBUG 启动新线程：check_rared
+Mon, 01 Dec 2014 22:24:52 common.py[line:32] DEBUG chrome.part1.rar 压缩成功!
+Mon, 01 Dec 2014 22:24:57 common.py[line:32] DEBUG =====第 2 次总轮循
+Mon, 01 Dec 2014 22:25:02 common.py[line:32] DEBUG =====第 3 次总轮循

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
 import logging
@@ -13,6 +14,11 @@ from settings import FirefoxProfilePath,DB_ENGINE, DB_BASE
 import humanize
 import os
 import shutil
+import ftplib
+from ftplib import FTP
+from multiprocessing import Pool
+from multiprocessing.dummy import Pool as ThreadPool
+
 def create_session(engine=DB_ENGINE, base=DB_BASE):
 	Session = sessionmaker(bind=engine)  # 创建一个Session类
 	session = Session()  # 生成一个Session实例
@@ -128,7 +134,7 @@ class CommonUtility():
 		# print type(l)
 		# print l
 		filtered_file_name = []
-		for name in filtered_file_name:
+		for name in file_names:
 			try:
 				# print name.encode('utf8')
 				ext = name.split('.')[1].lower()
@@ -139,6 +145,15 @@ class CommonUtility():
 			except:
 				pass
 		return filtered_file_name
+
+	def get_files_with_pull_path(self, dir_path):
+		files_with_abspath = []
+		for dirname, dirnames, filenames in os.walk(dir_path):
+			#path to all filenames.
+			for filename in filenames:
+				files_with_abspath.append(os.path.join(dirname, filename))
+		return files_with_abspath
+
 
 common_utility = CommonUtility()
 
@@ -176,6 +191,58 @@ class ShellCommand(object):
 			return u'成功的out里找到str'
 		else:
 			return u'在out里面找不到str'
+
+
+class FilmAvFtp():
+
+	def __init__(self,host='ftp.uploadable.ch',user='lxl001',password='f19174de',port=21,blocksize=8192):
+		self.host = host
+		self.user = user
+		self.password = password
+		self.port = port
+		self.ftp=FTP(host)
+		self.blocksize = blocksize
+
+	def login(self):
+		self.ftp.login(user=self.user, passwd=self.password)
+
+	# def handle(self):
+	#
+	# 	pass
+	#
+	# def upload_list(self,full_path_file_names):
+	#
+	# 	for full_path_file_name in full_path_file_names:
+	# 		file_name = os.path.basename(full_path_file_name)
+	# 		with open(full_path_file_name,'rb') as f:
+	# 			try:
+	# 				myFtp.ftp.storbinary('STOR ' + file_name,
+	# 						   f,
+	# 						   self.blocksize,
+	# 						   self.callback_handle(file_name))
+	# 			except ftplib.error_perm :
+	# 				print "上传失败！"
+	# 			print "%s 上传成功。" % file_name
+	#
+	# def upload(self,full_path_file_name):
+	# 	new_ftp = MyFtp()
+	# 	new_ftp.login()
+	#
+	# 	file_name = os.path.basename(full_path_file_name)
+	# 	with open(full_path_file_name,'rb') as f:
+	# 		try:
+	# 			new_ftp.ftp.storbinary('STOR ' + file_name,
+	# 					   f,
+	# 					   self.blocksize,
+	# 					   self.callback_handle(file_name))
+	#
+	# 		except ftplib.error_perm :
+	# 			print "上传失败！"
+	# 		print "%s 上传成功。" % file_name
+	#
+	# def callback_handle(self,file_name):
+	# 	print "%s 上传中..." % file_name
+
 
 
 # 测试
