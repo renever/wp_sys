@@ -20,7 +20,8 @@ from settings import FILE_UNIT_CONVERSION
 #数据库表
 from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, Category
 from utility.common import create_session, wp_logging, get_or_create, FirefoxDriver, common_utility
-from utility.common import ShellCommand
+from utility.common import ShellCommand, FilmAvFtp
+
 import unicodedata
 #系统包
 import logging
@@ -54,9 +55,14 @@ UPLOADING_LIST = []
 #最大限制数
 MAX_DOWNLOADING_NUMBER = 5
 MAX_RAR_AND_UNRAR_NUMBER = 1
+# MAX_UPLOAD_NUMBER = 1 # 一篇文章，一般有6个下载，在线网站下载速度一般10M/S
 MAX_UPLOAD_NUMBER = 5
 HAVE_UPLOAED_NUMBER = 0 #判断是否读取网页进行更新文章的新地址
 
+#检索新上传链接条件
+#是否为系统初次检索
+GRAB_NEW_URL_FIRST = True
+GRAB_NEW_URL = False # 当有文章上传成功时，就改为TRUE
 
 class Filmav_Grab():
 
@@ -727,7 +733,7 @@ class Filmav_Grab():
 				wp_logging(Msg=Msg)
 				Msg = '目前正在下载列表的状态：%s \r\n' % DOWNLOADING_LIST
 				DOWNLOADING_LIST.remove(url_inst)
-				Msg += '移除 %s ，现在正在下载列表状态：%s \r\n' % (url_inst.file_name.encode('utf8'), DOWNLOADING_LIST)
+				Msg += '移除 %s ，正在下载列表状态：%s \r\n' % (url_inst.file_name.encode('utf8'), DOWNLOADING_LIST)
 				Msg += '第 %s 次检查下载文件：%s ' % (loop_count, url_inst.file_name.encode('utf8'))
 				wp_logging(Msg=Msg)
 				db_session.close()
@@ -1002,12 +1008,12 @@ class Filmav_Grab():
 					self.get_wait_to_upload_urls()
 
 			if len(UPLOADING_LIST) < MAX_UPLOAD_NUMBER and len(WAITING_UPLOAD_LIST) > 0:
-				article_inst = WAITING_UPLOAD_LIST.pop()
-				UPLOADING_LIST.append(article_inst)
+				ndl_inst = WAITING_UPLOAD_LIST.pop()
+				UPLOADING_LIST.append(ndl_inst)
 				# url_inst.status = 'downloading'
 				#todo try...
 				# self.update_inst(url_inst)
-				self.upload_file(article_inst)
+				self.upload_file(ndl_inst)
 
 			time.sleep(5)
 
@@ -1023,57 +1029,120 @@ class Filmav_Grab():
 				if odl.status != 'rared':
 					all_be_rared = False
 			if all_be_rared:
-				WAITING_UPLOAD_LIST.append(article)
+				ndl_insts = article.new_download_links
+				if len(ndl_insts)==0:
+					rared_dir = ARTICLE_FILES_DIR +'/'+ str(article.id) +'/'+'rared_files/'
+					files_name = common_utility.get_rared_files_name(rared_dir)
+					for file_name in files_name:
+						#url 暂时用文件名替代。以后判断如果http没有在URL里，就需要更新URL
+						ndl_inst = NewDownloadLink(url=file_name,file_name=file_name, status='waiting_uploaded')
+						article.new_download_links.append(ndl_inst)
+						WAITING_UPLOAD_LIST.append(ndl_inst)
+					db_session.add(article)
+					db_session.commit()
+
+				for ndl_inst in ndl_insts:
+					if ndl_inst.status == 'waiting_uploaded':
+						WAITING_UPLOAD_LIST.append(ndl_inst)
 
 		db_session.close()
 
-	def upload_file(self, article_inst):
-		check_uploaded = threading.Thread(target=self.check_file_is_uploaded, args=(article_inst,))
+	def upload_file(self, ndl_inst):
+		check_uploaded = threading.Thread(target=self.check_file_is_uploaded, args=(ndl_inst,))
 		check_uploaded.start()
 		Msg = '启动新线程：check_uploaded'
 		wp_logging(Msg=Msg)
 
-	def check_file_is_uploaded(self, article_inst):
+	def check_file_is_uploaded(self, ndl_inst):
 		db_session = self.db_session()
-		db_session.add(article_inst)
-		url_inst = article_inst.old_download_links[0]
+		db_session.add(ndl_inst)
+		# url_inst = article_inst.old_download_links[0]
 
-		rared_dir = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'rared_files/'
-		uploaded_dir = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'uploaded_files/'
+		file_name = ndl_inst.file_name.encode('utf8')
+		rared_dir = ARTICLE_FILES_DIR +'/'+ str(ndl_inst.article_id) +'/'+'rared_files/'
+		uploaded_dir = ARTICLE_FILES_DIR +'/'+ str(ndl_inst.article_id) +'/'+'uploaded_files/'
 
-		files_with_abspath = common_utility.get_files_with_pull_path(rared_dir)
+		file_with_abspath = rared_dir + file_name
+
+		# files_with_abspath = common_utility.get_files_with_pull_path(rared_dir)
+
+		if not os.path.exists(file_with_abspath):
+			Msg='%s 还没上传就已经被删除了！' % file_name
+			wp_logging(Msg=Msg)
+			UPLOADING_LIST.remove(ndl_inst)
+			db_session.close()
+			return
 
 		if not os.path.exists(uploaded_dir):
 			os.makedirs(uploaded_dir)
 
-		if files_with_abspath <=0:
-			UPLOADING_LIST.remove(article_inst)
-			return
-		for file in files_with_abspath:
+		# if files_with_abspath <=0:
+		# 	UPLOADING_LIST.remove(article_inst)
+		# 	return
+		# db_session.close()
+		#
+		# rared_file_count = len(files_with_abspath)
+		# for file in files_with_abspath:
+		# 	#判断该文件是否已经上传（获取还没有新url信息，但已经上传到服务器，并关联到文章了）
+		# 	db_session = self.db_session()
+		# 	file_name = os.path.basename(file)
+		# 	q = db_session.query(NewDownloadLink).filter_by(file_name=file_name).all()
+		# 	if len(q)>0:
+		# 		continue
+		# 	db_session.close()
+		#
+		# 	upload_single_file = threading.Thread(target=self.upload_file_thread, args=(article_inst, file, rared_file_count))
+		# 	upload_single_file.start()
+		# 	Msg = '启动新线程：upload_single_file'
+		# 	wp_logging(Msg=Msg)
+	#
+	# def upload_file_thread(self,article_inst,file,rared_file_count):
+	# 	db_session = self.db_session()
+	# 	db_session.add(article_inst)
+	# 	url_inst = article_inst.old_download_links[0]
 
+		fileav_ftp = FilmAvFtp()
+		fileav_ftp.login()
+		# file_name_not_ext = os.path.basename(file)
+		with open(file_with_abspath,'rb') as file_to_uploaed:
+			try:
+				fileav_ftp.ftp.storbinary('STOR ' + file_name,
+						   file_to_uploaed,
+						   fileav_ftp.blocksize,
+						   )
 
-
-		command = ShellCommand(cmd)
-		result_dic = command.run(timeout=10)
-		#状态改成正在压缩中
-		q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
-		q.update({'status': 'raring'})
+			except Exception as e:
+				ndl_inst.status = 'waiting_uploaded'
+				db_session.add(ndl_inst)
+				db_session.commit()
+				db_session.close()
+				UPLOADING_LIST.remove(ndl_inst)
+				Msg = '%s ->upload fail！error:%s' % (file_name, e)
+				wp_logging(Msg=Msg)
+				db_session.close()
+				return
+		#没有异常，则文件上传成功
+		GRAB_NEW_UR = True # 告诉系统，需要抓取新链接了。
+		ndl_inst.status = 'uploaded'
+		db_session.add(ndl_inst)
 		db_session.commit()
-		if result_dic.get('status') == 0:
-			Msg = '%s 压缩成功!' % url_inst.file_name.encode('utf8')
-			wp_logging(Msg=Msg)
-			q.update({'status': 'rared'})
-			db_session.commit()
-		elif result_dic.get('status') == 'Time Out':
-			Msg = '%s 压缩超时!' % url_inst.file_name.encode('utf8')
-			wp_logging(Msg=Msg)
-			#改成unrared状态
-			q.update({'status': 'unrared'})
-			db_session.commit()
-		else:
-			raise Exception,'压缩发生为止错误：%s ' % result_dic.get('status')
-		RARING_LIST.remove(article_inst)
 		db_session.close()
+		Msg = '%s ->upload OK！' % file_name
+		wp_logging(Msg=Msg)
+		UPLOADING_LIST.remove(ndl_inst)
+		db_session.close()
+		# #检查是否都上传好了，如果 len（ewDownloadLink）==rared_file_count,表示全部都上传好了
+		# new_download_link = db_session.query(NewDownloadLink).filter(NewDownloadLink.article_id==article_inst.id).all()
+		# if new_download_link == rared_file_count:
+		# 	#状态改成正在压缩中
+		# 	q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
+		# 	q.update({'status': 'uploaded'})
+		# 	db_session.commit()
+		# 	Msg = '%s 全部已经上传成功!' % file_name.encode('utf8')
+		# 	wp_logging(Msg=Msg)
+
+
+
 
 
 if __name__ == '__main__':
@@ -1121,16 +1190,23 @@ if __name__ == '__main__':
 		# 	rar_thread.start()
 		# 	filmav_grab.RAR_SYSTEM_IS_RUNNING = True
 		# 	print 'start rar system... '
-		# #todo 文件上传，待正在上传列表小于10时，添加新的待上传文件地址
-		if not filmav_grab.UPLOAD_SYSTEM_IS_RUNNING:
 
-			print 'UPLOADING_LIST %s ' % UPLOADING_LIST
-			upload_thread = threading.Thread(target=filmav_grab.file_upload_system)
-			upload_thread.start()
-			filmav_grab.UPLOAD_SYSTEM_IS_RUNNING = True
-			print 'start upload system... '
-
+		#todo 文件上传，待正在上传列表小于10时，添加新的待上传文件地址
+		# if not filmav_grab.UPLOAD_SYSTEM_IS_RUNNING:
 		#
+		# 	print 'UPLOADING_LIST %s ' % UPLOADING_LIST
+		# 	upload_thread = threading.Thread(target=filmav_grab.file_upload_system)
+		# 	upload_thread.start()
+		# 	filmav_grab.UPLOAD_SYSTEM_IS_RUNNING = True
+		# 	print 'start upload system... '
+
+
+		#todo 抓取上传的地址
+		if GRAB_NEW_URL_FIRST or GRAB_NEW_URL:
+			if GRAB_NEW_URL:
+				#刚刚上传，需要等网盘站生成下载地址
+				time.sleep(10)
+
 		print 'man process sleep 5... '
 		# #todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
 

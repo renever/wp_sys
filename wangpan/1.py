@@ -5,7 +5,7 @@ import humanize
 # sys.path.append('/home/l/app/learning/wangpan/')
 
 from utility.common import create_session, common_utility
-from models import Article,OldDownloadLink
+from models import Article,OldDownloadLink, NewDownloadLink
 from sqlalchemy.sql import func
 from sqlalchemy.orm import contains_eager, subqueryload
 from sqlalchemy import literal
@@ -52,6 +52,15 @@ def get_wait_to_download_urls():
 
 # get_wait_to_download_urls()
 
+def url_query():
+	db_session = create_session()
+	q = db_session.query(NewDownloadLink).filter_by(file_name='chrome.part1.rar').all()
+	print q
+# url_query()
+
+
+
+
 # import shutil
 # file_path = '/home/l/app/learning/wangpan/wp_resource/downloaded_files/chrome.part1.rar'
 # dir = '/home/l/app/learning/wangpan/wp_resource/articles_file/123/downloaded_files'
@@ -74,18 +83,36 @@ def get_wait_to_download_urls():
 # 	except:
 # 		pass
 # print new_l
-dir_path = '/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files'
-for dirname, dirnames, filenames in os.walk(dir_path):
-	# print path to all subdirectories first.
-	for subdirname in dirnames:
-		print os.path.join(dirname, subdirname)
+#=================================
+# dir_path = '/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files'
+# for dirname, dirnames, filenames in os.walk(dir_path):
+# 	# print path to all subdirectories first.
+# 	for subdirname in dirnames:
+# 		print os.path.join(dirname, subdirname)
+#
+# 	# print path to all filenames.
+# 	for filename in filenames:
+# 		print os.path.join(dirname, filename)
+#
+# 	# Advanced usage:
+# 	# editing the 'dirnames' list will stop os.walk() from recursing into there.
+# 	if '.git' in dirnames:
+# 		# don't go into any .git directories.
+# 		dirnames.remove('.git')
+#
+# print os.path.basename('/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files/chrome.part1.rar')
 
-	# print path to all filenames.
-	for filename in filenames:
-		print os.path.join(dirname, filename)
 
-	# Advanced usage:
-	# editing the 'dirnames' list will stop os.walk() from recursing into there.
-	if '.git' in dirnames:
-		# don't go into any .git directories.
-		dirnames.remove('.git')
+#===========================
+def get_rared_files_name(dir_path):
+	#返回已经压缩好的文件名（位于rared 文件夹）
+	files_name = []
+	for dirname, dirnames, filenames in os.walk(dir_path):
+		for filename in filenames:
+			files_name.append(filename)
+	print files_name
+	return files_name
+
+
+
+get_rared_files_name('/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files/')

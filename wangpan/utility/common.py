@@ -106,7 +106,7 @@ class FirefoxDriver():
 			# wp_logging(Msg=Msg)
 			status = True
 		except Exception,e:
-			Msg = 'Error(下载文件)--> 异常信息（%s);文章ID（%s）;下载链接（%s） ' % (e, url_inst.article_id, url_inst.url)
+			Msg = '下载文件出错！ 异常信息（%s);文章ID（%s）;下载链接（%s） ' % (e, url_inst.article_id, url_inst.url)
 			wp_logging(Msg=Msg)
 			raise e
 		db_session.close()
@@ -129,10 +129,7 @@ class CommonUtility():
 		shutil.move(file_path,dir)
 
 	def get_files_in_dir(self, dir_path):
-		# dir_path = '/home/lotaku/app/learning/wangpan/wp_resource/articles_file/1/unrared_files'
 		file_names = os.listdir(dir_path)
-		# print type(l)
-		# print l
 		filtered_file_name = []
 		for name in file_names:
 			try:
@@ -149,13 +146,23 @@ class CommonUtility():
 	def get_files_with_pull_path(self, dir_path):
 		files_with_abspath = []
 		for dirname, dirnames, filenames in os.walk(dir_path):
-			#path to all filenames.
 			for filename in filenames:
 				files_with_abspath.append(os.path.join(dirname, filename))
 		return files_with_abspath
 
+	def get_rared_files_name(self, dir_path):
+		#返回已经压缩好的文件名（位于rared 文件夹）
+		files_name = []
+		for dirname, dirnames, filenames in os.walk(dir_path):
+			for filename in filenames:
+				files_name.append(filename)
+
+		return files_name
+
 
 common_utility = CommonUtility()
+
+# common_utility.get_rared_files_name('/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files/')
 
 import subprocess, threading
 

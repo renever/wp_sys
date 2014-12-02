@@ -7,3 +7,5 @@ __author__ = 'lotaku'
 #todo 文件上传后，判断Pending FTP Files (0)，值大于0,表示文件上传成功，等待服务器生成下载地址中
 #todo ftp 上传后程序会有返回值，直接做判断用
 #todo 压缩解压任务，都以文章原来的发布时间排序(发布时间需要抓取）
+#todo 为盘资源设置4个数字删除密码http://www.uploadable.ch/account_features.php
+#todo 新下载URL 也保存 file_size,file_size_unit

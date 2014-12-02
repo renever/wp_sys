@@ -37,10 +37,10 @@ class CommonLink(DB_BASE):
 	url = Column(String(255), unique=True)
 	is_done = Column(Boolean, default=False)
 	website = Column(String(255))
-	status = Column(String(255))#waiting_download,downloading,downloaded,unraring,unrared,raring,rared,uploading,uploaded
+	status = Column(String(255))#waiting_download,downloading,downloaded,unraring,unrared,raring,rared,waiting_uploaded,uploading,uploaded
 	linkbuck = Column(String(255))
 
-	def __init__(self, url,file_name='',file_size='', status='waiting_download',website='filmav.com',file_size_unit=''):
+	def __init__(self, url='',file_name='',file_size='', status='',website='filmav.com',file_size_unit=''):
 		self.url = url
 		self.website = website
 		self.file_name = file_name
