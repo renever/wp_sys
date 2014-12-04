@@ -1,121 +1,8 @@
-# -*- coding:utf-8 -*-
-import os
-import humanize
-# import sys
-# sys.path.append('/home/l/app/learning/wangpan/')
-
-from utility.common import create_session, common_utility
-from models import Article,OldDownloadLink, NewDownloadLink
-from sqlalchemy.sql import func
-from sqlalchemy.orm import contains_eager, subqueryload
-from sqlalchemy import literal
-
-# s = os.path.getsize('/home/l/app/learning/wangpan/wp_resource/downloaded_files/chrome.part6_005.rar')
-# s2 = os.path.getsize('/home/l/app/learning/wangpan/wp_resource/downloaded_files/chrome.part3.rar')
-# print s
-# h =  humanize.naturalsize(s2, gnu=True,format='%.2f')
-# print h
-# print type(h)
-#
-# def f1():
-#     return ('a','b')
-# a1,b1 = f1()
-# print a1
-
-def get_wait_to_download_urls():
-
-	#实际情况，过滤条件改成含有未下载地址的，最新发布的一篇文章
-	db_session = create_session()
-	# article = db_session.query(Article).join(OldDownloadLink).filter('downloaded'==func.all(OldDownloadLink.status))
-	# article2 = db_session.query(Article).join(OldDownloadLink).filter(literal('downloaded')==func.all(OldDownloadLink.status)).all()
-	# article2 = db_session.query(Article).join(OldDownloadLink).filter(literal('downloaded')==OldDownloadLink.status).all()
-	# article2 = db_session.query(Article).join(OldDownloadLink).filter('downloaded'==func.any(OldDownloadLink.status)).all()
-	# article = db_session.query(Article).join(Article.old_download_links).filter(Article.old_download_links.any(status='downloaded')).all()
-	# article = db_session.query(Article).join(Article.old_download_links).first()
-	# article = db_session.query(Article).join(Article.old_download_links).options(contains_eager('old_download_links')).filter(OldDownloadLink.status=='downloaded').first()
-	# article = db_session.query(Article).join(Article.old_download_links).filter(OldDownloadLink.status=='downloaded').first()
-	# article = db_session.query(Article).join(OldDownloadLink).options(subqueryload(Article.old_download_links)).filter(OldDownloadLink.status=='downloaded').first()
-	# article2 = db_session.query(Article).filter(Article.all_url_downloaded == '480')
-	# # print article
-	# print article2
-	q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==1)
-	# q = db_session.query(OldDownloadLink)
-	# q.update({'status': 'unrared2'})
-	#
-	# # db_session.add(q)
-	# db_session.commit()
-	q.update({'status': 'unrared'})
-	# q.update({'status': 'downloaded'})
-	# q.update({'status': 'waiting_download'})
-	db_session.commit()
-	db_session.close()
-
-# get_wait_to_download_urls()
-
-def url_query():
-	db_session = create_session()
-	q = db_session.query(NewDownloadLink).filter_by(file_name='chrome.part1.rar').all()
-	print q
-# url_query()
-
-# import shutil
-# file_path = '/home/l/app/learning/wangpan/wp_resource/downloaded_files/chrome.part1.rar'
-# dir = '/home/l/app/learning/wangpan/wp_resource/articles_file/123/downloaded_files'
-# # shutil.move(,)
-# common_utility.move_file_to_dir(file_path,dir)
-
-# dir_path = '/home/lotaku/app/learning/wangpan/wp_resource/articles_file/1/unrared_files'
-# l = os.listdir(dir_path)
-# print type(l)
-# print l
-# new_l = []
-# for name in l:
-# 	try:
-# 		print name.encode('utf8')
-# 		ext = name.split('.')[1].lower()
-# 		print ext.encode('utf8')
-# 		if ext.encode('utf8') in ['avi','mp4','txt',u'未命名文件夹']:
-#
-# 			new_l.append(name.encode('utf8'))
-# 	except:
-# 		pass
-# print new_l
-#=================================
-# dir_path = '/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files'
-# for dirname, dirnames, filenames in os.walk(dir_path):
-# 	# print path to all subdirectories first.
-# 	for subdirname in dirnames:
-# 		print os.path.join(dirname, subdirname)
-#
-# 	# print path to all filenames.
-# 	for filename in filenames:
-# 		print os.path.join(dirname, filename)
-#
-# 	# Advanced usage:
-# 	# editing the 'dirnames' list will stop os.walk() from recursing into there.
-# 	if '.git' in dirnames:
-# 		# don't go into any .git directories.
-# 		dirnames.remove('.git')
-#
-# print os.path.basename('/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files/chrome.part1.rar')
-
-#===========================
-# def get_rared_files_name(dir_path):
-# 	#返回已经压缩好的文件名（位于rared 文件夹）
-# 	files_name = []
-# 	for dirname, dirnames, filenames in os.walk(dir_path):
-# 		for filename in filenames:
-# 			files_name.append(filename)
-# 	print files_name
-# 	return files_name
-#
-#
-#
-# get_rared_files_name('/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files/')
-#===========================
+# -*- coding: utf-8 -*-
 import requests
 from contextlib import closing
 from pyquery import PyQuery as pq
+
 class GrabNewODL():
 	'''
 	抓取新的下载地址
@@ -201,6 +88,7 @@ class GrabNewODL():
 				print 'oK'
 			print a.history
 			print a.url
+			#todo 下载是有效的下载方法，可以增大chunk_size
 			# i = 0
 			# with open(local_filename, 'wb') as f:
 			# 	# for chunk in a.iter_content(chunk_size=1024):
@@ -210,9 +98,8 @@ class GrabNewODL():
 			# 			f.flush()
 			# 			i += 1
 			# 			print i
-	def get_1000(self):
+	def get_new_uploaded_file_url(self):
 		'''
-
 		'''
 		url = 'http://www.uploadable.ch/file-manager-expand-folder.php'
 		data = {
@@ -220,24 +107,14 @@ class GrabNewODL():
 			'extra':	        'filesPanel',
 			'files_per_page':	'1000',
 			'is_search':	    'false',
-			'parent_folder_id':	'197164',
+			'parent_folder_id':	'197173',
 			'sort_field':	    '0',
 			'sort_order':	    'ASC',
 			'total_folder_count':'0',
 		}
-		data2 = {
-			'current_page':	'1',
-			'extra':	'folderPanel',
-			'is_updated_folder_count':	'true',
-		}
-		data3 = dict(
-			folderId=197164,
-			getFolderSubFolderAndFileCount='getFolderSubFolderAndFileCount',
-		)
+
 		r = self.r_session.post(url=url,data=data, allow_redirects=True)
-		r2 = self.r_session.post(url=url,data=data2, allow_redirects=True)
-		r3 = self.r_session.post(url=url,data=data3, allow_redirects=True)
-		r4 = self.r_session.get(url=self.url_filesystem, allow_redirects=True)
+
 		print r.text
 
 	def para_new_url(self):
@@ -249,12 +126,9 @@ class GrabNewODL():
 			print "-"*99
 
 	def move_files_to_dir(self,files_list=[54689593,54689368,54689137]):
-		import json
 		data = dict(
 			CurrentFolderId=197173,#done 文件夹ID
 			moveFolderDest=210640,#ftp 文件ID
-			# moveFolderId=json.dump(files_list)
-			# moveFolderId='54689593,54689368,54689137'
 			moveFolderId=', '.join(str(file_id) for file_id in files_list)
 		)
 		url = 'http://www.uploadable.ch/file-manager-action.php'
@@ -270,22 +144,5 @@ grab_new_odl.login()
 # grab_new_odl.download()
 # grab_new_odl.grab_ndls()
 # grab_new_odl.get_1000()
-grab_new_odl.move_files_to_dir()
-
-#===========================================
-
-# def login_douban(username, passwd):
-# 	session = requests.session()
-# 	post_data={'source':'index_nav','form_email':username,'form_password':passwd}
-# 	request_headers={"User-Agent":"Mozilla/5.0 (Windows NT 6.1; rv:30.0) Gecko/20100101 Firefox/30.0"}
-# 	response=session.post("http://www.douban.com/accounts/login", data=post_data,headers=request_headers)
-# 	if u"豆瓣正在发生" in response.text:
-# 		# print response.text
-# 		#return  response
-# 		print "Login successful"
-# 	else:
-# 		# print response.text
-# 		print "Login failed"
-# 		#return  False
-#
-# login_douban('317399510@qq.com', 'dbF@ang11408')
+# grab_new_odl.move_files_to_dir()
+grab_new_odl.get_new_uploaded_file_url()
