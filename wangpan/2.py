@@ -26,10 +26,10 @@ class GrabNewODL():
 		}
 		self.url = 'http://www.uploadable.ch/login.php'
 		self.url_filesystem = 'http://www.uploadable.ch/filesystem.php'
-		self.r = None
+		self.r_session = requests.session()
 #http://www.uploadable.ch/file/dQADKukpsKjn/chrome.part1.rar
 	def login(self):
-		self.r_session = requests.session()
+
 		self.response = self.r_session.post(url=self.url, data=self.data, headers=self.headers)
 		# self.response = self.r_session.post(self.url, {'userName':'lxl001','userPassword':'qQ2@wW', },allow_redirects=True)
 		# self.response = self.r_session.get(url=self.url_filesystem,allow_redirects=True)
@@ -74,30 +74,39 @@ class GrabNewODL():
 		'''
 		用requests下载测试
 		'''
-		url = 'http://www.uploadable.ch/file/dQADKukpsKjn/chrome.part1.rar'
+		url = 'http://www.uploadable.ch/file/QDRExq9t4rX4'
 		local_filename = url.split('/')[-1]
 		print local_filename
 		# NOTE the stream=True parameter
 		# b = requests.get(url, cookies=r.cookies)
 		# print b.url
-
+		# r2 = self.r_session.get(url, allow_redirects=True)
+		# r2 = self.r_session.get(url,stream=True, allow_redirects=True)
+		# print '2'
+		# # print r2.text
+		# print r2.history
+		# print r2.url
 		with closing(self.r_session.get(url, stream=True, allow_redirects=True)) as a:
 			# print a.content
-
+			# print a.text
 			if a.status_code == 200:
 				print 'oK'
 			print a.history
 			print a.url
-			#todo 下载是有效的下载方法，可以增大chunk_size
-			# i = 0
-			# with open(local_filename, 'wb') as f:
-			# 	# for chunk in a.iter_content(chunk_size=1024):
-			# 	for chunk in a.iter_content(8192):
-			# 		if chunk:  # filter out keep-alive new chunks
-			# 			f.write(chunk)
-			# 			f.flush()
-			# 			i += 1
-			# 			print i
+			if len(a.history)<=0:
+				self.login()
+				self.download()
+				return
+			# todo 下载是有效的下载方法，可以增大chunk_size
+			i = 0
+			with open(local_filename, 'wb') as f:
+				# for chunk in a.iter_content(chunk_size=1024):
+				for chunk in a.iter_content(8192):
+					if chunk:  # filter out keep-alive new chunks
+						f.write(chunk)
+						f.flush()
+						i += 1
+						print i
 	def get_new_uploaded_file_url(self):
 		'''
 		'''
@@ -140,9 +149,9 @@ class GrabNewODL():
 
 #
 grab_new_odl = GrabNewODL()
-grab_new_odl.login()
-# grab_new_odl.download()
+# grab_new_odl.login()
+grab_new_odl.download()
 # grab_new_odl.grab_ndls()
 # grab_new_odl.get_1000()
 # grab_new_odl.move_files_to_dir()
-grab_new_odl.get_new_uploaded_file_url()
+# grab_new_odl.get_new_uploaded_file_url()

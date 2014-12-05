@@ -680,10 +680,10 @@ class Filmav_Grab():
 
 	def download_file(self,url_inst):
 
-		if self.driver.login_time is None:
-			self.get_firefox_driver()
+		# if self.driver.login_time is None:
+		# 	self.get_firefox_driver()
 		#登录超时检测
-		self.check_login_expire()
+		# self.check_login_expire()
 		#todo 直接做成 连接“下载链接”，判断 “立即下载” 按钮是否出现。没有就重新登录。
 		been_download =  self.driver.download_file(url_inst)
 		#todo 跟踪文件是否成功下载，文件存在，并且大小正确
@@ -703,10 +703,9 @@ class Filmav_Grab():
 		# 每5秒检查一次，超时，则文件状态改成waiting_download.
 		# loop_count > 120 表示超时10分钟,实际环境用
 		# loop_count > 6 表示超时30秒,测试用
-		loop_count = 0
-		while True:
-			# file_names = os.listdir(DOWNLOAD_DIR)
+		total_time = 0
 
+		while True:
 			if os.path.exists(file_path):
 				downloaded_file_size = common_utility.get_file_size(file_path=file_path)
 				Msg = 'file_name: %s \r\n' % url_inst.file_name.encode('utf8')
@@ -724,7 +723,7 @@ class Filmav_Grab():
 					dir = ARTICLE_FILES_DIR +'/'+str(url_inst.article_id)+'/'+'downloaded_files'
 					common_utility.move_file_to_dir(file_path,dir)
 				break
-			if loop_count > 3:
+			if total_time > 600: #超过十分钟
 				url_inst.status = 'waiting_download'
 				# self.update_inst(url_inst)
 				db_session.add(url_inst)
@@ -739,7 +738,7 @@ class Filmav_Grab():
 				db_session.close()
 				break
 			time.sleep(5)
-			loop_count += 1
+			total_time += 5
 
 			#todo 根据文件大小，下载速度，得到时间+5分钟，超时，则改url状态为等待下载，下次再下载
 
