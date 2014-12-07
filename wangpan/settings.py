@@ -2,6 +2,7 @@
 
 from sqlalchemy import Column, Sequence ,Text, String, Integer, ForeignKey , Boolean
 from sqlalchemy import create_engine  # 导入创建连接驱动
+from sqlalchemy.pool import NullPool
 from sqlalchemy.ext.declarative import declarative_base
 import logging
 import logging.config
@@ -11,7 +12,8 @@ BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 # print BASE_PATH
 if pwd.getpwuid(os.getuid())[0]=='l':
 	#XPS
-	DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
+	DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8",poolclass=NullPool,echo=True)
+	# DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
 	# 					     # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
 	#浏览器配置地址
 	#xps
@@ -51,11 +53,11 @@ IMG_PATH = BASE_PATH + '/wp_resource/images'
 if not os.path.exists(IMG_PATH):
 	os.makedirs(IMG_PATH)
 # 各种线程池大小
-GRAB_ARTICLES_POOL_SIZE = 10
+GRAB_ARTICLES_POOL_SIZE = 300
 
-GRAB_ARTICLE_URL_POOL_SIZE = 10
+GRAB_ARTICLE_URL_POOL_SIZE = 300
 
-SAVE_ARTICLE_URL_POOL_SIZE = 10
+SAVE_ARTICLE_URL_POOL_SIZE = 300
 
 #temp
 

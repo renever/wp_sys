@@ -222,7 +222,7 @@ class Filmav_Grab():
 			pool.map(self.grab_article_url_of_per_page, page_number_list)
 		except Exception,e:
 			Msg = '开始新线程报错：%s' % e
-			wp_logging(Msg=Msg,allow_print=True)
+			wp_logging(Msg=Msg,allow_print=False)
 
 	def grab_article_url_of_per_page(self,page_number):
 		"""
@@ -262,7 +262,7 @@ class Filmav_Grab():
 			pool.map(self.save_article_url, article_urls)
 		except Exception,e:
 			Msg = '开始新线程报错：%s' % e
-			wp_logging(Msg=Msg,allow_print=True)
+			wp_logging(Msg=Msg,allow_print=False)
 
 
 
@@ -308,6 +308,7 @@ class Filmav_Grab():
 
 		#独立性的db_session要记得关闭
 		db_session.close()
+		db_session.dispose()
 
 	def a_wait_to_pull_wiki(self):
 		"""有关线程安全的测试，避免了 数据库创建出现 实例重复创建的错误。"""
@@ -356,7 +357,7 @@ class Filmav_Grab():
 			pool.map(create_tag_from_list, l_all)
 		except Exception,e:
 			Msg = '开始新线程报错：%s' % e
-			wp_logging(Msg=Msg,allow_print=True)
+			wp_logging(Msg=Msg,allow_print=False)
 
 		end_time = time.clock()
 		exc_time = end_time - start_time
@@ -377,7 +378,7 @@ class Filmav_Grab():
 				grab_articles_pool.map(self.grab_article, file_links_inst)
 			except Exception,e:
 				Msg = '开始新线程报错2：%s' % e
-				wp_logging(Msg=Msg,allow_print=True)
+				wp_logging(Msg=Msg,allow_print=False)
 			# self.grab_article(file_links_inst[0])
 
 		else:
@@ -400,13 +401,16 @@ class Filmav_Grab():
 	def grab_article(self,url_inst):
 		# 建立数据库链接
 		db_session = self.db_session()
+		# db_session.connect()
 		r = None
 		try:
 			r = requests.get(url_inst.url, headers=self.headers)
 		except Exception, e:
 			Msg = '链接到文件URL时出现异常(下次再抓取）：%s' % e
 			wp_logging(Msg=Msg)
+
 			db_session.close()
+			db_session.dispose()
 
 			return
 		if r.status_code is not 200:
@@ -416,6 +420,7 @@ class Filmav_Grab():
 			Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
 			wp_logging(Msg=Msg)
 			db_session.close()
+			db_session.dispose()
 			return
 
 		h = pq(r.content)
@@ -443,6 +448,7 @@ class Filmav_Grab():
 			Msg = "失败! 抓取文章标题!"
 			wp_logging(Msg=Msg)
 			db_session.close()
+			db_session.dispose()
 			return
 		Msg = "抓取文章标题：" + str(unicode(title.html()).encode('utf-8'))
 		wp_logging(Msg=Msg, allow_print=False)
@@ -474,7 +480,7 @@ class Filmav_Grab():
 									 name=img_name, small_path=small_img, big_path=big_img,img_type=img_type )[0]
 			if not(img_inst in new_article.images):
 				new_article.images.append(img_inst)
-				Msg = "添加图片：" + img_name
+				Msg = "添加图片：" + img_name.encode('utf8')
 				wp_logging(Msg=Msg, allow_print=False)
 
 			# self.save_image(url=small_img, img_type=img_type, path='small_path')
@@ -558,7 +564,9 @@ class Filmav_Grab():
 				Msg = "抓取 old download link: %s" % old_download_link
 				wp_logging(Msg=Msg, allow_print=False)
 			else:
+
 				db_session.close()
+				db_session.dispose()
 				return
 
 
@@ -614,6 +622,7 @@ class Filmav_Grab():
 		db_session.add(url_inst_)
 		db_session.commit()
 		db_session.close()
+		db_session.dispose()
 		Msg='article successful'
 		wp_logging(Msg=Msg)
 
