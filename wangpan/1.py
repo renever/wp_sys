@@ -4,7 +4,7 @@ import humanize
 # import sys
 # sys.path.append('/home/l/app/learning/wangpan/')
 
-from utility.common import create_session, common_utility
+from utils import create_session, common_utility
 from models import Article,OldDownloadLink, NewDownloadLink
 from sqlalchemy.sql import func
 from sqlalchemy.orm import contains_eager, subqueryload
@@ -140,6 +140,7 @@ class GrabNewODL():
 		self.url = 'http://www.uploadable.ch/login.php'
 		self.url_filesystem = 'http://www.uploadable.ch/filesystem.php'
 		self.r = None
+
 #http://www.uploadable.ch/file/dQADKukpsKjn/chrome.part1.rar
 	def login(self):
 		self.r_session = requests.session()
@@ -187,29 +188,44 @@ class GrabNewODL():
 		'''
 		用requests下载测试
 		'''
-		url = 'http://www.uploadable.ch/file/dQADKukpsKjn/chrome.part1.rar'
+		# url = 'http://www.uploadable.ch/file/dQADKukpsKjn/chrome.part1.rar'
+		url = 'http://www.uploadable.ch/file/4XBstq46gFbN/chrome.part1.rar'
 		local_filename = url.split('/')[-1]
 		print local_filename
 		# NOTE the stream=True parameter
 		# b = requests.get(url, cookies=r.cookies)
 		# print b.url
+		total_size = 0
+		try:
+			with closing(self.r_session.get(url, stream=True, allow_redirects=True,hooks=dict(response=self.print_url), timeout=20.001)) as a:
+				# print a.content
+				file_size = int(a.headers['content-length'])
+				print type(file_size),file_size
 
-		with closing(self.r_session.get(url, stream=True, allow_redirects=True)) as a:
-			# print a.content
+				# file_downloaded_size = os.path.getsize('/home/l/app/learning/wangpan/wp_resource/downloaded_files/chrome.part1_001.rar')
+				# print file_size, file_downloaded_size
+				# print file_size == file_downloaded_size
+				if a.status_code == 200:
+					print 'oK'
+				print a.history
+				print a.url
 
-			if a.status_code == 200:
-				print 'oK'
-			print a.history
-			print a.url
-			# i = 0
-			# with open(local_filename, 'wb') as f:
-			# 	# for chunk in a.iter_content(chunk_size=1024):
-			# 	for chunk in a.iter_content(8192):
-			# 		if chunk:  # filter out keep-alive new chunks
-			# 			f.write(chunk)
-			# 			f.flush()
-			# 			i += 1
-			# 			print i
+				with open(local_filename, 'wb') as f:
+					# for chunk in a.iter_content(chunk_size=1024):
+					for chunk in a.iter_content(8192):
+						if chunk:  # filter out keep-alive new chunks
+							total_size += len(chunk)
+							print total_size
+
+							f.write(chunk)
+							f.flush()
+				if total_size == file_size:
+					print "下载成功"
+		except requests.exceptions.Timeout as e:
+			print 'time out'
+	def print_url(self,r, *args, **kwargs):
+		print "调用回调函数"
+
 	def get_1000(self):
 		'''
 
@@ -267,10 +283,10 @@ class GrabNewODL():
 #
 grab_new_odl = GrabNewODL()
 grab_new_odl.login()
-# grab_new_odl.download()
+grab_new_odl.download()
 # grab_new_odl.grab_ndls()
 # grab_new_odl.get_1000()
-grab_new_odl.move_files_to_dir()
+# grab_new_odl.move_files_to_dir()
 
 #===========================================
 

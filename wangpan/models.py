@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Sequence, Text, String, Integer, ForeignKey, Boolean
+from sqlalchemy import Column, Sequence, Text, String, Integer, ForeignKey, Boolean, DateTime
 from sqlalchemy import create_engine  # 导入创建连接驱动
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Table, Text
@@ -10,7 +10,9 @@ from sqlalchemy import exc,select, func
 
 from settings import DB_ENGINE, DB_BASE
 from sqlalchemy.ext.hybrid import hybrid_property
-
+import datetime
+import os
+os.environ['TZ'] = 'Asia/Shanghai'
 
 
 class CommonForum(DB_BASE):
@@ -127,6 +129,10 @@ class Article(DB_BASE):
 	file_link = relationship(FileLink, backref=backref('file_link', order_by=id))
 
 	categories = relationship('Category', secondary=article_category, backref='articles')
+
+	pre_posted_date = Column(DateTime,  nullable=True)
+	posted_date = Column(DateTime,  nullable=True)
+	pre_body = Column(Text, nullable=True)
 
 	#images 已经在定义在Images 类一对多。
 	#OldDownloadLink 一对多

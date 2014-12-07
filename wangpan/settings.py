@@ -51,21 +51,22 @@ IMG_PATH = BASE_PATH + '/wp_resource/images'
 if not os.path.exists(IMG_PATH):
 	os.makedirs(IMG_PATH)
 # 各种线程池大小
-GRAB_ARTICLES_POOL_SIZE = 300
+GRAB_ARTICLES_POOL_SIZE = 10
 
-GRAB_ARTICLE_URL_POOL_SIZE = 300
+GRAB_ARTICLE_URL_POOL_SIZE = 10
 
-SAVE_ARTICLE_URL_POOL_SIZE = 300
+SAVE_ARTICLE_URL_POOL_SIZE = 10
 
 #temp
 
 s_links = [
-		'http://www.uploadable.ch/file/4XBstq46gFbN/chrome.part1.rar',
-		'http://www.uploadable.ch/file/dGV4kpjY4XZ6/chrome.part2.rar',
-		'http://www.uploadable.ch/file/AF3ufw5qsQvp/chrome.part3.rar',
-		'http://www.uploadable.ch/file/FWMcqgNY6BZr/chrome.part4.rar',
-		'http://www.uploadable.ch/file/CtSRpcYSZkqG/chrome.part5.rar',
-		'http://www.uploadable.ch/file/Ud29HCTsFmWu/chrome.part6.rar',
+	'http://www.uploadable.ch/file/fKBAph49mgeh/chrome.part1.rar',
+	'http://www.uploadable.ch/file/aKm6hXM2spDd/chrome.part2.rar',
+	'http://www.uploadable.ch/file/eAJajDV5cJA4/chrome.part3.rar',
+	'http://www.uploadable.ch/file/4DUm3RVUKzjr/chrome.part4.rar',
+	'http://www.uploadable.ch/file/sFGNVYqEjCvu/chrome.part5.rar',
+	'http://www.uploadable.ch/file/txPgQBDzY3HH/chrome.part6.rar',
+
 	]
 
 #全局变量：
@@ -76,3 +77,6 @@ FILE_UNIT_CONVERSION={
 	'MB': 1048576,
 	'KB': 1024,
 }
+
+#时区设置
+os.environ['TZ'] = 'Asia/Shanghai'
