@@ -32,7 +32,7 @@ def create_scoped_session(engine, base):
 
 	return session
 
-def wp_logging(level='debug', Msg='Msg',allow_print=False):
+def wp_logging(level='debug', Msg='Msg',allow_print=True):
 	if level=='debug':
 		if allow_print:
 			print Msg

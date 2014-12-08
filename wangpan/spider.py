@@ -66,6 +66,11 @@ GRAB_NEW_URL = False # 当有文章上传成功时，就改为TRUE
 
 os.environ['TZ'] = 'Asia/Shanghai'
 
+# DBSession  =  sessionmaker(autoflush=True, expire_on_commit=False)
+# DBSession.configure(bind=DB_ENGINE)
+# DBSession.configure(autoflush=True, bind=DB_ENGINE, expire_on_commit=False)
+DBSession = sessionmaker(autoflush=True, bind=DB_ENGINE, expire_on_commit=False)
+session_count = 0
 class Filmav_Grab():
 
 	def __init__(self):
@@ -112,6 +117,7 @@ class Filmav_Grab():
 		self.UNRAR_SYSTEM_IS_RUNNING = False
 		self.RAR_SYSTEM_IS_RUNNING = False
 		self.UPLOAD_SYSTEM_IS_RUNNING = False
+		self.GRAB_SYSTEM_IS_RUNNING = False
 
 	def db_session(self):
 		db_session = create_session(DB_ENGINE, DB_BASE)
@@ -222,7 +228,7 @@ class Filmav_Grab():
 			pool.map(self.grab_article_url_of_per_page, page_number_list)
 		except Exception,e:
 			Msg = '开始新线程报错：%s' % e
-			wp_logging(Msg=Msg,allow_print=False)
+			wp_logging(Msg=Msg,allow_print=True)
 
 	def grab_article_url_of_per_page(self,page_number):
 		"""
@@ -262,7 +268,7 @@ class Filmav_Grab():
 			pool.map(self.save_article_url, article_urls)
 		except Exception,e:
 			Msg = '开始新线程报错：%s' % e
-			wp_logging(Msg=Msg,allow_print=False)
+			wp_logging(Msg=Msg,allow_print=True)
 
 
 
@@ -284,16 +290,16 @@ class Filmav_Grab():
 				db_session.add(url_instance)
 				db_session.commit()
 				Msg =  "save article url ： " + article_url
-				wp_logging(Msg=Msg, allow_print=False)
+				wp_logging(Msg=Msg, allow_print=True)
 
 			except exc.IntegrityError, e :
 				Msg =  "save article url fail： " + e.message.encode('utf8')
-				wp_logging(Msg=Msg, allow_print=False)
+				wp_logging(Msg=Msg, allow_print=True)
 				#如果db_session.commit() 出现异常，需要手动关闭
 
 		else:
 			Msg =  "文章url已经存在"
-			wp_logging(Msg=Msg, allow_print=False)
+			wp_logging(Msg=Msg, allow_print=True)
 
 		# now_filelinks_count = db_session.query(FileLink.id).count()
 		# if now_filelinks_count - pre_filelinks_count > 0:
@@ -308,7 +314,7 @@ class Filmav_Grab():
 
 		#独立性的db_session要记得关闭
 		db_session.close()
-		db_session.dispose()
+		
 
 	def a_wait_to_pull_wiki(self):
 		"""有关线程安全的测试，避免了 数据库创建出现 实例重复创建的错误。"""
@@ -357,7 +363,7 @@ class Filmav_Grab():
 			pool.map(create_tag_from_list, l_all)
 		except Exception,e:
 			Msg = '开始新线程报错：%s' % e
-			wp_logging(Msg=Msg,allow_print=False)
+			wp_logging(Msg=Msg,allow_print=True)
 
 		end_time = time.clock()
 		exc_time = end_time - start_time
@@ -369,6 +375,7 @@ class Filmav_Grab():
 		file_links_inst = self.query_not_crawled_article_url()
 
 		grab_articles_pool = ThreadPool(GRAB_ARTICLES_POOL_SIZE)
+		# grab_articles_pool = ThreadPool(1)
 		# try:
 		new_articles_count =  file_links_inst.count()
 		if new_articles_count > 0:
@@ -376,9 +383,13 @@ class Filmav_Grab():
 			wp_logging(Msg=Msg)
 			try:
 				grab_articles_pool.map(self.grab_article, file_links_inst)
+				grab_articles_pool.close()
+				grab_articles_pool.join()
+				self.GRAB_SYSTEM_IS_RUNNING = False
 			except Exception,e:
 				Msg = '开始新线程报错2：%s' % e
-				wp_logging(Msg=Msg,allow_print=False)
+				wp_logging(Msg=Msg,allow_print=True)
+
 			# self.grab_article(file_links_inst[0])
 
 		else:
@@ -392,15 +403,21 @@ class Filmav_Grab():
 
 	def query_not_crawled_article_url(self):
 		# 建立数据库链接
-		db_session = self.db_session()
+		db_session = DBSession()
 		file_links_inst = db_session.query(FileLink).filter_by(is_crawled=False)
+		# file_links_inst = db_session.query(FileLink).filter_by(url='http://filmav.com/51832.html')
 		return file_links_inst
 		#临时测试
 
 
 	def grab_article(self,url_inst):
 		# 建立数据库链接
-		db_session = self.db_session()
+		# db_session = self.db_session()
+		db_session = DBSession()
+		global session_count
+		print session_count
+		session_count += 1
+
 		# db_session.connect()
 		r = None
 		try:
@@ -410,7 +427,8 @@ class Filmav_Grab():
 			wp_logging(Msg=Msg)
 
 			db_session.close()
-			db_session.dispose()
+			session_count -=1
+
 
 			return
 		if r.status_code is not 200:
@@ -420,13 +438,19 @@ class Filmav_Grab():
 			Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
 			wp_logging(Msg=Msg)
 			db_session.close()
-			db_session.dispose()
+			session_count -=1
+			
 			return
 
 		h = pq(r.content)
 		body = h('.entry')
+
 		#匹配中文，记得要进行编码
-		old_body_str =str(unicode(body).encode('utf-8'))
+		print type(body.html())
+		# print body.html()
+		print url_inst.url
+
+		old_body_str =str(body.html().encode('utf-8'))
 
 		#todo 抓取文章的发布时间
 
@@ -436,9 +460,8 @@ class Filmav_Grab():
 		#抓取主体
 		old_body = re.split('<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br />',old_body_str)
 		old_body = old_body[0][:-53]
-
-
-
+		print 'old_body\'s type: %s' % type(old_body)
+		print "-"*99
 
 		#抓取文章标题
 		title = h('.title-single')
@@ -448,10 +471,11 @@ class Filmav_Grab():
 			Msg = "失败! 抓取文章标题!"
 			wp_logging(Msg=Msg)
 			db_session.close()
-			db_session.dispose()
+			session_count -=1
+			
 			return
 		Msg = "抓取文章标题：" + str(unicode(title.html()).encode('utf-8'))
-		wp_logging(Msg=Msg, allow_print=False)
+		wp_logging(Msg=Msg, allow_print=True)
 
 		# 创建 文章实例
 		# new_article = get_or_create(session=db_session, model=Article,title = title_unicode)[0]
@@ -459,7 +483,7 @@ class Filmav_Grab():
 		if new_article is None:
 			new_article = Article(title=title_unicode)
 		Msg =  "创建文章实例（--> 文章标题）" + title_unicode.encode('utf8')
-		wp_logging(Msg=Msg, allow_print=False)
+		wp_logging(Msg=Msg, allow_print=True)
 
 
 		#抓取所有图片,使用非贪婪模式
@@ -481,7 +505,7 @@ class Filmav_Grab():
 			if not(img_inst in new_article.images):
 				new_article.images.append(img_inst)
 				Msg = "添加图片：" + img_name.encode('utf8')
-				wp_logging(Msg=Msg, allow_print=False)
+				wp_logging(Msg=Msg, allow_print=True)
 
 			# self.save_image(url=small_img, img_type=img_type, path='small_path')
 			# self.save_image(url=big_img, img_type=img_type, path='big_path')
@@ -490,14 +514,14 @@ class Filmav_Grab():
 
 		pre_posted_date = h('.post-info-date').text()
 		pre_posted_date_list = re.split(',| ',pre_posted_date)
-		print url_inst.url
-		print pre_posted_date_list
+		# print url_inst.url
+		# print pre_posted_date_list
 		t_str = pre_posted_date_list[-4][:3] +' '+ pre_posted_date_list[-3] + ' ' + pre_posted_date_list[-1]
 		pre_posted_date = datetime.strptime(t_str, '%b %d %Y')
 		new_article.pre_posted_date = pre_posted_date
 
 		# 保存文件pre_body
-		new_article.pre_body = old_body
+		# new_article.pre_body = '123'
 
 		# 保存文章的来源地址
 		file_link_inst = get_or_create(session=db_session, is_global=True, model=FileLink,url=url_inst.url,website=self.website)[0]
@@ -515,28 +539,30 @@ class Filmav_Grab():
 					category_instanc = get_or_create(session=db_session,is_global=True, model=Category,name=category_text)[0]
 					if not(category_instanc in new_article.categories):
 						new_article.categories.append(category_instanc)
-				Msg = "抓取文章分类：" + category_text
-				wp_logging(Msg=Msg, allow_print=False)
+				Msg = "抓取文章分类：" + category_text.encode('utf8')
+				wp_logging(Msg=Msg, allow_print=True)
 
 		#抓取tag,使用非贪婪模式
 		tags_re_str = r'tag/.*?>(.*?)</a>'
 		tags_re = re.compile(tags_re_str)
 		tags = re.findall(tags_re, old_body_str)
 		for tag in tags:
+			print type(tag)
+			# print tag
+			tag = tag.decode('utf-8').encode('utf-8')
 			Msg = "抓取文章标签：" + tag
-			wp_logging(Msg=Msg, allow_print=False)
+			wp_logging(Msg=Msg, allow_print=True)
 			if tag is not None:
-				tag = unicode(tag)
 				if not(tag in TAG_LIST_IN_DB_SESSION):
 					TAG_LIST_IN_DB_SESSION.append(tag)
 					tag_inst = get_or_create(session=db_session, is_global=True, model=Tag, name=tag)[0]
 					if not(tag_inst in new_article.tags):
 						new_article.tags.append(tag_inst)
 						Msg = "添加文章标签：" + tag
-						wp_logging(Msg=Msg, allow_print=False)
+						wp_logging(Msg=Msg, allow_print=True)
 
 		#抓取old_download_links
-		wp_logging(Msg="开始抓取old download links", allow_print=False)
+		wp_logging(Msg="开始抓取old download links", allow_print=True)
 		old_download_links_re_str = r'(http://www.uploadable.ch/file/.*?)["<]'
 		old_download_links_re = re.compile(old_download_links_re_str)
 		old_download_links = re.findall(old_download_links_re, old_body_str)
@@ -562,11 +588,11 @@ class Filmav_Grab():
 				old_download_link_inst = get_or_create(session=db_session, is_global=True, model=OldDownloadLink,filter_cond={'url':old_download_link},**dict_params)[0]
 				new_article.old_download_links.append(old_download_link_inst)
 				Msg = "抓取 old download link: %s" % old_download_link
-				wp_logging(Msg=Msg, allow_print=False)
+				wp_logging(Msg=Msg, allow_print=True)
 			else:
-
 				db_session.close()
-				db_session.dispose()
+				session_count -=1
+				
 				return
 
 
@@ -622,12 +648,17 @@ class Filmav_Grab():
 		db_session.add(url_inst_)
 		db_session.commit()
 		db_session.close()
-		db_session.dispose()
+		session_count -=1
+		
 		Msg='article successful'
-		wp_logging(Msg=Msg)
+		wp_logging(Msg=Msg, allow_print=True)
+		print 'db_session open统计',session_count
+		print "*"*99
+		return
 
 	def get_filename_by_url(self,url):
-
+		print url
+		print "888888"
 		content = dict(
 			status = True,
 			file_name ='',
@@ -648,14 +679,18 @@ class Filmav_Grab():
 			wp_logging(Msg=Msg)
 			content.update(status=False)
 			return content
-
+		#todo 旧下载链接失效了，要做异常处理
 		h = pq(r.content)
 		file_name = h('#file_name').attr('title')
 		file_size_and_unit = h('.filename_normal').html()
-		file_size = file_size_and_unit[1:-4]
+		try:#文件不存在了删除该链接
+			file_size = file_size_and_unit[1:-4]
+		except Exception as e:
+			return content.update(status=False)
+
 		file_size_unit = file_size_and_unit[-3:-1]
 		Msg = "抓取文件名：%s，文件大小：%s " % (file_name, file_size)
-		wp_logging(Msg=Msg, allow_print=False)
+		wp_logging(Msg=Msg, allow_print=True)
 		content.update(file_name=file_name,file_size=file_size,file_size_unit=file_size_unit)
 		#匹配中文，记得要进行编码
 		# old_body_str =str(unicode(body).encode('utf-8'))
@@ -1289,9 +1324,12 @@ if __name__ == '__main__':
 		#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
 		#
 		# 自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
-		filmav_grab.grab_article_url(page_end=1)
-		# 自动抓取未抓取的文章详细内容
-		filmav_grab.grab_articles()
+		if not filmav_grab.GRAB_SYSTEM_IS_RUNNING:
+			print 'grab?'
+			filmav_grab.grab_article_url(page_end=1)
+			# 自动抓取未抓取的文章详细内容
+			filmav_grab.grab_articles()
+			filmav_grab.GRAB_SYSTEM_IS_RUNNING = True
 		test = False
 		for_count += 1
 		time.sleep(5)
