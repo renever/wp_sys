@@ -71,6 +71,7 @@ os.environ['TZ'] = 'Asia/Shanghai'
 # DBSession.configure(autoflush=True, bind=DB_ENGINE, expire_on_commit=False)
 DBSession = sessionmaker(autoflush=True, bind=DB_ENGINE, expire_on_commit=False)
 session_count = 0
+lock = threading.Lock()
 class Filmav_Grab():
 
 	def __init__(self):
@@ -414,9 +415,12 @@ class Filmav_Grab():
 		# 建立数据库链接
 		# db_session = self.db_session()
 		db_session = DBSession()
-		global session_count
+		global session_count,lock
 		print session_count
+
+		lock.acquire()
 		session_count += 1
+		lock.release()
 
 		# db_session.connect()
 		r = None
@@ -427,7 +431,11 @@ class Filmav_Grab():
 			wp_logging(Msg=Msg)
 
 			db_session.close()
+			lock.acquire()
 			session_count -=1
+			lock.release()
+
+
 
 
 			return
@@ -438,7 +446,9 @@ class Filmav_Grab():
 			Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
 			wp_logging(Msg=Msg)
 			db_session.close()
+			lock.acquire()
 			session_count -=1
+			lock.release()
 			
 			return
 
@@ -471,7 +481,9 @@ class Filmav_Grab():
 			Msg = "失败! 抓取文章标题!"
 			wp_logging(Msg=Msg)
 			db_session.close()
+			lock.acquire()
 			session_count -=1
+			lock.release()
 			
 			return
 		Msg = "抓取文章标题：" + str(unicode(title.html()).encode('utf-8'))
@@ -547,7 +559,7 @@ class Filmav_Grab():
 		tags_re = re.compile(tags_re_str)
 		tags = re.findall(tags_re, old_body_str)
 		for tag in tags:
-			print type(tag)
+
 			# print tag
 			tag = tag.decode('utf-8').encode('utf-8')
 			Msg = "抓取文章标签：" + tag
@@ -591,7 +603,9 @@ class Filmav_Grab():
 				wp_logging(Msg=Msg, allow_print=True)
 			else:
 				db_session.close()
+				lock.acquire()
 				session_count -=1
+				lock.release()
 				
 				return
 
@@ -648,7 +662,11 @@ class Filmav_Grab():
 		db_session.add(url_inst_)
 		db_session.commit()
 		db_session.close()
+		print 'pre: %s ...' % session_count ,
+		lock.acquire()
 		session_count -=1
+		lock.release()
+		print 'after: %s' % session_count
 		
 		Msg='article successful'
 		wp_logging(Msg=Msg, allow_print=True)
