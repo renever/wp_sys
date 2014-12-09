@@ -382,16 +382,22 @@ class Filmav_Grab():
 		if new_articles_count > 0:
 			Msg = '建立抓取文章的线程池...开始抓取'
 			wp_logging(Msg=Msg)
-			try:
-				grab_articles_pool.map(self.grab_article, file_links_inst)
-				grab_articles_pool.close()
-				grab_articles_pool.join()
-				self.GRAB_SYSTEM_IS_RUNNING = False
-			except Exception,e:
-				Msg = '开始新线程报错2：%s' % e
-				wp_logging(Msg=Msg,allow_print=True)
+			# try:
+			grab_articles_pool.map(self.grab_article, file_links_inst)
+			#
+			# # print '-'*99
+			# grab_articles_pool.close()
+			# grab_articles_pool.join()
+			# self.GRAB_SYSTEM_IS_RUNNING = False
+			# except Exception,e:
+			# 	Msg = '开始新线程报错2：%s' % e
+			# 	wp_logging(Msg=Msg,allow_print=True)
 
 			# self.grab_article(file_links_inst[0])
+
+			# for f_inst in file_links_inst:
+			# 	self.grab_article(f_inst)
+
 
 		else:
 			Msg = '没有新文章更新...'
@@ -405,8 +411,12 @@ class Filmav_Grab():
 	def query_not_crawled_article_url(self):
 		# 建立数据库链接
 		db_session = DBSession()
+		global session_count
+		session_count +=1
 		file_links_inst = db_session.query(FileLink).filter_by(is_crawled=False)
 		# file_links_inst = db_session.query(FileLink).filter_by(url='http://filmav.com/51832.html')
+		db_session.close()
+		session_count -=1
 		return file_links_inst
 		#临时测试
 
@@ -414,269 +424,294 @@ class Filmav_Grab():
 	def grab_article(self,url_inst):
 		# 建立数据库链接
 		# db_session = self.db_session()
-		db_session = DBSession()
-		global session_count,lock
-		print session_count
-
-		lock.acquire()
-		session_count += 1
-		lock.release()
-
-		# db_session.connect()
-		r = None
 		try:
-			r = requests.get(url_inst.url, headers=self.headers)
-		except Exception, e:
-			Msg = '链接到文件URL时出现异常(下次再抓取）：%s' % e
-			wp_logging(Msg=Msg)
+			db_session = DBSession()
+			global session_count,lock
+			print session_count
 
-			db_session.close()
 			lock.acquire()
-			session_count -=1
+			session_count += 1
 			lock.release()
 
+			# db_session.connect()
+			r = None
+			try:
+				r = requests.get(url_inst.url, headers=self.headers)
+			except Exception, e:
+				Msg = u'链接到文件URL时出现异常(下次再抓取）：%s' % e
+				wp_logging(Msg=Msg)
 
-
-
-			return
-		if r.status_code is not 200:
-			if r.status_code == 500:
-				db_session.delete(url_inst)
-				db_session.commit()
-			Msg = "首页抓取不是200,返回状态码：" + str(r.status_code)
-			wp_logging(Msg=Msg)
-			db_session.close()
-			lock.acquire()
-			session_count -=1
-			lock.release()
-			
-			return
-
-		h = pq(r.content)
-		body = h('.entry')
-
-		#匹配中文，记得要进行编码
-		print type(body.html())
-		# print body.html()
-		print url_inst.url
-
-		old_body_str =str(body.html().encode('utf-8'))
-
-		#todo 抓取文章的发布时间
-
-
-		#todo 排除没有包含所需要的网盘资源地址的文件。
-
-		#抓取主体
-		old_body = re.split('<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br />',old_body_str)
-		old_body = old_body[0][:-53]
-		print 'old_body\'s type: %s' % type(old_body)
-		print "-"*99
-
-		#抓取文章标题
-		title = h('.title-single')
-		title_unicode = unicode(title.html())
-		title_str = unicode(title.html()).encode('utf-8')
-		if len(title_str) < 0:
-			Msg = "失败! 抓取文章标题!"
-			wp_logging(Msg=Msg)
-			db_session.close()
-			lock.acquire()
-			session_count -=1
-			lock.release()
-			
-			return
-		Msg = "抓取文章标题：" + str(unicode(title.html()).encode('utf-8'))
-		wp_logging(Msg=Msg, allow_print=True)
-
-		# 创建 文章实例
-		# new_article = get_or_create(session=db_session, model=Article,title = title_unicode)[0]
-		new_article = db_session.query(Article).filter_by(title=title_unicode).first()
-		if new_article is None:
-			new_article = Article(title=title_unicode)
-		Msg =  "创建文章实例（--> 文章标题）" + title_unicode.encode('utf8')
-		wp_logging(Msg=Msg, allow_print=True)
-
-
-		#抓取所有图片,使用非贪婪模式
-		small_img_re_str = r'(?P<images>http://img[\d]{0,3}.imagetwist.com/.*?.jpg)'
-		small_img_re = re.compile(small_img_re_str)
-		small_imgs = re.findall(small_img_re, old_body_str)
-		for small_img in small_imgs:
-			"""
-			small_path--> 图片存于small_path,
-			big_path-->图片存于big_path
-			"""
-			img_name = small_img.split('/')[-1]
-
-
-			big_img, img_type = self.get_big_img_and_type(small_img=small_img)
-			#保存 small_path 图片
-			img_inst = get_or_create(session=db_session, is_global=True, model=Image, \
-									 name=img_name, small_path=small_img, big_path=big_img,img_type=img_type )[0]
-			if not(img_inst in new_article.images):
-				new_article.images.append(img_inst)
-				Msg = "添加图片：" + img_name.encode('utf8')
-				wp_logging(Msg=Msg, allow_print=True)
-
-			# self.save_image(url=small_img, img_type=img_type, path='small_path')
-			# self.save_image(url=big_img, img_type=img_type, path='big_path')
-
-		#todo 抓取文章发布时间
-
-		pre_posted_date = h('.post-info-date').text()
-		pre_posted_date_list = re.split(',| ',pre_posted_date)
-		# print url_inst.url
-		# print pre_posted_date_list
-		t_str = pre_posted_date_list[-4][:3] +' '+ pre_posted_date_list[-3] + ' ' + pre_posted_date_list[-1]
-		pre_posted_date = datetime.strptime(t_str, '%b %d %Y')
-		new_article.pre_posted_date = pre_posted_date
-
-		# 保存文件pre_body
-		# new_article.pre_body = '123'
-
-		# 保存文章的来源地址
-		file_link_inst = get_or_create(session=db_session, is_global=True, model=FileLink,url=url_inst.url,website=self.website)[0]
-		new_article.file_link = file_link_inst
-
-		#todo 抓取作者，拍摄电影的俱乐部
-		#抓取电影分类
-		categories = h('a[rel="category tag"]')
-		# categories_text_list = []
-		for category in categories:
-			if category is not None:
-				category_text = unicode(category.text)
-				if not(category_text in CATEGORY_LIST_IN_DB_SESSION):
-					CATEGORY_LIST_IN_DB_SESSION.append(category_text)
-					category_instanc = get_or_create(session=db_session,is_global=True, model=Category,name=category_text)[0]
-					if not(category_instanc in new_article.categories):
-						new_article.categories.append(category_instanc)
-				Msg = "抓取文章分类：" + category_text.encode('utf8')
-				wp_logging(Msg=Msg, allow_print=True)
-
-		#抓取tag,使用非贪婪模式
-		tags_re_str = r'tag/.*?>(.*?)</a>'
-		tags_re = re.compile(tags_re_str)
-		tags = re.findall(tags_re, old_body_str)
-		for tag in tags:
-
-			# print tag
-			tag = tag.decode('utf-8').encode('utf-8')
-			Msg = "抓取文章标签：" + tag
-			wp_logging(Msg=Msg, allow_print=True)
-			if tag is not None:
-				if not(tag in TAG_LIST_IN_DB_SESSION):
-					TAG_LIST_IN_DB_SESSION.append(tag)
-					tag_inst = get_or_create(session=db_session, is_global=True, model=Tag, name=tag)[0]
-					if not(tag_inst in new_article.tags):
-						new_article.tags.append(tag_inst)
-						Msg = "添加文章标签：" + tag
-						wp_logging(Msg=Msg, allow_print=True)
-
-		#抓取old_download_links
-		wp_logging(Msg="开始抓取old download links", allow_print=True)
-		old_download_links_re_str = r'(http://www.uploadable.ch/file/.*?)["<]'
-		old_download_links_re = re.compile(old_download_links_re_str)
-		old_download_links = re.findall(old_download_links_re, old_body_str)
-
-		#todo 初始化后台浏览器 准备下载
-		# driver = FirefoxDriver()
-		# driver.driver = driver.get_new_driver()
-
-		for old_download_link in old_download_links:
-			#抓取该链接的文件名和文件大小
-			file_name = ''
-			file_size = ''
-			content = self.get_filename_by_url(old_download_link)
-			if content.get('status'):
-				dict_params = {}
-				dict_params.update(dict(
-					status='waiting_download',
-					file_name=file_name[1:-1],#不要包括括号
-					file_size=file_size,
-					url=old_download_link,
-					website=self.website
-					))
-				old_download_link_inst = get_or_create(session=db_session, is_global=True, model=OldDownloadLink,filter_cond={'url':old_download_link},**dict_params)[0]
-				new_article.old_download_links.append(old_download_link_inst)
-				Msg = "抓取 old download link: %s" % old_download_link
-				wp_logging(Msg=Msg, allow_print=True)
-			else:
 				db_session.close()
 				lock.acquire()
 				session_count -=1
 				lock.release()
-				
+
+
+
+
+				return
+			if r.status_code is not 200:
+				if r.status_code == 500:
+					db_session.delete(url_inst)
+					db_session.commit()
+				Msg = u"首页抓取不是200,返回状态码：" + str(r.status_code)
+				wp_logging(Msg=Msg)
+				db_session.close()
+				lock.acquire()
+				session_count -=1
+				lock.release()
+
 				return
 
+			h = pq(r.content)
+			body = h('.entry')
 
-			#todo 测试下载，暂时放在这里,不用使用多线程
-			# driver.download_file(old_download_link_inst)
-			# download_pool = self.get_download_pool(processes=10)
-			# download_pool.map(driver.download_file,new_article.old_download_links)
+			#匹配中文，记得要进行编码
+			print type(body.html())
+			# print body.html()
+			print url_inst.url
+
+			old_body_str =str(body.html().encode('utf-8'))
+
+			#todo 抓取文章的发布时间
 
 
-		#取文件名（已经被其他代码替代）
-		# file_name=''
-		# file_name_re_strs  = [r'>(.*?).part\d.rar',r'/?([\d\w]*[-]*[\w\d]*)\.wmv']
-		# for file_name_re_str in file_name_re_strs:
-		# 	file_name_re = re.compile(file_name_re_str)
-		# 	file_names = re.findall(file_name_re, old_body_str)
-		# 	if len(file_names) == 0:
-		# 		continue
-		# 	for file_name_ in file_names:
-		# 		file_name = file_name_
-		# 		Msg =  "抓取文件名： "+ file_name
-		# 		wp_logging(Msg=Msg)
-		# 		break
-		# 创建 文章实例
-		# if len(file_name):
-		# 	self.article_files.update(
-		# 		file_name = file_name,
-		# 		website = self.website,
-		# 	)
-		# 	new_article = Article(**self.article_files)
-		# 	Msg =  "创建文章实例： "+ new_article.title
-		# 	wp_logging(Msg=Msg)
-		#todo 临时查看文章的所有属性
-		# attr_list = dir(new_article)
-		# for attr in attr_list:
-		# 	# ss= 'ss'
-		# 	if not attr.startswith('__'):
-		# 		v = getattr(new_article,attr,'empty')
-		# 		Msg =  "文章-->属性：%s  |  值：%s " % (attr, v)
-		# 		wp_logging(Msg=Msg)
+			#todo 排除没有包含所需要的网盘资源地址的文件。
 
-		#todo 实际操作时，要提交保存到数据库。
+			#抓取主体
+			old_body = re.split('<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br />',old_body_str)
 
-		#将url状态改成 已经被抓取
-		# db_session_1 = self.db_session()
-		# url_inst_ = db_session_1.query(FileLink).filter_by(id=url_inst.id).first()
-		url_inst_ = get_or_create(session=db_session,is_global=True, model=FileLink,id=url_inst.id)[0]
-		url_inst_.is_crawled = True
-		# db_session_1.add(url_inst_)
-		# db_session_1.commit()
-		#提交文章
+			# print old_body
+			print 'old_body\'s type: %s' % type(old_body[0])
+			# print old_body[0]
+			old_body = old_body[0]
+			print "-"*99
+			# old_body = str(old_body[0][:-53])
+			# old_body = old_body_str
 
-		db_session.add(new_article)
-		db_session.add(url_inst_)
-		db_session.commit()
-		db_session.close()
-		print 'pre: %s ...' % session_count ,
-		lock.acquire()
-		session_count -=1
-		lock.release()
-		print 'after: %s' % session_count
-		
-		Msg='article successful'
-		wp_logging(Msg=Msg, allow_print=True)
-		print 'db_session open统计',session_count
-		print "*"*99
-		return
+			#抓取文章标题
+			title = h('.title-single')
+			title_unicode = unicode(title.html())
+			title_str = unicode(title.html()).encode('utf-8')
+			if len(title_str) < 0:
+				Msg = u"失败! 抓取文章标题!"
+				wp_logging(Msg=Msg)
+				db_session.close()
+				lock.acquire()
+				session_count -=1
+				lock.release()
+
+				return
+			Msg = u"抓取文章标题：" + str(unicode(title.html()).encode('utf-8'))
+			wp_logging(Msg=Msg, allow_print=True)
+
+			# 创建 文章实例
+			# new_article = get_or_create(session=db_session, model=Article,title = title_unicode)[0]
+			new_article = db_session.query(Article).filter_by(title=title_unicode).first()
+			if new_article is None:
+				new_article = Article(title=title_unicode)
+			Msg =  u"创建文章实例（--> 文章标题）" + title_unicode.encode('utf8')
+			wp_logging(Msg=Msg, allow_print=True)
+
+
+			#抓取所有图片,使用非贪婪模式
+			small_img_re_str = r'(?P<images>http://img[\d]{0,3}.imagetwist.com/.*?.jpg)'
+			small_img_re = re.compile(small_img_re_str)
+			small_imgs = re.findall(small_img_re, old_body_str)
+			for small_img in small_imgs:
+				"""
+				small_path--> 图片存于small_path,
+				big_path-->图片存于big_path
+				"""
+				img_name = small_img.split('/')[-1]
+
+
+				big_img, img_type = self.get_big_img_and_type(small_img=small_img)
+				#保存 small_path 图片
+				img_inst = get_or_create(session=db_session, is_global=True, model=Image, \
+										 name=img_name, small_path=small_img, big_path=big_img,img_type=img_type )[0]
+				if not(img_inst in new_article.images):
+					new_article.images.append(img_inst)
+					Msg = u"添加图片：" + img_name.encode('utf8')
+					wp_logging(Msg=Msg, allow_print=True)
+
+				# self.save_image(url=small_img, img_type=img_type, path='small_path')
+				# self.save_image(url=big_img, img_type=img_type, path='big_path')
+
+			#todo 抓取文章发布时间
+
+			pre_posted_date = h('.post-info-date').text()
+			pre_posted_date_list = re.split(',| ',pre_posted_date)
+			# print url_inst.url
+			# print pre_posted_date_list
+			t_str = pre_posted_date_list[-4][:3] +' '+ pre_posted_date_list[-3] + ' ' + pre_posted_date_list[-1]
+			pre_posted_date = datetime.strptime(t_str, '%b %d %Y')
+			new_article.pre_posted_date = pre_posted_date
+
+			# 保存文件pre_body
+			new_article.pre_body = old_body
+
+			# 保存文章的来源地址
+			file_link_inst = get_or_create(session=db_session, is_global=True, model=FileLink,url=url_inst.url,website=self.website)[0]
+			new_article.file_link = file_link_inst
+
+			#todo 抓取作者，拍摄电影的俱乐部
+			#抓取电影分类
+			categories = h('a[rel="category tag"]')
+			# categories_text_list = []
+			for category in categories:
+				if category is not None:
+					category_text = unicode(category.text)
+					if not(category_text in CATEGORY_LIST_IN_DB_SESSION):
+						CATEGORY_LIST_IN_DB_SESSION.append(category_text)
+						category_instanc = get_or_create(session=db_session,is_global=True, model=Category,name=category_text)[0]
+						if not(category_instanc in new_article.categories):
+							new_article.categories.append(category_instanc)
+					Msg = u"抓取文章分类：" + category_text.encode('utf8')
+					wp_logging(Msg=Msg, allow_print=True)
+
+			#抓取tag,使用非贪婪模式
+			tags_re_str = r'tag/.*?>(.*?)</a>'
+			tags_re = re.compile(tags_re_str)
+			tags = re.findall(tags_re, old_body_str)
+			for tag in tags:
+
+				# print tag
+				tag = tag.decode('utf-8').encode('utf-8')
+				Msg = u"抓取文章标签：" + tag
+				wp_logging(Msg=Msg, allow_print=True)
+				if tag is not None:
+					if not(tag in TAG_LIST_IN_DB_SESSION):
+						TAG_LIST_IN_DB_SESSION.append(tag)
+						tag_inst = get_or_create(session=db_session, is_global=True, model=Tag, name=tag)[0]
+						if not(tag_inst in new_article.tags):
+							new_article.tags.append(tag_inst)
+							Msg = u"添加文章标签：" + tag
+							wp_logging(Msg=Msg, allow_print=True)
+
+			#抓取old_download_links
+			wp_logging(Msg=u"开始抓取old download links", allow_print=True)
+			old_download_links_re_str = r'(http://www.uploadable.ch/file/.*?)["<]'
+			old_download_links_re = re.compile(old_download_links_re_str)
+			old_download_links = re.findall(old_download_links_re, old_body_str)
+
+			#todo 初始化后台浏览器 准备下载
+			# driver = FirefoxDriver()
+			# driver.driver = driver.get_new_driver()
+
+			for old_download_link in old_download_links:
+				#抓取该链接的文件名和文件大小
+				file_name = ''
+				file_size = ''
+				content = self.get_filename_by_url(old_download_link)
+				print type(content)
+				print content
+				if content.get('status'):
+					dict_params = {}
+					dict_params.update(dict(
+						status='waiting_download',
+						file_name=file_name[1:-1],#不要包括括号
+						file_size=file_size,
+						url=old_download_link,
+						website=self.website
+						))
+					old_download_link_inst = get_or_create(session=db_session, is_global=True, model=OldDownloadLink,filter_cond={'url':old_download_link},**dict_params)[0]
+					new_article.old_download_links.append(old_download_link_inst)
+					Msg = u"抓取 old download link: %s" % old_download_link
+					wp_logging(Msg=Msg, allow_print=True)
+				else:
+					file_no_exist = content.get('file_no_exist',None)
+					if file_no_exist is True:
+						# url_inst.is_crawled=True
+						# db_session.add(url_inst)
+						# db_session.commit()
+						# db_session.flush()
+						# db_session.query(FileLink).filter_by(id=url_inst.id).delete()
+
+
+						url_inst_temp = db_session.query(FileLink).filter_by(id=url_inst.id).first()
+						url_inst_temp.is_crawled=True
+
+						db_session.add(url_inst_temp)
+						db_session.commit()
+						db_session.close()
+					lock.acquire()
+					session_count -=1
+					lock.release()
+
+					return
+
+
+				#todo 测试下载，暂时放在这里,不用使用多线程
+				# driver.download_file(old_download_link_inst)
+				# download_pool = self.get_download_pool(processes=10)
+				# download_pool.map(driver.download_file,new_article.old_download_links)
+
+
+			#取文件名（已经被其他代码替代）
+			# file_name=''
+			# file_name_re_strs  = [r'>(.*?).part\d.rar',r'/?([\d\w]*[-]*[\w\d]*)\.wmv']
+			# for file_name_re_str in file_name_re_strs:
+			# 	file_name_re = re.compile(file_name_re_str)
+			# 	file_names = re.findall(file_name_re, old_body_str)
+			# 	if len(file_names) == 0:
+			# 		continue
+			# 	for file_name_ in file_names:
+			# 		file_name = file_name_
+			# 		Msg =  "抓取文件名： "+ file_name
+			# 		wp_logging(Msg=Msg)
+			# 		break
+			# 创建 文章实例
+			# if len(file_name):
+			# 	self.article_files.update(
+			# 		file_name = file_name,
+			# 		website = self.website,
+			# 	)
+			# 	new_article = Article(**self.article_files)
+			# 	Msg =  "创建文章实例： "+ new_article.title
+			# 	wp_logging(Msg=Msg)
+			#todo 临时查看文章的所有属性
+			# attr_list = dir(new_article)
+			# for attr in attr_list:
+			# 	# ss= 'ss'
+			# 	if not attr.startswith('__'):
+			# 		v = getattr(new_article,attr,'empty')
+			# 		Msg =  "文章-->属性：%s  |  值：%s " % (attr, v)
+			# 		wp_logging(Msg=Msg)
+
+			#todo 实际操作时，要提交保存到数据库。
+
+			#将url状态改成 已经被抓取
+			# db_session_1 = self.db_session()
+			# url_inst_ = db_session_1.query(FileLink).filter_by(id=url_inst.id).first()
+			url_inst_ = get_or_create(session=db_session,is_global=True, model=FileLink,id=url_inst.id)[0]
+			url_inst_.is_crawled = True
+			# db_session_1.add(url_inst_)
+			# db_session_1.commit()
+			#提交文章
+
+			db_session.add(new_article)
+			db_session.add(url_inst_)
+			db_session.commit()
+			db_session.close()
+			print 'pre: %s ...' % session_count ,
+			lock.acquire()
+			session_count -=1
+			lock.release()
+			print 'after: %s' % session_count
+
+			Msg='article successful'
+			wp_logging(Msg=Msg, allow_print=True)
+			print u'db_session open统计',session_count
+			print "*"*99
+			return
+		except	Exception as e:
+			Msg = e
+			wp_logging(Msg=Msg,allow_print=True)
+			raise e
 
 	def get_filename_by_url(self,url):
 		print url
-		print "888888"
 		content = dict(
 			status = True,
 			file_name ='',
@@ -686,13 +721,13 @@ class Filmav_Grab():
 		try:
 			r = requests.get(url=url, headers=self.uploadable_headers)
 		except Exception,e:
-			Msg = "链接到URL失败（%s）：%s" % (url,e)
+			Msg = u"链接到URL失败（%s）：%s" % (url,e)
 			wp_logging(Msg=Msg)
 			content.update(status=False)
 			return content
 
 		if r.status_code is not 200:
-			Msg = "开始抓取指定下载链接的文件名，及大小：%s \r\n \
+			Msg = u"开始抓取指定下载链接的文件名，及大小：%s \r\n \
 				  抓取失败！状态码:%s " % (url, str(r.status_code))
 			wp_logging(Msg=Msg)
 			content.update(status=False)
@@ -704,10 +739,11 @@ class Filmav_Grab():
 		try:#文件不存在了删除该链接
 			file_size = file_size_and_unit[1:-4]
 		except Exception as e:
-			return content.update(status=False)
+			content.update(status=False,file_no_exist=True)
+			return content
 
 		file_size_unit = file_size_and_unit[-3:-1]
-		Msg = "抓取文件名：%s，文件大小：%s " % (file_name, file_size)
+		Msg = u"抓取文件名：%s，文件大小：%s " % (file_name, file_size)
 		wp_logging(Msg=Msg, allow_print=True)
 		content.update(file_name=file_name,file_size=file_size,file_size_unit=file_size_unit)
 		#匹配中文，记得要进行编码
@@ -1357,3 +1393,4 @@ if __name__ == '__main__':
 	# article_urls = filmav_grab.grab_article_url()
 	# filmav_grab.save_article_url(article_urls)
 	# filmav_grab.grab_article_body()
+	f
