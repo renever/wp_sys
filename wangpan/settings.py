@@ -13,7 +13,7 @@ BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 if pwd.getpwuid(os.getuid())[0]=='l':
 	#XPS
 	# DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8",poolclass=NullPool,echo=True)
-	DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
+	DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", pool_size=300, max_overflow=1000,echo=True)
 	# 					     # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
 	#浏览器配置地址
 	#xps
@@ -24,7 +24,7 @@ else:#公司PC
 	#由于SQLite存在并发死锁，不再使用。# 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
 	# DB_ENGINE = create_engine("sqlite:///wangpan", echo=True)
 
-	DB_ENGINE = create_engine("mysql://root:@localhost/wangpan?charset=utf8", pool_size=100, max_overflow=200,echo=True)
+	DB_ENGINE = create_engine("mysql://root:@localhost/wangpan?charset=utf8", pool_size=300, max_overflow=1000,echo=True)
 	FirefoxProfilePath = '/home/lotaku/.mozilla/firefox/mwad0hks.default'
 
 	# DOWNLOAD_DIR = '/home/lotaku/wangpan/downloaded_files'
@@ -53,7 +53,7 @@ IMG_PATH = BASE_PATH + '/wp_resource/images'
 if not os.path.exists(IMG_PATH):
 	os.makedirs(IMG_PATH)
 # 各种线程池大小
-GRAB_ARTICLES_POOL_SIZE = 100
+GRAB_ARTICLES_POOL_SIZE = 140
 
 GRAB_ARTICLE_URL_POOL_SIZE = 200
 

@@ -471,7 +471,7 @@ class Filmav_Grab():
 			# print body.html()
 			print url_inst.url
 
-			old_body_str =str(body.html().encode('utf-8'))
+			old_body_str =body.html()
 
 			#todo 抓取文章的发布时间
 
@@ -492,7 +492,7 @@ class Filmav_Grab():
 			#抓取文章标题
 			title = h('.title-single')
 			title_unicode = unicode(title.html())
-			title_str = unicode(title.html()).encode('utf-8')
+			title_str = title.html()
 			if len(title_str) < 0:
 				Msg = u"失败! 抓取文章标题!"
 				wp_logging(Msg=Msg)
@@ -502,7 +502,7 @@ class Filmav_Grab():
 				lock.release()
 
 				return
-			Msg = u"抓取文章标题：" + str(unicode(title.html()).encode('utf-8'))
+			Msg = u"抓取文章标题：" + title.html()
 			wp_logging(Msg=Msg, allow_print=True)
 
 			# 创建 文章实例
@@ -510,7 +510,7 @@ class Filmav_Grab():
 			new_article = db_session.query(Article).filter_by(title=title_unicode).first()
 			if new_article is None:
 				new_article = Article(title=title_unicode)
-			Msg =  u"创建文章实例（--> 文章标题）" + title_unicode.encode('utf8')
+			Msg =  u"创建文章实例（--> 文章标题）" + title_unicode
 			wp_logging(Msg=Msg, allow_print=True)
 
 
@@ -532,7 +532,7 @@ class Filmav_Grab():
 										 name=img_name, small_path=small_img, big_path=big_img,img_type=img_type )[0]
 				if not(img_inst in new_article.images):
 					new_article.images.append(img_inst)
-					Msg = u"添加图片：" + img_name.encode('utf8')
+					Msg = u"添加图片：" + img_name
 					wp_logging(Msg=Msg, allow_print=True)
 
 				# self.save_image(url=small_img, img_type=img_type, path='small_path')
@@ -567,7 +567,7 @@ class Filmav_Grab():
 						category_instanc = get_or_create(session=db_session,is_global=True, model=Category,name=category_text)[0]
 						if not(category_instanc in new_article.categories):
 							new_article.categories.append(category_instanc)
-					Msg = u"抓取文章分类：" + category_text.encode('utf8')
+					Msg = u"抓取文章分类：" + category_text
 					wp_logging(Msg=Msg, allow_print=True)
 
 			#抓取tag,使用非贪婪模式
@@ -577,7 +577,7 @@ class Filmav_Grab():
 			for tag in tags:
 
 				# print tag
-				tag = tag.decode('utf-8').encode('utf-8')
+				tag = tag
 				Msg = u"抓取文章标签：" + tag
 				wp_logging(Msg=Msg, allow_print=True)
 				if tag is not None:
@@ -847,7 +847,7 @@ class Filmav_Grab():
 			url_inst.status = 'downloaded'
 			db_session.add(url_inst)
 			db_session.commit()
-			Msg = 'have download ：%s' % url_inst.file_name.encode('utf8')
+			Msg = u'have download ：%s' % url_inst.file_name
 			wp_logging(Msg=Msg)
 			DOWNLOADING_LIST.remove(url_inst)
 			db_session.close()
