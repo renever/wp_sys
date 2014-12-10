@@ -415,7 +415,8 @@ class Filmav_Grab():
 		session_count +=1
 		file_links_inst = db_session.query(FileLink).filter_by(is_crawled=False)
 		# file_links_inst = db_session.query(FileLink).filter_by(url='http://filmav.com/51832.html')
-		db_session.close()
+		db_session.close_all()
+		# db_session.
 		session_count -=1
 		return file_links_inst
 		#临时测试
@@ -479,7 +480,7 @@ class Filmav_Grab():
 			#todo 排除没有包含所需要的网盘资源地址的文件。
 
 			#抓取主体
-			old_body = re.split('<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br />',old_body_str)
+			old_body = re.split(u'<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード',old_body_str)
 
 			# print old_body
 			print 'old_body\'s type: %s' % type(old_body[0])
@@ -518,6 +519,17 @@ class Filmav_Grab():
 			small_img_re_str = r'(?P<images>http://img[\d]{0,3}.imagetwist.com/.*?.jpg)'
 			small_img_re = re.compile(small_img_re_str)
 			small_imgs = re.findall(small_img_re, old_body_str)
+			if not small_imgs:
+				print '='*99
+				print u'%s 没有找到图片' % url_inst.url
+				print '='*99
+				db_session.close()
+				lock.acquire()
+				session_count -=1
+				lock.release()
+				return
+
+			#	raise u'找不到图片！'
 			for small_img in small_imgs:
 				"""
 				small_path--> 图片存于small_path,

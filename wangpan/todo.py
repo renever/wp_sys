@@ -14,5 +14,7 @@ __author__ = 'lotaku'
 #todo 旧下载链接失效了，要做异常处理
 #todo 考虑各种情况下抓取失败的url怎么处理，删除？
 #todo 注意body字段
+#todo 处理异常requests.exceptions.ConnectionError: HTTPConnectionPool(host='img103.imagetwist.com', port=80): Max retries exceeded with url: /i/05488/ju631gxnymvl.jpg (Caused by <class 'socket.error'>: [Errno 104] Connection reset by peer)
+#todo 图片找不到的也不抓取
 #文章发布日期
 # t2 = datetime.strftime(datetime.now(),'%b %d %Y' )
