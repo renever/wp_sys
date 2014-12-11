@@ -516,6 +516,7 @@ class Filmav_Grab():
 
 
 			#抓取所有图片,使用非贪婪模式
+			#图片网站1
 			small_img_re_str = r'(?P<images>http://img[\d]{0,3}.imagetwist.com/.*?.jpg)'
 			small_img_re = re.compile(small_img_re_str)
 			small_imgs = re.findall(small_img_re, old_body_str)
@@ -549,6 +550,8 @@ class Filmav_Grab():
 
 				# self.save_image(url=small_img, img_type=img_type, path='small_path')
 				# self.save_image(url=big_img, img_type=img_type, path='big_path')
+			#图片网站2http://img106.imagetwist.com/th/07426/qniaqkzrzldj.jpg
+
 
 			#todo 抓取文章发布时间
 
@@ -1321,6 +1324,12 @@ class Filmav_Grab():
 		# 	Msg = '%s 全部已经上传成功!' % file_name.encode('utf8')
 		# 	wp_logging(Msg=Msg)
 
+	def temp_print_article(self):
+		db_session = DBSession()
+		article_inst = db_session.query(Article).filter_by(id=4476).first()
+		print article_inst.pre_body
+
+
 
 
 
@@ -1390,19 +1399,19 @@ if __name__ == '__main__':
 		#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
 		#
 		# 自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
-		if not filmav_grab.GRAB_SYSTEM_IS_RUNNING:
-			print 'grab?'
-			filmav_grab.grab_article_url(page_end=1)
-			# 自动抓取未抓取的文章详细内容
-			filmav_grab.grab_articles()
-			filmav_grab.GRAB_SYSTEM_IS_RUNNING = True
+		# if not filmav_grab.GRAB_SYSTEM_IS_RUNNING:
+		# 	print 'X'*99
+		# 	filmav_grab.grab_article_url(page_end=1)
+		# 	# 自动抓取未抓取的文章详细内容
+		# 	filmav_grab.grab_articles()
+		# 	filmav_grab.GRAB_SYSTEM_IS_RUNNING = True
 		test = False
 		for_count += 1
-		time.sleep(5)
+		filmav_grab.temp_print_article()
+		time.sleep(50)
 
 	# filmav_grab.get(url='http://filmav.com/53049.html')
 	# filmav_grab.get_image(url='http://filmav.com/52792.html')
 	# article_urls = filmav_grab.grab_article_url()
 	# filmav_grab.save_article_url(article_urls)
 	# filmav_grab.grab_article_body()
-	f
