@@ -35,6 +35,9 @@ import time
 import os
 import thread
 import threading
+from wordpress_xmlrpc import Client, WordPressPost
+from wordpress_xmlrpc.methods.posts import GetPosts, NewPost
+
 import sys
 # reload(sys)
 # sys.setdefaultencoding("utf-8")
@@ -122,6 +125,7 @@ class Filmav_Grab():
 		self.UPLOAD_SYSTEM_IS_RUNNING = False
 		self.GRAB_SYSTEM_IS_RUNNING = False
 		self.MAKE_BODY_SYSTEM = False
+		self.POST_TO_WORDPRESS = False
 
 
 	def db_session(self):
@@ -1413,11 +1417,14 @@ class Filmav_Grab():
 		self.db_session_body = DBSession()
 		#todo条件需要修改 （生产环境下）,改成all（），增加过滤条件
 		articles = self.db_session_body.query(Article).filter(Article.can_make_body==True, Article.is_posted==False).order_by(~Article.pre_posted_date).all()
+		#test 条件
+		articles = self.db_session_body.query(Article).filter(Article.can_make_body==False, Article.is_posted==False).order_by(~Article.pre_posted_date).all()
 
 		for article in articles:
 			# print article.id
 			# print article.pre_posted_date
 			# print type(article.pre_body)
+
 			if len(article.pre_body) <=0:
 				continue
 			if len(article.body_6park) >=0:
@@ -1527,9 +1534,39 @@ class Filmav_Grab():
 			str = '''<a href="{url}">{name}</a><br>'''.format(url=url.url,name=url.file_name)
 			content += str
 
+	def post_to_wordpress_system(self):
+		db_session = DBSession()
+		# 实际条件
+		# article = db_session.query(Article).filter(Article.can_posted==True,Article.is_posted==False).order_by(~Article.pre_posted_date).first()
+		#temp
+		article = db_session.query(Article).filter(Article.body_6park != None).order_by(~Article.pre_posted_date).first()
 
+		post_tag_list = [tag.name for tag in article.tags]
+		category_list = [category.name for category in article.categories]
+		wp_client = Client('http://95.211.60.76/xmlrpc.php', 'l', 'jpqQ2@wW')
 
+		post = WordPressPost()
+		post.title = article.title
+		post.content = article.body_wordpress
+		post.post_status = 'publish'
+		post.terms_names = {
+		  'post_tag': post_tag_list,
+		  'category': category_list,
 
+		}
+		try:
+			result = wp_client.call(NewPost(post))
+			article.is_posted = True
+			db_session.add(article)
+			db_session.commit()
+		except Exception as e:
+			Msg = u'@@@发布文章%s 有错误！（errmsg：%s)' % (article.id, e)
+			wp_logging(Msg=Msg)
+
+		db_session.close()
+		# 每xx秒 轮循一次
+		time.sleep(60)
+		self.post_to_wordpress_system()
 
 
 if __name__ == '__main__':
@@ -1612,6 +1649,10 @@ if __name__ == '__main__':
 		if not filmav_grab.MAKE_BODY_SYSTEM:
 			filmav_grab.make_bodys()
 
+		# 发布文章
+		# if not filmav_grab.POST_TO_WORDPRESS:
+		# 	filmav_grab.post_to_wordpress_system()
+		# 	filmav_grab.POST_TO_WORDPRESS = True
 		test = False
 		for_count += 1
 		# filmav_grab.temp_print_article()
