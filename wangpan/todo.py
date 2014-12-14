@@ -16,5 +16,6 @@ __author__ = 'lotaku'
 #todo 注意body字段
 #todo 处理异常requests.exceptions.ConnectionError: HTTPConnectionPool(host='img103.imagetwist.com', port=80): Max retries exceeded with url: /i/05488/ju631gxnymvl.jpg (Caused by <class 'socket.error'>: [Errno 104] Connection reset by peer)
 #todo 图片找不到的也不抓取
+#todo 图片做备份
 #文章发布日期
 # t2 = datetime.strftime(datetime.now(),'%b %d %Y' )

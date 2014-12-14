@@ -281,9 +281,9 @@ class GrabNewODL():
 	# 	print i2
 
 #
-grab_new_odl = GrabNewODL()
-grab_new_odl.login()
-grab_new_odl.download()
+# grab_new_odl = GrabNewODL()
+# grab_new_odl.login()
+# grab_new_odl.download()
 # grab_new_odl.grab_ndls()
 # grab_new_odl.get_1000()
 # grab_new_odl.move_files_to_dir()
@@ -305,3 +305,10 @@ grab_new_odl.download()
 # 		#return  False
 #
 # login_douban('317399510@qq.com', 'dbF@ang11408')
+#================ 获取文件就大小 in view 格式的
+
+def get_file_size(file_path, gnu=True, format='%.2f'):
+	return humanize.naturalsize(os.path.getsize(file_path),gnu=gnu,format=format)
+	# return os.path.getsize(file_path)
+s = get_file_size(file_path='/home/l/system.reg', format="%.f")
+print s

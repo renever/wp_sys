@@ -20,6 +20,7 @@ from pyquery import PyQuery as pq
 import shutil
 import json
 from models import NewDownloadLink
+import re
 def create_session(engine=DB_ENGINE, base=DB_BASE):
 	Session = sessionmaker(bind=engine)  # 创建一个Session类
 	session = Session()  # 生成一个Session实例
@@ -321,7 +322,7 @@ class GrabNewODL():
 			url = file.get('downloadLink')
 
 
-			ndl_inst = db_session.query(NewDownloadLink).filter_by(file_name=file_name).first()
+			ndl_inst = db_session.query(NewDownloadLink).filter_by(file_name=file_name,url_type='uploadable.ch').first()
 			if ndl_inst is not None:
 				if int(ndl_inst.file_size) == file_size:
 					ndl_inst.url = url
@@ -338,30 +339,316 @@ class GrabNewODL():
 
 		db_session.close()
 		#none 和不相等的移动到delete_dir_id
-		self.move_files_to_dir(files_list=file_ids, moveFolderDest=self.dir_delete_id)
+		self.move_files_to_dir(files_list=file_ids_deleted, moveFolderDest=self.dir_delete_id)
 		#已经更新的移动到done dir
 		self.move_files_to_dir(files_list=file_ids, moveFolderDest=self.dir_done_id)
 
 
-	def move_files_to_dir(self,files_list=[54689593,54689368,54689137], CurrentFolderId=197173,moveFolderDest=210640 ):
+	def move_files_to_dir(self,files_list=[], CurrentFolderId=197173,moveFolderDest=210640 ):
+		if not files_list:
+			return
 		data = dict(
 			CurrentFolderId=CurrentFolderId,#ftp 文件ID 197173
 			moveFolderDest=moveFolderDest,#done 文件夹ID 210640
 			moveFolderId=', '.join(str(file_id) for file_id in files_list)
 		)
 		url = 'http://www.uploadable.ch/file-manager-action.php'
-		r = self.r_session.post(url=url,data=data, allow_redirects=True)
-		# print r.text
+		try:
+			r = self.r_session.post(url=url,data=data, allow_redirects=True)
+		except Exception as e:
+			raise e
 
-	# for i2 in i:
-	# 	print i2
 	def update_urls(self):
 		self.login()
 		json_data = self.get_new_uploaded_file_url()
 		self.para_new_url(json_data=json_data)
 
+
+class GrabNewODL_UPNET():
+	'''
+	抓取新的下载地址
+	'''
+	def __init__(self):
+		self.data = {
+			'id': 'lxl001',
+			'pw': '123qwe',
+		}
+
+		self.headers = {
+			'Accept': 'text/javascript, text/html, application/xml, text/xml, */*',
+			'Accept-Encoding': 'gzip, deflate',
+			'Accept-Language': 'zh-cn,en;q=0.7,en-us;q=0.3',
+			'Cache-Control': 'no-cache',
+			'Connection': 'keep-alive',
+			'Content-Length': '19',
+			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+			'Host':	'uploaded.net',
+			'Pragma': 'no-cache',
+			'Referer': 'http://uploaded.net/',
+			'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0',
+			'X-Prototype-Version': '1.6.1',
+			'X-Requested-With': 'XMLHttpRequest',
+
+		}
+		self.url = 'http://uploaded.net/io/login'
+		self.url_filesystem = 'http://uploaded.net/manage'
+		self.r_session = requests.session()
+		self.try_download_count = 0
+		self.total_size = 0
+		self.logining = False
+		self.dir_delete = 'hwsukj'
+		self.dir_done = 'fmaszx'
+		#done 文件夹 ：fmaszx
+		#delete 文件夹：hwsukj
+	def login(self):
+		self.response = self.r_session.post(url=self.url, data=self.data, headers=self.headers)
+		self.logining = True
+
+
+
+	def get_new_uploaded_file_url(self):
+		'''
+		'''
+		url = 'http://uploaded.net/api/file/list'
+		data = {
+			'folder': '0',
+			'max':'100',
+			'nav':'undefined',
+			'q':'',
+			'start':'0',
+		}
+
+		#返回的数据格式
+		responded_no_use = '''
+
+		{"parent":{"id":"0","title":"root","parent":"0"},
+"path_info":[{"id":"0","title":"root","parent":"0"}],
+"folder":[
+        {"title":"FTP","id":"nu98tc","parent":"0"},
+        {"title":"done","id":"fmaszx","parent":"0"}],
+"files_count":1,
+"files":[
+    {"filename":"wps_symbol_fonts.zip",
+    "size":255720,
+    "size_nice":"249,73 KB",
+    "ext":"zip",
+    "id":"9lr16lec",
+    "admin":"werito",
+    "_public":"0",
+    "pass":false,
+    "_private":false,
+    "created":"2014-12-13 14:25:57",
+    "created_nice":"13\/12\/2014",
+    "folder":"0",
+    "downloads":0,
+    "downloads_last":"n\/A",
+    "is_quarantined":false,
+    "will_deleted_at":false}],
+"pagination":[]}
+
+		'''
+
+		r = self.r_session.post(url=url,data=data, allow_redirects=True)
+		return r.text
+
+	def para_new_url(self,json_data={}):
+		db_session = create_session()
+		json_data = json.loads(json_data)
+		file_ids = []
+		file_ids_deleted = []
+		for file in json_data['files']:
+			file_name = file.get('filename')
+			file_size = int(file.get('size'))
+			file_size_in_view = file.get('size_nice')
+			file_id = file.get('id')
+			# url 格式：http://uploaded.net/file/9lr16lec/wps_symbol_fonts.zip
+			url = 'http://uploaded.net/file/' + file_id +'/' + file_name
+
+
+			ndl_inst = db_session.query(NewDownloadLink).filter_by(file_name=file_name,url_type='uploaded.net').first()
+			if ndl_inst is not None:
+				if int(ndl_inst.file_size) == int(file_size):
+					ndl_inst.url = url
+					ndl_inst.file_size_in_view = file_size_in_view
+					db_session.add(ndl_inst)
+					db_session.commit()
+					file_ids.append(file_id)
+					Msg = '更新%s 的新URL' % file_name.encode('utf8')
+					wp_logging(Msg=Msg)
+				else:#大小不相等，属于上传失败的文件，删除！
+					file_ids_deleted.append(file_id)
+
+
+
+		db_session.close()
+		#none 和不相等的移动到delete_dir_id
+		self.move_files_to_dir(files_list=file_ids_deleted, to=self.dir_delete)
+		#已经更新的移动到done dir
+		self.move_files_to_dir(files_list=file_ids, to=self.dir_done)
+
+
+	def move_files_to_dir(self,files_list=[], to='fmaszx',):
+		#done 文件夹 ：fmaszx
+		#delete 文件夹：hwsukj
+		if not files_list:
+			return
+		data = {
+			'to':to,#ftp 文件ID 197173
+			'auth[]':[ file_id for file_id in files_list],
+			}
+
+		url = 'http://uploaded.net/api/file/move'
+		try:
+			r = self.r_session.post(url=url,data=data, allow_redirects=True)
+			print r.text
+		except Exception as e:
+			raise e
+
+	def update_urls(self):
+		self.login()
+		json_data = self.get_new_uploaded_file_url()
+		self.para_new_url(json_data=json_data)
+
+class GrabNewODL_SH():
+	'''
+	抓取新的下载地址
+	'''
+	def __init__(self):
+		self.data = {
+		'login': 'nlxl001',
+		'loginFormSubmit': 'Login',
+		'op': 'login',
+		'password': '123qwe',
+		'redirect': 'http://ryushare.com/'
+
+		}
+
+		self.headers = {
+
+		'POST': '/ HTTP/1.1',
+		'Host': 'ryushare.com',
+		'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0',
+		'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+		'Accept-Language': 'zh-cn,en;q=0.7,en-us;q=0.3',
+		'Accept-Encoding': 'gzip, deflate',
+		'Referer': 'http://ryushare.com/login.html',
+		'Cookie': 'aff2=0; __utma=21463736.2104919758.1418543060.1418543060.1418549388.2; __utmc=21463736; __utmz=21463736.1418543060.1.1.utmcsr=filmav.com|utmccn=(referral)|utmcmd=referral|utmcct=/56602.html; login=nlxl001; xfss=; __utmb=21463736.5.10.1418549388; __utmt=1',
+		'Connection': 'keep-alive',
+
+
+		}
+		self.url = 'http://ryushare.com/'
+		self.url_filesystem = 'http://ryushare.com/?op=my_files'
+		self.r_session = requests.session()
+		self.try_download_count = 0
+		self.total_size = 0
+		self.logining = False
+		self.dir_delete = '95579'
+		self.dir_done = '95578'
+		#done 文件夹 ：fmaszx
+		#delete 文件夹：hwsukj
+	def login(self):
+		self.response = self.r_session.post(url=self.url, data=self.data, headers=self.headers)
+		self.logining = True
+
+
+
+	def get_new_uploaded_file_url(self):
+		'''
+		'''
+		url = 'http://ryushare.com/?op=my_files&fld_id=0'
+		files = {}
+		r = self.r_session.get(url=url, allow_redirects=True)
+		h = pq(r.text)
+		trs = h('tr[align="center"]').items()
+		for tr in trs:
+			tr = pq(tr)
+			url = tr('td[align="left"]')('a').attr('href')
+			file_id = tr('input[name="file_id"]').attr('value')
+			file_name = tr('td[align="left"]')('a').text()
+			size_in_view = tr('td[align="right"]').text()
+			# print file_id
+			# print file_name
+			# print size_in_view
+			# print url
+			files.update({
+				'url':url,
+				'file_id':file_id,
+				'file_name':file_name,
+				'size_in_view':size_in_view,
+			})
+		return r.text
+
+
+	def para_new_url(self,files={}):
+		db_session = create_session()
+		# json_data = json.loads(json_data)
+		file_ids = []
+		file_ids_deleted = []
+		for file in files.items():
+			file_name = file.get('file_name')
+			file_size_in_view = file.get('size_in_view')
+			file_id = file.get('file_id')
+			url = file.get('url')
+
+
+			ndl_inst = db_session.query(NewDownloadLink).filter_by(file_name=file_name,url_type='ryushare.com').first()
+			if ndl_inst is not None:
+				# 正确的文件大小
+				right_size_in_view = humanize.naturalsize(ndl_inst.file_size,gnu=True,format='%f')
+				# 只需要数字部分
+				right_size_in_view = re.sub('[a-zA-Z ]','',right_size_in_view)
+				file_size_in_view = re.sub('[a-zA-Z ]','',file_size_in_view)
+
+				if int(right_size_in_view) == int(file_size_in_view):
+					#如果url抓取失败，或者没有得到正确的url，url仍旧保持为文件名，所以，http没有在包含在url（用作判断条件）
+					ndl_inst.url = url
+					ndl_inst.file_size_in_view = file_size_in_view
+					db_session.add(ndl_inst)
+					db_session.commit()
+					file_ids.append(file_id)
+					Msg = '更新%s 的新URL' % file_name.encode('utf8')
+					wp_logging(Msg=Msg)
+				else:#大小不相等，属于上传失败的文件，删除！
+					file_ids_deleted.append(file_id)
+
+
+
+		db_session.close()
+		#none 和不相等的移动到delete_dir_id
+		self.move_files_to_dir(files_list=file_ids_deleted, to_folder=self.dir_delete)
+		#已经更新的移动到done dir
+		self.move_files_to_dir(files_list=file_ids, to_folder=self.dir_done)
+
+
+	def move_files_to_dir(self,files_list=[], to_folder='',):
+
+		if not files_list:
+			return
+		data = {
+			'create_new_folder': '',
+			'file_id': [ file_id for file_id in files_list],
+			'fld_id': '0',
+			'key': '',
+			'op': 'my_files',
+			'to_folder': to_folder,
+			'to_folder_move': 'Move files',
+
+			}
+
+		url = 'http://ryushare.com/'
+		try:
+			r = self.r_session.post(url=url,data=data, allow_redirects=True)
+			# print r.text
+		except Exception as e:
+			raise e
+
+	def update_urls(self):
+		self.login()
+		files = self.get_new_uploaded_file_url()
+		self.para_new_url(files=files)
 #
-grab_new_odl = GrabNewODL()
+# grab_new_odl = GrabNewODL()
 if __name__ == '__main__':
 
 	# grab_new_odl.login()
@@ -370,5 +657,15 @@ if __name__ == '__main__':
 	# grab_new_odl.get_1000()
 	# grab_new_odl.move_files_to_dir()
 	# grab_new_odl.get_new_uploaded_file_url()
-	names = common_utility.get_files_in_dir('/home/l/app/learning/wangpan/wp_resource/articles_file/1/unrared_files')
-	print names
+	# names = common_utility.get_files_in_dir('/home/l/app/learning/wangpan/wp_resource/articles_file/1/unrared_files')
+	# print names
+
+	# upnet = GrabNewODL_UPNET()
+	# upnet.login()
+	# upnet.move_files_to_dir(files_list=['9lr16lec','r37668ch'] ,to=upnet.dir_done)
+	#
+	sh = GrabNewODL_SH()
+	sh.login()
+	# sh.get_new_uploaded_file_url()
+	sh.move_files_to_dir(files_list=[1611061,1611055],to_folder=sh.dir_done)
+	# sh.move_files_to_dir(files_list=['9lr16lec','r37668ch'] ,to=upnet.dir_done)

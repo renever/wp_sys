@@ -41,14 +41,16 @@ class CommonLink(DB_BASE):
 	website = Column(String(255))
 	status = Column(String(255))#waiting_download,downloading,downloaded,unraring,unrared,raring,rared,waiting_uploaded,uploading,uploaded
 	linkbuck = Column(String(255))
+	url_type = Column(String(255),nullable=True)# uploadable.ch, uploaded.net ryushare.com
 
-	def __init__(self, url='',file_name='',file_size='', status='',website='filmav.com',file_size_unit=''):
+	def __init__(self, url='',file_name='',file_size='', status='',website='filmav.com',file_size_unit='',url_type=''):
 		self.url = url
 		self.website = website
 		self.file_name = file_name
 		self.file_size = file_size
 		self.status = status
 		self.file_size_unit=file_size_unit
+		self.url_type = url_type # ryushare.com , uploadable.ch, uploaded.net
 
 	def __unicode__(self):
 		return unicode(self.file_name.encode('utf-8'))
@@ -117,6 +119,7 @@ class Article(DB_BASE):
 	is_posted = Column(Boolean, default=False)
 	unrar_times = Column(Integer,default=0)
 	can_posted = Column(Boolean, default=False)
+	can_make_body = Column(Boolean, default=False) # 都获得新的下载url成功了
 	body = Column(String(512)) #保存HTML文件路径，文章正文
 	file_name = Column(String(255),unique=True) #以文件名为唯一值
 	# many to many
@@ -133,6 +136,8 @@ class Article(DB_BASE):
 	pre_posted_date = Column(DateTime,  nullable=True)
 	posted_date = Column(DateTime,  nullable=True)
 	pre_body = Column(Text, nullable=True)
+	body_6park = Column(Text, nullable=True)
+	body_wordpress = Column(Text, nullable=True)
 
 	#images 已经在定义在Images 类一对多。
 	#OldDownloadLink 一对多

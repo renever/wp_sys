@@ -153,14 +153,30 @@ class ShellCommand(object):
 
 
 class FilmAvFtp():
-
-	def __init__(self,host='ftp.uploadable.ch',user='lxl001',password='f19174de',port=21,blocksize=8192):
-		self.host = host
-		self.user = user
-		self.password = password
-		self.port = port
-		self.ftp=FTP(host)
+	def __init__(self,host='ftp.uploadable.ch',user='lxl001',password='f19174de',port=21,blocksize=8192,url_type=''):
+		# uploadable.ch, uploaded.net ryushare.com
 		self.blocksize = blocksize
+		if url_type == 'uploadable.ch':
+			self.host = host
+			self.user = user
+			self.password = password
+			self.port = port
+			self.ftp=FTP(self.host)
+
+		elif url_type == 'uploaded.net':
+			self.host = 'ftp.uploaded.net'
+			self.user = '12917027'
+			self.password = '123qwe'
+			self.port = port
+			self.ftp=FTP(self.host)
+
+		elif url_type == 'ryushare.com':
+			self.host = 'ftp.ryushare.com'
+			self.user = 'nlxl001'
+			self.password = 'fhnmmw3e10'
+			self.port = port
+			self.ftp=FTP(self.host)
+
 
 	def login(self):
 		self.ftp.login(user=self.user, passwd=self.password)

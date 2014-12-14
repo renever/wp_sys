@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-#import os
-#a = os.path.getsize('/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files/chrome.part6.rar')
-#print a
+# import os
+# a = os.path.getsize('/home/l/app/learning/wangpan/wp_resource/articles_file/1/rared_files/chrome.part6.rar')
+# print a
 ##import time
 #from datetime import datetime
 
@@ -52,6 +52,7 @@ from datetime import datetime
 # r_session = requests.session()
 # r_session
 # 替换主体内容
+
 content = u'''<p>xxx-av 21708  Wデカパイコラボ 2
 <span class="wp_keywordlink_affiliate"><a href="http://filmav.com/tag/%e8%91%89%e5%b1%b1%e3%81%8f%e3%81%bf%e3%81%93" title="View all posts in 葉山くみこ" target="_blank">葉山くみこ</a></span>
 <span class="wp_keywordlink_affiliate"><a href="http://filmav.com/tag/%e5%92%b2%e6%9c%88%e7%be%8e%e7%be%bd" title="View all posts in 咲月美羽" target="_blank">咲月美羽</a></span>
@@ -67,6 +68,37 @@ content = u'''<p>xxx-av 21708  Wデカパイコラボ 2
 <strong><span id="more-55864"></span></strong><br />
 '''
 h = pq(content)
-a_list = h("span[class='wp_keywordlink_affiliate']")("a")
+
+
+span_list = h("span[class='wp_keywordlink_affiliate']")
+big_img = 'http://img106.imagetwist.com/i/07415/us8j8q1tvvvf.jpg'
+small_img = 'http://img106.imagetwist.com/th/07415/us8j8q1tvvvf.jpg'
+for span in span_list:
+	# print span('a')
+	# print dir(span)
+	text =  pq(span)('a').text()
+	pq(span).before(pq(span)('a').text()).remove()
+a_list = h('a')
+
 for a in a_list:
-	print a.text
+
+	pre_a = pq(a)
+	# print a
+	a = pq(a)('img')
+	# for img
+	# print dir(a)
+	# if a('img')
+	# print type(a)
+	src = a.attr('src')
+	if src == small_img:
+		img_str = '<br/><img src="%s" ><br/>' % big_img
+		pre_a.before(img_str).remove()
+	if src == 'http://img57.imagetwist.com/th/07415/bzbyvl63cpet.jpg':
+		img_str = '<br/><img src="http://img57.imagetwist.com/i/07415/bzbyvl63cpet.jpeg" ><br/>'
+		pre_a.before(img_str).remove()
+	# print dir(a)
+print "-"*99
+	# print span
+# for span in span_list:
+# 	print span
+print h.html()
