@@ -1,5 +1,0 @@
-Django==1.7                                                                                   │~                              |~                                                              
-argparse==1.2.1                                                                               │~                              |~                                                              
-django-bower==5.0.1                                                                           │~                              |~                                                              
-six==1.8.0                                                                                    │~                              |~                                                              
-wsgiref==0.1.2

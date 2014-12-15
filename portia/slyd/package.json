@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "bower": "*",
-    "karma-ember-preprocessor": "*",
-    "karma-qunit": "*",
-    "karma": "0.10.2"
-  }
-}
