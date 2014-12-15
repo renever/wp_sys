@@ -6,6 +6,7 @@ from sqlalchemy import exc
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import exc
 from sqlalchemy.sql import func
+from sqlalchemy import and_, or_
 import humanize
 #自定义settings
 #-----线程池大小
@@ -51,6 +52,7 @@ WAITING_DOWNLOAD_LIST = [] #如果正在下载量少于10，并且该列表为�
 WAITING_RAR_LIST = []
 WAITING_UNRAR_LIST = []
 WAITING_UPLOAD_LIST = []
+GRABBING_ARTICLE_LIST = [] #正在抓取中的url ID list
 
 DOWNLOADING_LIST = [] # 同时下载量5
 RARING_LIST = [] #同时压缩数量 1 优先处理压缩，可以就接着上传
@@ -67,6 +69,7 @@ HAVE_UPLOAED_NUMBER = 0 #判断是否读取网页进行更新文章的新地址
 #是否为系统初次检索
 GRAB_NEW_URL_FIRST = True
 GRAB_NEW_URL = False # 当有文章上传成功时，就改为TRUE
+SLEEP_TIME = 10
 
 os.environ['TZ'] = 'Asia/Shanghai'
 
@@ -126,6 +129,7 @@ class Filmav_Grab():
 		self.GRAB_SYSTEM_IS_RUNNING = False
 		self.MAKE_BODY_SYSTEM = False
 		self.POST_TO_WORDPRESS = False
+		self.UPDATE_URLS_SYSTEM = False
 
 
 	def db_session(self):
@@ -215,8 +219,15 @@ class Filmav_Grab():
 		big_img = re.sub(big_img_re,'/i/',small_img)
 
 		response = requests.get(big_img)
-		# print response.headers['content-length']
-		if int(response.headers['content-length']) == 8183: #一张错误图片，则原图是normal图片
+		img_content_length = 0
+		try:
+			img_content_length = int(response.headers['content-length'])
+		except Exception as e:
+			Msg = u"小图（%s）的大图没有找到content_length！%s" % (small_img,e)
+
+			wp_logging(Msg=Msg, allow_print=True)
+			raise e
+		if img_content_length == 8183: #一张错误图片，则原图是normal图片
 			img_type = 'normal'
 			#将 jpg替换成 jpeg
 			big_img_re_str = r'jpg$'
@@ -235,15 +246,28 @@ class Filmav_Grab():
 		else:
 			big_img = small_img[:-6]+u'.jpeg'
 
+		print "imgspice big_img url-1: %s" % big_img
 		response = requests.get(big_img)
-		# print response.headers['content-length']
-		if int(response.headers['content-length']) == 40275: #一张错误图片，则原图是normal图片
+		img_content_length = 0
+		try:
+			img_content_length = int(response.headers['content-length'])
+		except Exception as e:
+			Msg = u"大图没有找到content_length！%s" % e
+			wp_logging(Msg=Msg)
+		if img_content_length == 40275: #一张错误图片，则原图是normal图片
 			#将 jpeg替换成 jpg
 			big_img_re_str = r'jpeg$'
 			big_img_re =re.compile(big_img_re_str)
 			big_img = re.sub(big_img_re,'jpg',big_img)
-			# print big_img
+
 		return (big_img,)
+
+	def grab_article_url_loop(self):
+		while True:
+			self.grab_article_url(page_end=2)
+
+			time.sleep(SLEEP_TIME)
+
 
 	def grab_article_url(self,page_start=1,page_end=1):
 		'''
@@ -256,7 +280,7 @@ class Filmav_Grab():
 		try:
 			pool.map(self.grab_article_url_of_per_page, page_number_list)
 		except Exception,e:
-			Msg = u'开始新线程报错：%s' % e
+			Msg = u'抓取文章链接错误：%s' % e
 			wp_logging(Msg=Msg,allow_print=True)
 
 	def grab_article_url_of_per_page(self,page_number):
@@ -328,7 +352,7 @@ class Filmav_Grab():
 
 		else:
 			Msg =  "文章url已经存在"
-			wp_logging(Msg=Msg, allow_print=True)
+			wp_logging(Msg=Msg, allow_print=False)
 
 		# now_filelinks_count = db_session.query(FileLink.id).count()
 		# if now_filelinks_count - pre_filelinks_count > 0:
@@ -415,6 +439,8 @@ class Filmav_Grab():
 				wp_logging(Msg=Msg)
 				# try:
 				grab_articles_pool.map(self.grab_article, file_links_inst)
+				# grab_articles_pool.join()
+				# grab_articles_pool.close()
 				#
 				# # print '-'*99
 				# grab_articles_pool.close()
@@ -438,9 +464,9 @@ class Filmav_Grab():
 			# 	Msg = '[线程池](抓取文章)-->失败：%s' % e
 			# 	wp_logging(Msg=Msg)
 			# 	raise e
-			Msg = u'5秒后再次抓取新文章'
+			Msg = u'%s秒后再次抓取新文章' % SLEEP_TIME
 			wp_logging(Msg=Msg)
-			time.sleep(5)
+			time.sleep(SLEEP_TIME)
 
 	def query_not_crawled_article_url(self):
 		# 建立数据库链接
@@ -458,6 +484,11 @@ class Filmav_Grab():
 
 
 	def grab_article(self,url_inst):
+		# 前当前抓取的url id 加入 GRABBING_ARTICLE_LIST = []
+		if url_inst.id in GRABBING_ARTICLE_LIST:
+			return
+		GRABBING_ARTICLE_LIST.append(url_inst.id)
+
 		# 建立数据库链接
 		# db_session = self.db_session()
 		try:
@@ -481,6 +512,7 @@ class Filmav_Grab():
 				lock.acquire()
 				session_count -=1
 				lock.release()
+				GRABBING_ARTICLE_LIST.remove(url_inst.id)
 				return
 			if r.status_code is not 200:
 				if r.status_code == 500:
@@ -492,6 +524,7 @@ class Filmav_Grab():
 				lock.acquire()
 				session_count -=1
 				lock.release()
+				GRABBING_ARTICLE_LIST.remove(url_inst.id)
 
 				return
 
@@ -499,9 +532,9 @@ class Filmav_Grab():
 			body = h('.entry')
 
 			#匹配中文，记得要进行编码
-			print type(body.html())
+			# print type(body.html())
 			# print body.html()
-			print url_inst.url
+			# print url_inst.url
 
 			old_body_str =body.html()
 
@@ -514,10 +547,10 @@ class Filmav_Grab():
 			old_body = re.split(u'<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード',old_body_str)
 
 			# print old_body
-			print 'old_body\'s type: %s' % type(old_body[0])
+			# print 'old_body\'s type: %s' % type(old_body[0])
 			# print old_body[0]
 			old_body = old_body[0]
-			print "-"*99
+			# print "-"*99
 			# old_body = str(old_body[0][:-53])
 			# old_body = old_body_str
 
@@ -532,7 +565,7 @@ class Filmav_Grab():
 				lock.acquire()
 				session_count -=1
 				lock.release()
-
+				GRABBING_ARTICLE_LIST.remove(url_inst.id)
 				return
 			Msg = u"抓取文章标题：" + title.html()
 			wp_logging(Msg=Msg, allow_print=True)
@@ -583,13 +616,15 @@ class Filmav_Grab():
 			img_type = 'normal'
 
 			if not small_imgs_dict:
-				print '='*99
-				print u'%s 没有找到图片' % url_inst.url
-				print '='*99
+				# print '='*99
+				Msg =  u'%s 没有找到imgspice图片' % url_inst.url
+				wp_logging(Msg=Msg,allow_print=False)
+				# print '='*99
 				db_session.close()
 				lock.acquire()
 				session_count -=1
 				lock.release()
+				GRABBING_ARTICLE_LIST.remove(url_inst.id)
 				return
 
 			for small_img in small_imgs_dict:
@@ -599,12 +634,14 @@ class Filmav_Grab():
 				"""
 				img_name = small_img.get('img_name')
 				img_ext = small_img.get('img_ext')
+				small_img_url = small_img.get('img_url')
 
 				big_img = self.get_big_img_imgspice(small_img)[0]
 
 				#保存 small_path 图片
+
 				img_inst = get_or_create(session=db_session, is_global=True, model=Image, \
-										 name=img_name, small_path=small_img, big_path=big_img,img_type=img_type )[0]
+										 name=img_name, small_path=small_img_url, big_path=big_img,img_type=img_type )[0]
 				if not(img_inst in new_article.images):
 					new_article.images.append(img_inst)
 					Msg = u"添加imgspice图片：" + img_name
@@ -671,6 +708,17 @@ class Filmav_Grab():
 			# driver = FirefoxDriver()
 			# driver.driver = driver.get_new_driver()
 
+			if not old_download_links:
+				#这是新文章，upch的下载链接还没有发布
+				Msg = u"失败! upch的下载链接还没有发布!"
+				wp_logging(Msg=Msg)
+				db_session.close()
+				lock.acquire()
+				session_count -=1
+				lock.release()
+				GRABBING_ARTICLE_LIST.remove(url_inst.id)
+				return
+
 			for old_download_link in old_download_links:
 				#抓取该链接的文件名和文件大小
 				file_name = ''
@@ -679,12 +727,13 @@ class Filmav_Grab():
 				print type(content)
 				print content
 				# if False:
+
 				if content.get('status'):
 					dict_params = {}
 					dict_params.update(dict(
 						status='waiting_download',
-						file_name=file_name[1:-1],#不要包括括号
-						file_size=file_size,
+						file_name=content.get('file_name'),
+						file_size=content.get('file_size'),
 						url=old_download_link,
 						website=self.website,
 						url_type='uploadable.ch'
@@ -713,6 +762,7 @@ class Filmav_Grab():
 					lock.acquire()
 					session_count -=1
 					lock.release()
+					GRABBING_ARTICLE_LIST.remove(url_inst.id)
 
 					return
 
@@ -779,6 +829,7 @@ class Filmav_Grab():
 			wp_logging(Msg=Msg, allow_print=True)
 			print u'db_session open统计',session_count
 			print "*"*99
+			GRABBING_ARTICLE_LIST.remove(url_inst.id)
 			return
 		except	Exception as e:
 			Msg = e
@@ -883,7 +934,7 @@ class Filmav_Grab():
 				self.update_inst(url_inst)
 				self.download_file(url_inst)
 
-			time.sleep(5)
+			time.sleep(SLEEP_TIME)
 
 	def update_inst(self,inst):
 		db_session = self.db_session()
@@ -1009,6 +1060,7 @@ class Filmav_Grab():
 		odl_insts = db_session.query(OldDownloadLink).filter(OldDownloadLink.status=='downloading').all()
 
 		for odl_inst in odl_insts:
+			# print odl_inst.url
 			file_path, file_real_size = self.get_file_path_and_real_size(odl_inst)
 			# file_path = DOWNLOAD_DIR + "/" + odl_inst.file_name
 			# file_real_size = float(odl_inst.file_size) * FILE_UNIT_CONVERSION.get(odl_inst.file_size_unit)
@@ -1046,7 +1098,10 @@ class Filmav_Grab():
 	def get_wait_to_download_urls(self):
 		#实际情况，过滤条件改成含有未下载地址的，最新发布的一篇文章
 		db_session = self.db_session()
-		article = db_session.query(Article).filter_by(id=1).first()
+		# article = db_session.query(Article).filter_by(id=1).first()
+		article = db_session.query(Article).join(Article.old_download_links).filter(OldDownloadLink.status=='waiting_download').order_by(~Article.pre_posted_date).first()
+		if article is None:
+			return
 		for url_inst in article.old_download_links:
 			if url_inst.status == 'waiting_download':
 				if url_inst not in DOWNLOADING_LIST:
@@ -1075,7 +1130,7 @@ class Filmav_Grab():
 				# self.update_inst(url_inst)
 				self.unrar_file(article_inst)
 
-			time.sleep(5)
+			time.sleep(SLEEP_TIME)
 
 
 	def get_wait_to_unrar_urls(self):
@@ -1156,7 +1211,7 @@ class Filmav_Grab():
 				# self.update_inst(url_inst)
 				self.rar_file(article_inst)
 
-			time.sleep(5)
+			time.sleep(SLEEP_TIME)
 	def get_wait_to_rar_urls(self):
 		db_session = self.db_session()
 		articles = db_session.query(Article).join(Article.old_download_links).filter(OldDownloadLink.status=='unrared').all()
@@ -1252,7 +1307,7 @@ class Filmav_Grab():
 				print '\r\n'
 				self.upload_file(ndl_inst)
 
-			time.sleep(5)
+			time.sleep(SLEEP_TIME)
 
 	def get_wait_to_upload_urls(self):
 		db_session = self.db_session()
@@ -1440,7 +1495,7 @@ class Filmav_Grab():
 				wp_logging(Msg=Msg)
 		self.db_session_body.close()
 		#每xx秒 轮循一次
-		time.sleep(5)
+		time.sleep(SLEEP_TIME)
 		return self.make_bodys()
 	def make_wordpress_body(self,article):
 		h = pq(article.pre_body)
@@ -1537,10 +1592,11 @@ class Filmav_Grab():
 	def post_to_wordpress_system(self):
 		db_session = DBSession()
 		# 实际条件
-		# article = db_session.query(Article).filter(Article.can_posted==True,Article.is_posted==False).order_by(~Article.pre_posted_date).first()
+		article = db_session.query(Article).filter(and_(Article.can_posted==True,Article.is_posted==False)).order_by(~Article.pre_posted_date).first()
 		#temp
-		article = db_session.query(Article).filter(Article.body_6park != None).order_by(~Article.pre_posted_date).first()
-
+		# article = db_session.query(Article).filter(Article.body_6park != None).order_by(~Article.pre_posted_date).first()
+		if article is None:
+			return
 		post_tag_list = [tag.name for tag in article.tags]
 		category_list = [category.name for category in article.categories]
 		wp_client = Client('http://95.211.60.76/xmlrpc.php', 'l', 'jpqQ2@wW')
@@ -1565,8 +1621,22 @@ class Filmav_Grab():
 
 		db_session.close()
 		# 每xx秒 轮循一次
-		time.sleep(60)
-		self.post_to_wordpress_system()
+		time.sleep(SLEEP_TIME)
+		return self.post_to_wordpress_system()
+
+	def update_new_url(self,time_sleep=0):
+		while True:
+			time.sleep(time_sleep)
+			UPCH = GrabNewODL()
+			UPCH.update_urls()
+
+			UPNET = GrabNewODL_UPNET()
+			UPNET.update_urls()
+
+			SH = GrabNewODL_SH()
+			SH.update_urls()
+			time.sleep(SLEEP_TIME)
+
 
 
 if __name__ == '__main__':
@@ -1587,76 +1657,77 @@ if __name__ == '__main__':
 
 		if test:
 			filmav_grab.temp_make_s_links() # 创建6个测试下载链接
-		#todo test
-
-		# #todo 文件下载，解压，压缩，上传 轮循
-		# if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
-		# 	download_thread = threading.Thread(target=filmav_grab.file_download_system)
-		# 	download_thread.start()
-		# 	filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
-		# 	print 'start download system... '
-		#
-		# #todo 文件解压，正在解压/正在压缩列表小于1时，处理新的解压任务
-		# if not filmav_grab.UNRAR_SYSTEM_IS_RUNNING:
-		# 	print 'start unrar system... '
-		# 	rar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
-		# 	rar_thread.start()
-		# 	filmav_grab.UNRAR_SYSTEM_IS_RUNNING = True
-		#
-		#
-		#
-		# #todo 文件压缩，正在解压/正在压缩列表小于1时，不处理新的解压任务
-		# if not filmav_grab.RAR_SYSTEM_IS_RUNNING:
-		# 	print 'RARING_LIST %s ' % RARING_LIST
-		# 	rar_thread = threading.Thread(target=filmav_grab.file_rar_system)
-		# 	rar_thread.start()
-		# 	filmav_grab.RAR_SYSTEM_IS_RUNNING = True
-		# 	print 'start rar system... '
-		#
-		# #todo 文件上传，待正在上传列表小于10时，添加新的待上传文件地址
-		# if not filmav_grab.UPLOAD_SYSTEM_IS_RUNNING:
-		# 	upload_thread = threading.Thread(target=filmav_grab.file_upload_system)
-		# 	upload_thread.start()
-		# 	filmav_grab.UPLOAD_SYSTEM_IS_RUNNING = True
-		# 	print 'start upload system... '
-		#
-		#
-		# #todo 抓取上传的地址 改成循环系统，每60秒
-		# if GRAB_NEW_URL_FIRST or GRAB_NEW_URL:
-		# 	if GRAB_NEW_URL:
-		# 		#刚刚上传，需要等网盘站生成下载地址
-		# 		time.sleep(10)
-		# 	UPCH = GrabNewODL()
-		# 	UPCH.update_urls()
-		#
-		# 	UPNET = GrabNewODL_UPNET()
-		# 	UPNET.update_urls()
-		#
-		# 	SH = GrabNewODL_SH()
-		# 	SH.update_urls()
 
 
-		print 'man process sleep 5... '
-		#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
-		#
+		#下载系统
+		if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
+			download_thread = threading.Thread(target=filmav_grab.file_download_system)
+			download_thread.start()
+			filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
+			print 'start download system... '
+
+
+		#解压系统
+		if not filmav_grab.UNRAR_SYSTEM_IS_RUNNING:
+			print 'start unrar system... '
+			rar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
+			rar_thread.start()
+			filmav_grab.UNRAR_SYSTEM_IS_RUNNING = True
+
+
+
+		#压缩系统
+		if not filmav_grab.RAR_SYSTEM_IS_RUNNING:
+			print 'RARING_LIST %s ' % RARING_LIST
+			rar_thread = threading.Thread(target=filmav_grab.file_rar_system)
+			rar_thread.start()
+			filmav_grab.RAR_SYSTEM_IS_RUNNING = True
+			print 'start rar system... '
+
+		#上传系统
+		if not filmav_grab.UPLOAD_SYSTEM_IS_RUNNING:
+			upload_thread = threading.Thread(target=filmav_grab.file_upload_system)
+			upload_thread.start()
+			filmav_grab.UPLOAD_SYSTEM_IS_RUNNING = True
+			print 'start upload system... '
+
+		#更新下载地址
+		if not filmav_grab.UPDATE_URLS_SYSTEM:
+			update_urls_thread = threading.Thread(target=filmav_grab.update_new_url)
+			update_urls_thread.start()
+
 		# 自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
-		# if not filmav_grab.GRAB_SYSTEM_IS_RUNNING:
-		# 	print 'start grab sysyem'
-		# 	# filmav_grab.grab_article_url(page_end=1)
-		# 	# 自动抓取未抓取的文章详细内容
-		# 	filmav_grab.grab_articles()
-		# 	filmav_grab.GRAB_SYSTEM_IS_RUNNING = True
+		if not filmav_grab.GRAB_SYSTEM_IS_RUNNING:
+			#每20分钟抓取前 2 页
+			grab_article_loop_thread = threading.Thread(target=filmav_grab.grab_article_url_loop)
+			grab_article_loop_thread.start()
+			#仅抓取一次，可以单独运行
+			# grab_article_thread = threading.Thread(target=filmav_grab.grab_article_url,kwargs={'page_end':2000})
+			# grab_article_thread.start()
+
+			# 自动抓取未抓取的文章详细内容
+			grab_articles_thread = threading.Thread(target=filmav_grab.grab_articles)
+			grab_articles_thread.start()
+			filmav_grab.GRAB_SYSTEM_IS_RUNNING = True
+			print 'start grab sysyem'
+		# 文章body生成系统
 		if not filmav_grab.MAKE_BODY_SYSTEM:
-			filmav_grab.make_bodys()
+			make_bodys_thread = threading.Thread(target=filmav_grab.make_bodys)
+			make_bodys_thread.start()
+
+			filmav_grab.MAKE_BODY_SYSTEM = True
 
 		# 发布文章
-		# if not filmav_grab.POST_TO_WORDPRESS:
-		# 	filmav_grab.post_to_wordpress_system()
-		# 	filmav_grab.POST_TO_WORDPRESS = True
+		if not filmav_grab.POST_TO_WORDPRESS:
+			post_to_wordpress_thread = threading.Thread(target=filmav_grab.post_to_wordpress_system)
+			post_to_wordpress_thread.start()
+			filmav_grab.POST_TO_WORDPRESS = True
+
 		test = False
 		for_count += 1
 		# filmav_grab.temp_print_article()
-		time.sleep(50)
+		print 'man process sleep 5... '
+		time.sleep(20)
 
 	# filmav_grab.get(url='http://filmav.com/53049.html')
 	# filmav_grab.get_image(url='http://filmav.com/52792.html')

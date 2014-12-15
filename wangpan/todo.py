@@ -1,21 +1,20 @@
 # coding: utf-8
 __author__ = 'lotaku'
 
-#todo 抓取下载地址的时候，用request抓取文件名
+
 #todo web GUI / Client GUi
 #todo 添加网盘的支付帐号
-#todo ftp 上传后程序会有返回值，直接做判断用
-#todo 压缩解压任务，都以文章原来的发布时间排序(发布时间需要抓取）
 #todo 为盘资源设置4个数字删除密码http://www.uploadable.ch/account_features.php
-#todo 修改pre_downloaded_file 方法
-#todo 抓取到的新上传的链接，如果文件大小不符合，则是上传了一半的。post删除它
+
+
 #todo 判断是否在列表里，用字符串，不要用实例，除非，定义实例的比较方法
-#todo 根据更新时间下载文章，过滤条件要修改
-#todo 旧下载链接失效了，要做异常处理
+
 #todo 考虑各种情况下抓取失败的url怎么处理，删除？
-#todo 注意body字段
-#todo 处理异常requests.exceptions.ConnectionError: HTTPConnectionPool(host='img103.imagetwist.com', port=80): Max retries exceeded with url: /i/05488/ju631gxnymvl.jpg (Caused by <class 'socket.error'>: [Errno 104] Connection reset by peer)
-#todo 图片找不到的也不抓取
+
 #todo 图片做备份
+#todo 为每一个大步 建立try机制？中止或重启，并发邮件通知操作者
+#todo 新建一个表，统计每天以发布文章数量，以及最后一次的发布时间
+#todo 图片的requests 也要try 超时
+#todo 有些文章有 压缩和非压缩文件 混合在一起的下载链接
 #文章发布日期
 # t2 = datetime.strftime(datetime.now(),'%b %d %Y' )

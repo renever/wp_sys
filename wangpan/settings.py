@@ -9,11 +9,15 @@ import logging.config
 import os
 import pwd
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+
+#生产环境的DB_ENGINE
+DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan2?charset=utf8", pool_size=300, max_overflow=1000,echo=True)
+
 # print BASE_PATH
 if pwd.getpwuid(os.getuid())[0]=='l':
 	#XPS
 	# DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8",poolclass=NullPool,echo=True)
-	DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan?charset=utf8", pool_size=300, max_overflow=1000,echo=True)
+	DB_ENGINE = create_engine("mysql://root:123qwe@localhost/wangpan2?charset=utf8", pool_size=300, max_overflow=1000,echo=True)
 	# 					     # 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
 	#浏览器配置地址
 	#xps

@@ -242,6 +242,7 @@ class GrabNewODL():
 		'''
 		db_session = create_session()
 		db_session.add(url_inst)
+		print url_inst.url
 		file_dir = ARTICLE_FILES_DIR +'/'+ str(url_inst.article_id) +'/downloaded_files/'
 		file_path = file_dir+url_inst.file_name
 		if not os.path.exists(file_dir):
@@ -258,7 +259,9 @@ class GrabNewODL():
 			#尝试下载5次不成功，则放弃
 			if self.try_download_count > 5:
 				db_session.close()
-				return 'Try more times than 5'
+				Msg = u'Try more times than 5 (link: %s )' % url_inst.url
+				wp_logging(Msg=Msg)
+				return
 			self.try_download_count += 1
 			self.login()
 			db_session.close()
@@ -456,6 +459,8 @@ class GrabNewODL_UPNET():
 		json_data = json.loads(json_data)
 		file_ids = []
 		file_ids_deleted = []
+		if not json_data.get('files',None):
+			return
 		for file in json_data['files']:
 			file_name = file.get('filename')
 			file_size = int(file.get('size'))
@@ -577,7 +582,7 @@ class GrabNewODL_SH():
 				'file_name':file_name,
 				'size_in_view':size_in_view,
 			})
-		return r.text
+		return files
 
 
 	def para_new_url(self,files={}):
