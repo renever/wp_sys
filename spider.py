@@ -20,7 +20,8 @@ from settings import DOWNLOAD_SYSTEM_IS_RUNNING
 from settings import FILE_UNIT_CONVERSION
 #数据库表
 from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, Category
-from utils import create_session, wp_logging, get_or_create, FirefoxDriver, common_utility, GrabNewODL,\
+#from utils import FirefoxDriver
+from utils import create_session, wp_logging, get_or_create,  common_utility, GrabNewODL,\
 				GrabNewODL_UPNET,GrabNewODL_SH
 from utility.common import ShellCommand, FilmAvFtp
 
