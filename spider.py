@@ -1599,7 +1599,7 @@ class Filmav_Grab():
 			return
 		post_tag_list = [tag.name for tag in article.tags]
 		category_list = [category.name for category in article.categories]
-		wp_client = Client('http://95.211.60.76/xmlrpc.php', 'l', 'jpqQ2@wW')
+		wp_client = Client('http://95.211.60.76/xmlrpc.php', 'lotaku', 'jpqQ2@wW')
 
 		post = WordPressPost()
 		post.title = article.title
