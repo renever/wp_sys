@@ -24,7 +24,7 @@ if pwd.getpwuid(os.getuid())[0]=='l':
 	FirefoxProfilePath = '/home/l/.mozilla/firefox/mwad0hks.default'
 	#图片文件目录
 	# DOWNLOAD_DIR = BASE_PATH + 'downloaded_files/'
-else:#公司PC
+elif pwd.getpwuid(os.getuid())[0]=='Lotaku':#公司PC
 	#由于SQLite存在并发死锁，不再使用。# 这个url可以用urlparse解析, 其中echo=True表示执行时显示sql语句
 	# DB_ENGINE = create_engine("sqlite:///wangpan", echo=True)
 
