@@ -3,10 +3,10 @@ from __future__ import division
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
 import logging
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait  # available since 2.4.0
-from selenium.webdriver.support import expected_conditions as EC  # available since 2.26.0
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.support.ui import WebDriverWait  # available since 2.4.0
+# from selenium.webdriver.support import expected_conditions as EC  # available since 2.26.0
 from datetime import datetime
 
 import humanize
