@@ -247,37 +247,44 @@ class GrabNewODL():
 		file_path = file_dir+url_inst.file_name
 		if not os.path.exists(file_dir):
 			os.makedirs(file_dir)
-		try:
-			file = self.r_session.get(url_inst.url, stream=True, allow_redirects=True)
-			# file = self.r_session.post(url_inst.url, data = {'stream':True, 'allow_redirects':True})
-		except requests.exceptions.Timeout as e:
-			db_session.close()
-			return 'Download Time out'
-			# with closing(self.r_session.get(url_inst.url, stream=True, allow_redirects=True)) as file:
-		#file.history
 
-		if 'http://pdl' not in file.url:
-			#尝试下载5次不成功，则放弃
-			if self.try_download_count > 5:
-				db_session.close()
-				Msg = u'Try more times than 5 (link: %s )' % url_inst.url
-				wp_logging(Msg=Msg)
-				return
-			self.try_download_count += 1
-			self.login()
-			db_session.close()
-			return self.download(url_inst)
 		if self.logining == True:
-			have_downloaded_size = 0
-			self.total_size = int(file.headers['content-length'])
+			file_size_dl = 0
+
 			# todo 下载是有效的下载方法，可以增大chunk_size
 			with open(file_path, 'wb') as local_file:
+				try:
+					file = self.r_session.get(url_inst.url, stream=True, allow_redirects=True)
+					# file = self.r_session.post(url_inst.url, data = {'stream':True, 'allow_redirects':True})
+				except requests.exceptions.Timeout as e:
+					db_session.close()
+					return 'Download Time out'
+					# with closing(self.r_session.get(url_inst.url, stream=True, allow_redirects=True)) as file:
+				#file.history
+				self.total_size = int(file.headers['content-length'])
+				if 'http://pdl' not in file.url:
+					#尝试下载5次不成功，则放弃
+					if self.try_download_count > 5:
+						db_session.close()
+						Msg = u'Try more times than 5 (link: %s )' % url_inst.url
+						wp_logging(Msg=Msg)
+						return
+					self.try_download_count += 1
+					self.login()
+					db_session.close()
+					return self.download(url_inst)
+
 				for content in file.iter_content(CHUNK_SIZE):
 					if content:  # filter out keep-alive new chunks
-						have_downloaded_size += len(content)
+						file_size_dl += len(content)
 						local_file.write(content)
-						# local_file.flush()
-			if have_downloaded_size == self.total_size:
+						local_file.flush()
+						completeness = r"%10d  [%3.2f%%]" % (file_size_dl, file_size_dl * 100. / self.total_size)
+						completeness = completeness + chr(8)*(len(completeness)+1)
+						Msg = u'{file_name} 下载进度：{completeness}'\
+							.format(file_name=url_inst.file_name, completeness=completeness)
+						wp_logging(Msg=Msg, allow_print=True)
+			if file_size_dl == self.total_size:
 				db_session.close()
 				return 'Download successful'
 			else:
