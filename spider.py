@@ -500,6 +500,8 @@ class Filmav_Grab():
 
 
 
+
+
 		# 建立数据库链接
 		# db_session = self.db_session()
 		try:
@@ -538,6 +540,11 @@ class Filmav_Grab():
 				GRABBING_ARTICLE_LIST.remove(url_inst.id)
 
 				return
+
+			url_inst_ = get_or_create(session=db_session,is_global=True, model=FileLink,id=url_inst.id)[0]
+			url_inst_.is_crawled = True
+			db_session.add(url_inst_)
+			db_session.commit()
 
 			h = pq(r.content)
 			body = h('.entry')
