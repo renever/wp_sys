@@ -284,6 +284,7 @@ class GrabNewODL():
 						Msg = u'{file_name} 下载进度：{completeness}'\
 							.format(file_name=url_inst.file_name, completeness=completeness)
 						wp_logging(Msg=Msg, allow_print=True)
+						print "???zheli?"
 			if file_size_dl == self.total_size:
 				db_session.close()
 				return 'Download successful'
