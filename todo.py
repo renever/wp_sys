@@ -16,5 +16,6 @@ __author__ = 'lotaku'
 #todo 新建一个表，统计每天以发布文章数量，以及最后一次的发布时间
 #todo 图片的requests 也要try 超时
 #todo 有些文章有 压缩和非压缩文件 混合在一起的下载链接
+#todo 连接 下载地址时，如果VPN 断了 ，会抛出 异常： Max retries exceeded with url
 #文章发布日期
 # t2 = datetime.strftime(datetime.now(),'%b %d %Y' )

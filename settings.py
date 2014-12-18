@@ -42,7 +42,10 @@ ARTICLE_FILES_DIR = BASE_PATH + '/wp_resource/articles_file'
 # if not os.path.exists(DOWNLOAD_DIR):
 # 	os.mkdir(DOWNLOAD_DIR)
 
-CHUNK_SIZE = 8192
+# CHUNK_SIZE = 8192
+# CHUNK_SIZE = 10485760 #10M
+CHUNK_SIZE = 5242880 # 5M
+
 
 #日志配置
 logging_fileConfig_path = BASE_PATH + '/logging.conf'

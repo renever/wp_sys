@@ -248,7 +248,8 @@ class GrabNewODL():
 		if not os.path.exists(file_dir):
 			os.makedirs(file_dir)
 		try:
-			file = self.r_session.get(url_inst.url, stream=True, allow_redirects=True)
+			# file = self.r_session.get(url_inst.url, stream=True, allow_redirects=True)
+			file = self.r_session.post(url_inst.url, data = {'stream':True, 'allow_redirects':True})
 		except requests.exceptions.Timeout as e:
 			db_session.close()
 			return 'Download Time out'

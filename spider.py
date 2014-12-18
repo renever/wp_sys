@@ -476,6 +476,14 @@ class Filmav_Grab():
 		session_count +=1
 		file_links_inst = db_session.query(FileLink).filter_by(is_crawled=False)
 		# file_links_inst = db_session.query(FileLink).filter_by(url='http://filmav.com/51832.html')
+		if not file_links_inst:
+			return None
+		# if file_links_inst.count()>=10:
+		# 	file_links_inst= file_links_inst[0:10]
+		# for file_link_inst in file_links_inst:
+		# 	file_link_inst.is_crawled = True
+		# 	db_session.add(file_link_inst)
+		db_session.commit()
 		db_session.close()
 		# db_session.close_all()
 		# db_session.
@@ -489,6 +497,8 @@ class Filmav_Grab():
 		if url_inst.id in GRABBING_ARTICLE_LIST:
 			return
 		GRABBING_ARTICLE_LIST.append(url_inst.id)
+
+
 
 		# 建立数据库链接
 		# db_session = self.db_session()
