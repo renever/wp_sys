@@ -1694,62 +1694,62 @@ if __name__ == '__main__':
 			filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
 			print 'start download system... '
 
-
-		#解压系统
-		if not filmav_grab.UNRAR_SYSTEM_IS_RUNNING:
-			print 'start unrar system... '
-			rar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
-			rar_thread.start()
-			filmav_grab.UNRAR_SYSTEM_IS_RUNNING = True
-
-
-
-		#压缩系统
-		if not filmav_grab.RAR_SYSTEM_IS_RUNNING:
-			print 'RARING_LIST %s ' % RARING_LIST
-			rar_thread = threading.Thread(target=filmav_grab.file_rar_system)
-			rar_thread.start()
-			filmav_grab.RAR_SYSTEM_IS_RUNNING = True
-			print 'start rar system... '
-
-		#上传系统
-		if not filmav_grab.UPLOAD_SYSTEM_IS_RUNNING:
-			upload_thread = threading.Thread(target=filmav_grab.file_upload_system)
-			upload_thread.start()
-			filmav_grab.UPLOAD_SYSTEM_IS_RUNNING = True
-			print 'start upload system... '
-
-		#更新下载地址
-		if not filmav_grab.UPDATE_URLS_SYSTEM:
-			update_urls_thread = threading.Thread(target=filmav_grab.update_new_url)
-			update_urls_thread.start()
-
-		# 自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
-		if not filmav_grab.GRAB_SYSTEM_IS_RUNNING:
-			#每20分钟抓取前 2 页
-			grab_article_loop_thread = threading.Thread(target=filmav_grab.grab_article_url_loop)
-			grab_article_loop_thread.start()
-			#仅抓取一次，可以单独运行
-			# grab_article_thread = threading.Thread(target=filmav_grab.grab_article_url,kwargs={'page_end':2000})
-			# grab_article_thread.start()
-
-			# 自动抓取未抓取的文章详细内容
-			grab_articles_thread = threading.Thread(target=filmav_grab.grab_articles)
-			grab_articles_thread.start()
-			filmav_grab.GRAB_SYSTEM_IS_RUNNING = True
-			print 'start grab sysyem'
-		# 文章body生成系统
-		if not filmav_grab.MAKE_BODY_SYSTEM:
-			make_bodys_thread = threading.Thread(target=filmav_grab.make_bodys)
-			make_bodys_thread.start()
-
-			filmav_grab.MAKE_BODY_SYSTEM = True
-
-		# 发布文章
-		if not filmav_grab.POST_TO_WORDPRESS:
-			post_to_wordpress_thread = threading.Thread(target=filmav_grab.post_to_wordpress_system)
-			post_to_wordpress_thread.start()
-			filmav_grab.POST_TO_WORDPRESS = True
+		#
+		# #解压系统
+		# if not filmav_grab.UNRAR_SYSTEM_IS_RUNNING:
+		# 	print 'start unrar system... '
+		# 	rar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
+		# 	rar_thread.start()
+		# 	filmav_grab.UNRAR_SYSTEM_IS_RUNNING = True
+		#
+		#
+		#
+		# #压缩系统
+		# if not filmav_grab.RAR_SYSTEM_IS_RUNNING:
+		# 	print 'RARING_LIST %s ' % RARING_LIST
+		# 	rar_thread = threading.Thread(target=filmav_grab.file_rar_system)
+		# 	rar_thread.start()
+		# 	filmav_grab.RAR_SYSTEM_IS_RUNNING = True
+		# 	print 'start rar system... '
+		#
+		# #上传系统
+		# if not filmav_grab.UPLOAD_SYSTEM_IS_RUNNING:
+		# 	upload_thread = threading.Thread(target=filmav_grab.file_upload_system)
+		# 	upload_thread.start()
+		# 	filmav_grab.UPLOAD_SYSTEM_IS_RUNNING = True
+		# 	print 'start upload system... '
+		#
+		# #更新下载地址
+		# if not filmav_grab.UPDATE_URLS_SYSTEM:
+		# 	update_urls_thread = threading.Thread(target=filmav_grab.update_new_url)
+		# 	update_urls_thread.start()
+		#
+		# # 自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
+		# if not filmav_grab.GRAB_SYSTEM_IS_RUNNING:
+		# 	#每20分钟抓取前 2 页
+		# 	grab_article_loop_thread = threading.Thread(target=filmav_grab.grab_article_url_loop)
+		# 	grab_article_loop_thread.start()
+		# 	#仅抓取一次，可以单独运行
+		# 	# grab_article_thread = threading.Thread(target=filmav_grab.grab_article_url,kwargs={'page_end':2000})
+		# 	# grab_article_thread.start()
+		#
+		# 	# 自动抓取未抓取的文章详细内容
+		# 	grab_articles_thread = threading.Thread(target=filmav_grab.grab_articles)
+		# 	grab_articles_thread.start()
+		# 	filmav_grab.GRAB_SYSTEM_IS_RUNNING = True
+		# 	print 'start grab sysyem'
+		# # 文章body生成系统
+		# if not filmav_grab.MAKE_BODY_SYSTEM:
+		# 	make_bodys_thread = threading.Thread(target=filmav_grab.make_bodys)
+		# 	make_bodys_thread.start()
+		#
+		# 	filmav_grab.MAKE_BODY_SYSTEM = True
+		#
+		# # 发布文章
+		# if not filmav_grab.POST_TO_WORDPRESS:
+		# 	post_to_wordpress_thread = threading.Thread(target=filmav_grab.post_to_wordpress_system)
+		# 	post_to_wordpress_thread.start()
+		# 	filmav_grab.POST_TO_WORDPRESS = True
 
 		test = False
 		for_count += 1
