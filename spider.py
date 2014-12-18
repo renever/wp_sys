@@ -977,10 +977,20 @@ class Filmav_Grab():
 
 	def check_file_is_downloaded(self,url_inst):
 		'''跟踪文件是否成功下载，文件存在，并且大小正确'''
-
+		print '''跟踪文件是否成功下载，文件存在，并且大小正确'''
 		grab_new_odl = GrabNewODL()
-		download_result = grab_new_odl.download(url_inst=url_inst)
-		print download_result
+		grab_new_odl.login()
+		download_start_thread = threading.Thread(target=grab_new_odl.download, kwargs={'url_inst':url_inst})
+		download_start_thread.start()
+		download_start_thread.join()
+		download_result = ''
+		# download_result = download_start_thread.
+		# from multiprocessing.pool import ThreadPool
+		# pool = ThreadPool(processes=1)
+		# async_result = pool.apply_async(grab_new_odl.download,kwds={'url_inst':url_inst}) # tuple of args for foo
+		# download_result = async_result.get()
+		# download_result = grab_new_odl.download(url_inst=url_inst)
+		print download_result,'None?'
 		# file_path = DOWNLOAD_DIR + "/" + url_inst.file_name
 		# file_real_size = float(url_inst.file_size) * FILE_UNIT_CONVERSION.get(url_inst.file_size_unit)
 		# file_path, file_real_size = self.get_file_path_and_real_size(url_inst)
