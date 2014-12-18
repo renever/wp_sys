@@ -254,13 +254,16 @@ class GrabNewODL():
 			# todo 下载是有效的下载方法，可以增大chunk_size
 			with open(file_path, 'wb') as local_file:
 				try:
+					print u"下载前xxxxxxxxxx"
 					file = self.r_session.get(url_inst.url, stream=True, allow_redirects=True)
+					print u"下载中xxxxxxxxx"
 					# file = self.r_session.post(url_inst.url, data = {'stream':True, 'allow_redirects':True})
 				except requests.exceptions.Timeout as e:
 					db_session.close()
 					return 'Download Time out'
 					# with closing(self.r_session.get(url_inst.url, stream=True, allow_redirects=True)) as file:
 				#file.history
+				print u'跑进来没有？'
 				self.total_size = int(file.headers['content-length'])
 				if 'http://pdl' not in file.url:
 					#尝试下载5次不成功，则放弃
