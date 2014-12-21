@@ -264,7 +264,7 @@ class GrabNewODL():
 				return 'Download Time out'
 				# with closing(self.r_session.get(url_inst.url, stream=True, allow_redirects=True)) as file:
 			#file.history
-			print file.headers
+			# print file.headers
 			self.total_size = int(file.headers['content-length'])
 
 			# 更新下载文件的实际大小

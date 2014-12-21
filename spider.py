@@ -1202,6 +1202,10 @@ class Filmav_Grab():
 		if not os.path.exists(dir):
 			os.makedirs(dir)
 
+		#如果文件不需要解压
+		if url_inst.file_name.split('.')[-1] in [u'wmv',u'avi']:
+			common_utility.move_file_to_dir(file_path,dir)
+
 		cmd = '/usr/bin/unrar x ' + file_path +' ' + dir
 
 		command = ShellCommand(cmd)
@@ -1291,7 +1295,7 @@ class Filmav_Grab():
 		print cmd
 
 		command = ShellCommand(cmd)
-		result_dic = command.run(timeout=10)
+		result_dic = command.run(timeout=600)
 		#状态改成正在压缩中
 		q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
 		q.update({'status': 'raring'})
@@ -1392,16 +1396,16 @@ class Filmav_Grab():
 		db_session.add(ndl_inst)
 		# url_inst = article_inst.old_download_links[0]
 
-		file_name = ndl_inst.file_name.encode('utf8')
-		rared_dir = ARTICLE_FILES_DIR +'/'+ str(ndl_inst.article_id) +'/'+'rared_files/'
-		uploaded_dir = ARTICLE_FILES_DIR +'/'+ str(ndl_inst.article_id) +'/'+'uploaded_files/'
+		file_name = ndl_inst.file_name
+		rared_dir = ARTICLE_FILES_DIR +u'/'+ str(ndl_inst.article_id) +u'/'+u'rared_files/'
+		uploaded_dir = ARTICLE_FILES_DIR +u'/'+ str(ndl_inst.article_id) +u'/'+u'uploaded_files/'
 
 		file_with_abspath = rared_dir + file_name
 
 		# files_with_abspath = common_utility.get_files_with_pull_path(rared_dir)
 
 		if not os.path.exists(file_with_abspath):
-			Msg='%s 还没上传就已经被删除了！' % file_name
+			Msg=u'%s 还没上传就已经被删除了！' % file_name
 			wp_logging(Msg=Msg)
 			UPLOADING_LIST.remove(ndl_inst)
 			db_session.close()
@@ -1438,12 +1442,16 @@ class Filmav_Grab():
 		fileav_ftp = FilmAvFtp(url_type=ndl_inst.url_type)
 		fileav_ftp.login()
 		# file_name_not_ext = os.path.basename(file)
-
+		total_size = os.path.getsize(file_with_abspath)
+		fileav_ftp.total_size = total_size
+		fileav_ftp.file_name = file_name
 		with open(file_with_abspath,'rb') as file_to_uploaed:
 			try:
-				fileav_ftp.ftp.storbinary('STOR ' + file_name,
-						   file_to_uploaed,
-						   fileav_ftp.blocksize,
+				fileav_ftp.ftp.storbinary(
+						   cmd='STOR ' + file_name,
+						   fp=file_to_uploaed,
+						   blocksize=fileav_ftp.blocksize,
+						   callback=self.upload_bar(fileav_ftp),
 						   )
 
 			except Exception as e:
@@ -1474,6 +1482,15 @@ class Filmav_Grab():
 		# 	db_session.commit()
 		# 	Msg = '%s 全部已经上传成功!' % file_name.encode('utf8')
 		# 	wp_logging(Msg=Msg)
+
+	def upload_bar(self, fileav_ftp):
+		total_size = fileav_ftp.total_size
+		uploaded_size = fileav_ftp.uploaded_size + fileav_ftp.blocksize
+		completeness = r"%10d  [%3.2f%%]" % (uploaded_size, uploaded_size * 100. / total_size)
+		completeness = completeness + chr(8)*(len(completeness)+1)
+		Msg = u'{file_name} 上传进度：{completeness}'\
+			.format(file_name=fileav_ftp.file_name, completeness=completeness)
+		wp_logging(Msg=Msg, allow_print=True)
 
 	def temp_print_article(self):
 		db_session = DBSession()

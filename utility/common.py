@@ -156,6 +156,9 @@ class FilmAvFtp():
 	def __init__(self,host='ftp.uploadable.ch',user='lxl001',password='f19174de',port=21,blocksize=8192,url_type=''):
 		# uploadable.ch, uploaded.net ryushare.com
 		self.blocksize = blocksize
+		self.total_size = 0
+		self.uploaded_size = 0
+		self.file_name = u''
 		if url_type == 'uploadable.ch':
 			self.host = host
 			self.user = user
@@ -176,6 +179,7 @@ class FilmAvFtp():
 			self.password = 'fhnmmw3e10'
 			self.port = port
 			self.ftp=FTP(self.host)
+
 
 
 	def login(self):
