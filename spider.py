@@ -745,8 +745,8 @@ class Filmav_Grab():
 				file_name = ''
 				file_size = ''
 				content = self.get_filename_by_url(old_download_link)
-				print type(content)
-				print content
+				# print type(content)
+				# print content
 				# if False:
 
 				if content.get('status'):
