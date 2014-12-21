@@ -1532,9 +1532,9 @@ class Filmav_Grab():
 			# print article.pre_posted_date
 			# print type(article.pre_body)
 
-			if len(article.pre_body) <=0:
+			if article.pre_body is not None and len(article.pre_body) <=0:
 				continue
-			if len(article.body_6park) >=0:
+			if article.body_6park is not None and len(article.body_6park) >=0:
 				#已经make body了。
 				continue
 			self.make_wordpress_body(article)
