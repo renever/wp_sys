@@ -1209,11 +1209,12 @@ class Filmav_Grab():
 		cmd = '/usr/bin/unrar x ' + file_path +' ' + dir
 
 		command = ShellCommand(cmd)
-		result_dic = command.run(timeout=10)
+		result_dic = command.run(timeout=600)
 		#状态改成正在解压中
 		q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
 		q.update({'status': 'unraring'})
 		db_session.commit()
+		print result_dic
 		if result_dic.get('status') == 0:
 			Msg = u'%s 解压成功!' % url_inst.file_name.encode('utf8')
 			wp_logging(Msg=Msg)
@@ -1226,7 +1227,7 @@ class Filmav_Grab():
 			q.update({'status': 'downloaded'})
 			db_session.commit()
 		else:
-			raise Exception,'解压发生为止错误：%s ' % result_dic.get('status')
+			raise Exception,'解压发生未知错误：%s ' % result_dic.get('status')
 		UNRARING_LIST.remove(article_inst)
 		db_session.close()
 	def file_rar_system(self):
