@@ -18,5 +18,6 @@ __author__ = 'lotaku'
 #todo 有些文章有 压缩和非压缩文件 混合在一起的下载链接
 #todo 连接 下载地址时，如果VPN 断了 ，会抛出 异常： Max retries exceeded with url
 #todo 把一个文件分4线程同时下载
+#todo 删除已经上传好的文件
 #文章发布日期
 # t2 = datetime.strftime(datetime.now(),'%b %d %Y' )
