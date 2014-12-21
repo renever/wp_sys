@@ -11,7 +11,7 @@ import pwd
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 
 #生产环境的DB_ENGINE
-DB_ENGINE = create_engine("mysql://root:123qwe@localhost/jpnewfilm?charset=utf8&unix_socket=/run/mysqld/mysqld.sock", pool_size=300, max_overflow=1000,echo=True)
+DB_ENGINE = create_engine("mysql://root:123qwe@localhost/jpnewfilm?charset=utf8&unix_socket=/tmp/mysql.sock", pool_size=300, max_overflow=1000,echo=True)
 FirefoxProfilePath =''
 # print BASE_PATH
 if pwd.getpwuid(os.getuid())[0]=='l':
