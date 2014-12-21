@@ -2,6 +2,7 @@
 #就搜哦
 import re
 import requests
+from datetime import datetime
 # old_body_str = '''<http://img51.imgspice.com/i/03254/bzlgkt3zgfm1.jpeg'''
 # small_img_re_str = r'(?P<img_url>(?P<img>http://img[\d]{0,3}.imgspice.com/i/[0-9]*/)(?P<img_name>.*?(?P<img_ext>.jpe?g)))'
 #
@@ -21,7 +22,14 @@ import requests
 # big_img = re.sub(big_img_re,'jpg',big_img)
 # print big_img
 
-n1 = 1
-n2 = 11
-r = float(1.0/11)
-print r
+# n1 = 1
+# n2 = 11
+# r = float(1.0/11)
+# print r
+
+today = datetime.today()
+print type(today)
+# print type(today.date())
+print today.day
+start = datetime(today.year,today.month,today.day,23,59,59)
+print start

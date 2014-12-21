@@ -280,8 +280,8 @@ class Filmav_Grab():
 		pool = ThreadPool(GRAB_ARTICLE_URL_POOL_SIZE)
 		try:
 			pool.map(self.grab_article_url_of_per_page, page_number_list)
-			pool.join()
-			pool.close()
+			# pool.join()
+			# pool.close()
 		except Exception,e:
 			Msg = u'抓取文章链接错误：%s' % e
 			wp_logging(Msg=Msg,allow_print=True)
@@ -442,8 +442,8 @@ class Filmav_Grab():
 				wp_logging(Msg=Msg)
 				# try:
 				grab_articles_pool.map(self.grab_article, file_links_inst)
-				grab_articles_pool.join()
-				grab_articles_pool.close()
+				# grab_articles_pool.join()
+				# grab_articles_pool.close()
 				# grab_articles_pool.join()
 				# grab_articles_pool.close()
 				#
@@ -500,7 +500,8 @@ class Filmav_Grab():
 		# 前当前抓取的url id 加入 GRABBING_ARTICLE_LIST = []
 		if url_inst.id in GRABBING_ARTICLE_LIST:
 			return
-		GRABBING_ARTICLE_LIST.append(url_inst.id)
+		else:
+			GRABBING_ARTICLE_LIST.append(url_inst.id)
 
 
 
@@ -545,10 +546,7 @@ class Filmav_Grab():
 
 				return
 
-			url_inst_ = get_or_create(session=db_session,is_global=True, model=FileLink,id=url_inst.id)[0]
-			url_inst_.is_crawled = True
-			db_session.add(url_inst_)
-			db_session.commit()
+
 
 			h = pq(r.content)
 			body = h('.entry')
@@ -640,14 +638,14 @@ class Filmav_Grab():
 			if not small_imgs_dict:
 				# print '='*99
 				Msg =  u'%s 没有找到imgspice图片' % url_inst.url
-				wp_logging(Msg=Msg,allow_print=False)
+				wp_logging(Msg=Msg,allow_print=True)
 				# print '='*99
-				db_session.close()
-				lock.acquire()
-				session_count -=1
-				lock.release()
-				GRABBING_ARTICLE_LIST.remove(url_inst.id)
-				return
+				# db_session.close()
+				# lock.acquire()
+				# session_count -=1
+				# lock.release()
+				# GRABBING_ARTICLE_LIST.remove(url_inst.id)
+
 
 			for small_img in small_imgs_dict:
 				"""
@@ -1623,6 +1621,17 @@ class Filmav_Grab():
 
 	def post_to_wordpress_system(self):
 		db_session = DBSession()
+
+		today = datetime.today()
+		start = datetime(today.year,today.month,today.day,0,0,0)
+		end = datetime(today.year,today.month,today.day,23,59,59)
+
+		today_posted_article = db_session.query(Article).filter(and_(Article.posted_date>=start,Article.posted_date<=end)).all()
+		if today_posted_article is not None and len(today_posted_article) >=15:
+			time.sleep(3600)
+			Msg = u'今天已经发布了15篇文章！明天再发...'
+			wp_logging(Msg=Msg, allow_print=True)
+			return
 		# 实际条件
 		article = db_session.query(Article).filter(and_(Article.can_posted==True,Article.is_posted==False)).order_by(~Article.pre_posted_date).first()
 		#temp
@@ -1643,8 +1652,11 @@ class Filmav_Grab():
 
 		}
 		try:
+			post_time = datetime.today()
 			result = wp_client.call(NewPost(post))
 			article.is_posted = True
+			article.posted_date = post_time
+
 			db_session.add(article)
 			db_session.commit()
 		except Exception as e:
@@ -1691,43 +1703,43 @@ if __name__ == '__main__':
 			filmav_grab.temp_make_s_links() # 创建6个测试下载链接
 
 
-		# #下载系统
-		# if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
-		# 	download_thread = threading.Thread(target=filmav_grab.file_download_system)
-		# 	download_thread.start()
-		# 	filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
-		# 	print 'start download system... '
+		#下载系统
+		if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
+			download_thread = threading.Thread(target=filmav_grab.file_download_system)
+			download_thread.start()
+			filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
+			print 'start download system... '
 
-		#
-		# #解压系统
-		# if not filmav_grab.UNRAR_SYSTEM_IS_RUNNING:
-		# 	print 'start unrar system... '
-		# 	rar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
-		# 	rar_thread.start()
-		# 	filmav_grab.UNRAR_SYSTEM_IS_RUNNING = True
-		#
-		#
-		#
-		# #压缩系统
-		# if not filmav_grab.RAR_SYSTEM_IS_RUNNING:
-		# 	print 'RARING_LIST %s ' % RARING_LIST
-		# 	rar_thread = threading.Thread(target=filmav_grab.file_rar_system)
-		# 	rar_thread.start()
-		# 	filmav_grab.RAR_SYSTEM_IS_RUNNING = True
-		# 	print 'start rar system... '
-		#
-		# #上传系统
-		# if not filmav_grab.UPLOAD_SYSTEM_IS_RUNNING:
-		# 	upload_thread = threading.Thread(target=filmav_grab.file_upload_system)
-		# 	upload_thread.start()
-		# 	filmav_grab.UPLOAD_SYSTEM_IS_RUNNING = True
-		# 	print 'start upload system... '
-		#
-		# #更新下载地址
-		# if not filmav_grab.UPDATE_URLS_SYSTEM:
-		# 	update_urls_thread = threading.Thread(target=filmav_grab.update_new_url)
-		# 	update_urls_thread.start()
-		#
+
+		#解压系统
+		if not filmav_grab.UNRAR_SYSTEM_IS_RUNNING:
+			print 'start unrar system... '
+			rar_thread = threading.Thread(target=filmav_grab.file_unrar_system)
+			rar_thread.start()
+			filmav_grab.UNRAR_SYSTEM_IS_RUNNING = True
+
+
+
+		#压缩系统
+		if not filmav_grab.RAR_SYSTEM_IS_RUNNING:
+			print 'RARING_LIST %s ' % RARING_LIST
+			rar_thread = threading.Thread(target=filmav_grab.file_rar_system)
+			rar_thread.start()
+			filmav_grab.RAR_SYSTEM_IS_RUNNING = True
+			print 'start rar system... '
+
+		#上传系统
+		if not filmav_grab.UPLOAD_SYSTEM_IS_RUNNING:
+			upload_thread = threading.Thread(target=filmav_grab.file_upload_system)
+			upload_thread.start()
+			filmav_grab.UPLOAD_SYSTEM_IS_RUNNING = True
+			print 'start upload system... '
+
+		#更新下载地址
+		if not filmav_grab.UPDATE_URLS_SYSTEM:
+			update_urls_thread = threading.Thread(target=filmav_grab.update_new_url)
+			update_urls_thread.start()
+
 		# 自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
 		if not filmav_grab.GRAB_SYSTEM_IS_RUNNING:
 			#每20分钟抓取前 2 页
@@ -1740,20 +1752,21 @@ if __name__ == '__main__':
 			# 自动抓取未抓取的文章详细内容
 			grab_articles_thread = threading.Thread(target=filmav_grab.grab_articles)
 			grab_articles_thread.start()
-		# 	filmav_grab.GRAB_SYSTEM_IS_RUNNING = True
-		# 	print 'start grab sysyem'
-		# # 文章body生成系统
-		# if not filmav_grab.MAKE_BODY_SYSTEM:
-		# 	make_bodys_thread = threading.Thread(target=filmav_grab.make_bodys)
-		# 	make_bodys_thread.start()
-		#
-		# 	filmav_grab.MAKE_BODY_SYSTEM = True
-		#
-		# # 发布文章
-		# if not filmav_grab.POST_TO_WORDPRESS:
-		# 	post_to_wordpress_thread = threading.Thread(target=filmav_grab.post_to_wordpress_system)
-		# 	post_to_wordpress_thread.start()
-		# 	filmav_grab.POST_TO_WORDPRESS = True
+			filmav_grab.GRAB_SYSTEM_IS_RUNNING = True
+			print 'start grab sysyem'
+
+		# 文章body生成系统
+		if not filmav_grab.MAKE_BODY_SYSTEM:
+			make_bodys_thread = threading.Thread(target=filmav_grab.make_bodys)
+			make_bodys_thread.start()
+
+			filmav_grab.MAKE_BODY_SYSTEM = True
+
+		# 发布文章
+		if not filmav_grab.POST_TO_WORDPRESS:
+			post_to_wordpress_thread = threading.Thread(target=filmav_grab.post_to_wordpress_system)
+			post_to_wordpress_thread.start()
+			filmav_grab.POST_TO_WORDPRESS = True
 
 		test = False
 		for_count += 1

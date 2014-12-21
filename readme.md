@@ -14,3 +14,8 @@ sudo apt-get install libxml2-dev libxslt1-dev python-dev
 
 依赖：
 pip install -r requirements.pip
+
+
+注意：
+调试时可以：/etc/mysql/my.cnf) removing the line bind-address=127.0.0.1
+实际使用时记得恢复原样
