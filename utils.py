@@ -626,7 +626,7 @@ class GrabNewODL_SH():
 				right_size_in_view = re.sub('[a-zA-Z ]','',right_size_in_view)
 				file_size_in_view = re.sub('[a-zA-Z ]','',file_size_in_view)
 
-				if int(right_size_in_view) == int(file_size_in_view):
+				if float(right_size_in_view) == float(file_size_in_view):
 					#如果url抓取失败，或者没有得到正确的url，url仍旧保持为文件名，所以，http没有在包含在url（用作判断条件）
 					ndl_inst.url = url
 					ndl_inst.file_size_in_view = file_size_in_view

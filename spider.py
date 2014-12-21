@@ -1615,8 +1615,8 @@ class Filmav_Grab():
 			self.db_session_body.add(article)
 			self.db_session_body.commit()
 
-		Msg = u'文章%s make 6park body' % article.id
-		wp_logging(Msg=Msg)
+			Msg = u'文章%s make 6park body' % article.id
+			wp_logging(Msg=Msg)
 		return can_post
 
 	def add_new_download_url_to_body(self,article):
