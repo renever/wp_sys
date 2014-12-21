@@ -2,6 +2,8 @@
 
 安装说明：
 
+安装 unrar ，rar deb包
+
 官网下载 编译安装 python2.7.6
 python默认安装目录在/usr/local/lib/python2.7，可以通过 /usr/local/bin/python -V 查看版本号
 sudo ln -s /usr/include/python2.7 /usr/bin/python

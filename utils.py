@@ -33,7 +33,7 @@ def create_scoped_session(engine, base):
 
 	return session
 
-def wp_logging(level='debug', Msg='Msg',allow_print=True):
+def wp_logging(level='debug', Msg=u'Msg',allow_print=True):
 	if level=='debug':
 		if allow_print:
 			print Msg
@@ -266,6 +266,14 @@ class GrabNewODL():
 			#file.history
 			print file.headers
 			self.total_size = int(file.headers['content-length'])
+
+			# 更新下载文件的实际大小
+			url_inst.file_size = self.total_size
+			db_session.add(url_inst)
+			db_session.commit()
+			Msg = u'更新下载文件(%s)的实际大小' % url_inst.file_name
+			wp_logging(Msg=Msg,allow_print=True)
+
 			if 'http://pdl' not in file.url:
 				#尝试下载5次不成功，则放弃
 				if self.try_download_count > 5:
