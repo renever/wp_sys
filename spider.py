@@ -1623,22 +1623,22 @@ class Filmav_Grab():
 		# uploadable.ch, uploaded.net ryushare.com
 		article_id = article.id
 
-		urls_upch = self.db_session_body.query(NewDownloadLink).filter_by(url_type='uploadable.ch', article_id=article_id)
-		urls_upnet = self.db_session_body.query(NewDownloadLink).filter_by(url_type='uploaded.net', article_id=article_id)
-		urls_sh = self.db_session_body.query(NewDownloadLink).filter_by(url_type='ryushare.com', article_id=article_id)
+		urls_upch = self.db_session_body.query(NewDownloadLink).filter_by(url_type=u'uploadable.ch', article_id=article_id)
+		urls_upnet = self.db_session_body.query(NewDownloadLink).filter_by(url_type=u'uploaded.net', article_id=article_id)
+		urls_sh = self.db_session_body.query(NewDownloadLink).filter_by(url_type=u'ryushare.com', article_id=article_id)
 
-		content = '''<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br>
+		content = u'''<span style="color: #ff0000;"><strong>Premium Dowload ゴッド会員 高速ダウンロード</strong></span><br>
 		'''
-		self.iter_urls(urls=urls_upnet,content=content,extra_str='<strong>uploaded Downloads link:↓</strong><br>')
-		self.iter_urls(urls=urls_upch,content=content, extra_str='<strong>uploadable Downloads link:↓</strong><br>')
-		self.iter_urls(urls=urls_sh,content=content, extra_str='<strong>ryushare     Downloads link:↓</strong><br>')
+		self.iter_urls(urls=urls_upnet,content=content,extra_str=u'<strong>uploaded Downloads link:↓</strong><br>')
+		self.iter_urls(urls=urls_upch,content=content, extra_str=u'<strong>uploadable Downloads link:↓</strong><br>')
+		self.iter_urls(urls=urls_sh,content=content, extra_str=u'<strong>ryushare     Downloads link:↓</strong><br>')
 
 		return content
 
-	def iter_urls(self, urls,content,extra_str=''):
+	def iter_urls(self, urls,content,extra_str=u''):
 		content += extra_str
 		for url in urls:
-			str = '''<a href="{url}">{name}</a><br>'''.format(url=url.url,name=url.file_name)
+			str = u'''<a href="{url}">{name}</a><br>'''.format(url=url.url,name=url.file_name)
 			content += str
 
 	def post_to_wordpress_system(self):
