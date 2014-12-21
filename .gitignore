@@ -3,6 +3,7 @@
 myapp.log
 /.idea
 /.idea/*
+/wp_resource/*
 site-static/
 components/
 /wangpan/wp_resource/*
