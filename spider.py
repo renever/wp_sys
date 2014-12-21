@@ -469,9 +469,10 @@ class Filmav_Grab():
 			# 	Msg = '[线程池](抓取文章)-->失败：%s' % e
 			# 	wp_logging(Msg=Msg)
 			# 	raise e
-			Msg = u'%s秒后再次抓取新文章' % SLEEP_TIME
+			loop_time = 10*60
+			Msg = u'%s分钟后再次抓取新文章' % loop_time
 			wp_logging(Msg=Msg)
-			time.sleep(SLEEP_TIME)
+			time.sleep(loop_time)
 
 	def query_not_crawled_article_url(self):
 		# 建立数据库链接
