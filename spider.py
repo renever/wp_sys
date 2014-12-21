@@ -1209,11 +1209,12 @@ class Filmav_Grab():
 		cmd = '/usr/bin/unrar x ' + file_path +' ' + dir
 
 		command = ShellCommand(cmd)
-		result_dic = command.run(timeout=600)
+
 		#状态改成正在解压中
 		q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
 		q.update({'status': 'unraring'})
 		db_session.commit()
+		result_dic = command.run(timeout=600)
 		print result_dic
 		if result_dic.get('status') == 0:
 			Msg = u'%s 解压成功!' % url_inst.file_name.encode('utf8')
@@ -1284,7 +1285,7 @@ class Filmav_Grab():
 		if not os.path.exists(rared_dir):
 			os.makedirs(rared_dir)
 		#-v10m 分卷大小1m , -ep 表示：不要把文件的路径层也照样复制进去
-		cmd = '/usr/bin/rar a -m0 -v1m -ep ' + rared_dir +'/' +str(url_inst.file_name.split('.')[0])
+		cmd = '/usr/bin/rar a -m0 -v402m -ep ' + rared_dir +'/' +str(url_inst.file_name.split('.')[0])
 		#指定压缩哪些文件
 		if file_names <=0:
 			RARING_LIST.remove(article_inst)
@@ -1296,11 +1297,13 @@ class Filmav_Grab():
 		print cmd
 
 		command = ShellCommand(cmd)
-		result_dic = command.run(timeout=600)
+
 		#状态改成正在压缩中
 		q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
 		q.update({'status': 'raring'})
 		db_session.commit()
+
+		result_dic = command.run(timeout=600)
 		if result_dic.get('status') == 0:
 			Msg = u'%s 压缩成功!' % url_inst.file_name.encode('utf8')
 			wp_logging(Msg=Msg)
