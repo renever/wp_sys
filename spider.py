@@ -1368,9 +1368,9 @@ class Filmav_Grab():
 						#url 暂时用文件名替代。以后判断如果http没有在URL里，就需要更新URL
 						file_size = os.path.getsize(rared_dir+file_name)
 						# uploadable.ch, uploaded.net ryushare.com
-						ndl_inst_upch = NewDownloadLink(url=file_name,file_name=file_name, file_size=file_size, status='waiting_uploaded', url_type='uploadable.ch')
-						ndl_inst_upnet = NewDownloadLink(url=file_name,file_name=file_name, file_size=file_size, status='waiting_uploaded', url_type='uploaded.net')
-						ndl_inst_rs = NewDownloadLink(url=file_name,file_name=file_name, file_size=file_size, status='waiting_uploaded', url_type='ryushare.com')
+						ndl_inst_upch = NewDownloadLink(url='upch',file_name=file_name, file_size=file_size, status='waiting_uploaded', url_type='uploadable.ch')
+						ndl_inst_upnet = NewDownloadLink(url='upnet',file_name=file_name, file_size=file_size, status='waiting_uploaded', url_type='uploaded.net')
+						ndl_inst_rs = NewDownloadLink(url='rs',file_name=file_name, file_size=file_size, status='waiting_uploaded', url_type='ryushare.com')
 						article.new_download_links.append(ndl_inst_upch)
 						article.new_download_links.append(ndl_inst_upnet)
 						article.new_download_links.append(ndl_inst_rs)
