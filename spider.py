@@ -280,6 +280,8 @@ class Filmav_Grab():
 		pool = ThreadPool(GRAB_ARTICLE_URL_POOL_SIZE)
 		try:
 			pool.map(self.grab_article_url_of_per_page, page_number_list)
+			pool.join()
+			pool.close()
 		except Exception,e:
 			Msg = u'抓取文章链接错误：%s' % e
 			wp_logging(Msg=Msg,allow_print=True)
@@ -440,6 +442,8 @@ class Filmav_Grab():
 				wp_logging(Msg=Msg)
 				# try:
 				grab_articles_pool.map(self.grab_article, file_links_inst)
+				grab_articles_pool.join()
+				grab_articles_pool.close()
 				# grab_articles_pool.join()
 				# grab_articles_pool.close()
 				#
@@ -1687,12 +1691,12 @@ if __name__ == '__main__':
 			filmav_grab.temp_make_s_links() # 创建6个测试下载链接
 
 
-		#下载系统
-		if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
-			download_thread = threading.Thread(target=filmav_grab.file_download_system)
-			download_thread.start()
-			filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
-			print 'start download system... '
+		# #下载系统
+		# if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
+		# 	download_thread = threading.Thread(target=filmav_grab.file_download_system)
+		# 	download_thread.start()
+		# 	filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
+		# 	print 'start download system... '
 
 		#
 		# #解压系统
@@ -1724,18 +1728,18 @@ if __name__ == '__main__':
 		# 	update_urls_thread = threading.Thread(target=filmav_grab.update_new_url)
 		# 	update_urls_thread.start()
 		#
-		# # 自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
-		# if not filmav_grab.GRAB_SYSTEM_IS_RUNNING:
-		# 	#每20分钟抓取前 2 页
-		# 	grab_article_loop_thread = threading.Thread(target=filmav_grab.grab_article_url_loop)
-		# 	grab_article_loop_thread.start()
+		# 自动抓取网站指定页面范围的所有文章URL(也是自动更新功能），
+		if not filmav_grab.GRAB_SYSTEM_IS_RUNNING:
+			#每20分钟抓取前 2 页
+			grab_article_loop_thread = threading.Thread(target=filmav_grab.grab_article_url_loop)
+			grab_article_loop_thread.start()
 		# 	#仅抓取一次，可以单独运行
 		# 	# grab_article_thread = threading.Thread(target=filmav_grab.grab_article_url,kwargs={'page_end':2000})
 		# 	# grab_article_thread.start()
 		#
-		# 	# 自动抓取未抓取的文章详细内容
-		# 	grab_articles_thread = threading.Thread(target=filmav_grab.grab_articles)
-		# 	grab_articles_thread.start()
+			# 自动抓取未抓取的文章详细内容
+			grab_articles_thread = threading.Thread(target=filmav_grab.grab_articles)
+			grab_articles_thread.start()
 		# 	filmav_grab.GRAB_SYSTEM_IS_RUNNING = True
 		# 	print 'start grab sysyem'
 		# # 文章body生成系统
