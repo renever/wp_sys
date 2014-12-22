@@ -1412,6 +1412,10 @@ class Filmav_Grab():
 			Msg=u'%s 还没上传就已经被删除了！' % file_name
 			wp_logging(Msg=Msg)
 			UPLOADING_LIST.remove(ndl_inst)
+			db_session.commit()
+			ndl_inst.status = 'waiting_download'
+			db_session.add(ndl_inst)
+			db_session.commit()
 			db_session.close()
 			return
 
@@ -1488,9 +1492,8 @@ class Filmav_Grab():
 		# 	wp_logging(Msg=Msg)
 
 	def upload_bar(self, fileav_ftp):
-		total_size = fileav_ftp.total_size
-		uploaded_size = fileav_ftp.uploaded_size + fileav_ftp.blocksize
-		completeness = r"%10d  [%3.2f%%]" % (uploaded_size, uploaded_size * 100. / total_size)
+		fileav_ftp.uploaded_size += fileav_ftp.blocksize
+		completeness = r"%10d  [%3.2f%%]" % (fileav_ftp.uploaded_size, fileav_ftp.uploaded_size * 100. / fileav_ftp.total_size)
 		completeness = completeness + chr(8)*(len(completeness)+1)
 		Msg = u'{file_name} 上传进度：{completeness}'\
 			.format(file_name=fileav_ftp.file_name, completeness=completeness)
@@ -1499,7 +1502,7 @@ class Filmav_Grab():
 	def temp_print_article(self):
 		db_session = DBSession()
 		article_inst = db_session.query(Article).filter_by(id=4476).first()
-		print article_inst.pre_body
+
 
 	def check_which_can_make_body(self):
 		can_make_body = True
