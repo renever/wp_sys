@@ -1726,13 +1726,16 @@ class Filmav_Grab():
 			SH.update_urls()
 			time.sleep(SLEEP_TIME)
 
-
+	def change_to_downloading(self):
+		db_session = DBSession()
+		db_session.query(OldDownloadLink).filter(OldDownloadLink.status=='downloaded').update({'status':'downloading'})
+		db_session.close()
 
 if __name__ == '__main__':
 
 	filmav_grab = Filmav_Grab()
 	# filmav_grab.a_wait_to_pull_wiki()
-	test = False
+	test = True
 	# 本次程序总轮循次数统计
 	for_count = 1
 	#test
@@ -1745,15 +1748,16 @@ if __name__ == '__main__':
 		#temp 创建测试数据等。
 
 		if test:
-			filmav_grab.temp_make_s_links() # 创建6个测试下载链接
+			# filmav_grab.temp_make_s_links() # 创建6个测试下载链接
+			filmav_grab.change_to_downloading()
+			test = False
 
-
-		# #下载系统
-		# if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
-		# 	download_thread = threading.Thread(target=filmav_grab.file_download_system)
-		# 	download_thread.start()
-		# 	filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
-		# 	print 'start download system... '
+		#下载系统
+		if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
+			download_thread = threading.Thread(target=filmav_grab.file_download_system)
+			download_thread.start()
+			filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
+			print 'start download system... '
 
 
 		#解压系统
