@@ -1204,6 +1204,10 @@ class Filmav_Grab():
 					common_utility.move_file_to_dir(file_path,dir)
 				except Exception as e:
 					pass
+				db_session.query(OldDownloadLink)\
+					.filter(and_(OldDownloadLink.article_id==article_inst.id, OldDownloadLink.file_name==url_inst.file_name))\
+					.update({'status': 'unrared'})
+				db_session.commit()
 				Msg = u'文件(%s)不需要解压,直接移动都unrared文件夹' % url_inst.file_name
 				wp_logging(Msg=Msg, allow_print=True)
 			elif middle == u'part1':
