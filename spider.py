@@ -1200,7 +1200,10 @@ class Filmav_Grab():
 			suffix = url_inst.file_name.split('.')[-1]
 			middle = url_inst.file_name.split('.')[-2]
 			if suffix in [u'wmv',u'avi']:
-				common_utility.move_file_to_dir(file_path,dir)
+				try:
+					common_utility.move_file_to_dir(file_path,dir)
+				except Exception as e:
+					pass
 				Msg = u'文件(%s)不需要解压,直接移动都unrared文件夹' % url_inst.file_name
 				wp_logging(Msg=Msg, allow_print=True)
 			elif middle == u'part1':
@@ -1305,10 +1308,10 @@ class Filmav_Grab():
 			RARING_LIST.remove(article_inst)
 			return
 		for name in file_names:
-			print 'name%s' % name
 			cmd += ' ' + unrared_dir+'/'+str(name)
-
+		print "=================压缩命令=============="
 		print cmd
+
 
 		command = ShellCommand(cmd)
 
