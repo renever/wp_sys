@@ -1748,12 +1748,12 @@ if __name__ == '__main__':
 			filmav_grab.temp_make_s_links() # 创建6个测试下载链接
 
 
-		#下载系统
-		if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
-			download_thread = threading.Thread(target=filmav_grab.file_download_system)
-			download_thread.start()
-			filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
-			print 'start download system... '
+		# #下载系统
+		# if not filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING:
+		# 	download_thread = threading.Thread(target=filmav_grab.file_download_system)
+		# 	download_thread.start()
+		# 	filmav_grab.DOWNLOAD_SYSTEM_IS_RUNNING = True
+		# 	print 'start download system... '
 
 
 		#解压系统
