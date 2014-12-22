@@ -1508,50 +1508,53 @@ class Filmav_Grab():
 		can_make_body = True
 		db_session = DBSession()
 		articles = db_session.query(Article).filter(Article.is_posted==False).order_by(~Article.pre_posted_date).all()
+		if not articles:
+			return
 		for article in articles:
 			ndl_insts = article.new_download_links
-			for ndl_inst in ndl_insts:
-				if not('http' in ndl_inst.url):
-					can_make_body = False
+			if not ndl_insts:
+				can_make_body = False
+			else:
+				for ndl_inst in ndl_insts:
+					if not('http' in ndl_inst.url):
+						can_make_body = False
 			if can_make_body:
-				article.can_make_body = True
+				article.can_make_body = False
 				db_session.add(article)
 				db_session.commit()
 		db_session.close()
 
 
 	def make_bodys(self):
-		self.check_which_can_make_body()
-		# can_make_body=True 新url都更新了，并且 pre_body 不为空，6park_body 和wordpress_body 为空
+		while True:
+			self.check_which_can_make_body()
+			# can_make_body=True 新url都更新了，并且 pre_body 不为空，6park_body 和wordpress_body 为空
 
-		self.db_session_body = DBSession()
-		#todo条件需要修改 （生产环境下）,改成all（），增加过滤条件
-		articles = self.db_session_body.query(Article).filter(and_(Article.can_make_body==True, Article.is_posted==False)).order_by(~Article.pre_posted_date).all()
-		#test 条件
-		# articles = self.db_session_body.query(Article).filter(Article.can_make_body==False, Article.is_posted==False).order_by(~Article.pre_posted_date).all()
-
-		for article in articles:
-			# print article.id
-			# print article.pre_posted_date
-			# print type(article.pre_body)
-
-			if article.pre_body is not None and len(article.pre_body) <=0:
-				continue
-			if article.body_6park is not None and len(article.body_6park) >=0:
-				#已经make body了。
-				continue
-			self.make_wordpress_body(article)
-			can_post = self.make_6park_body(article)
-			if can_post:
-				article.can_posted = True
-				self.db_session_body.add(article)
-				self.db_session_body.commit()
-				Msg='（OK）文章%s 能发布了！' % article.id
-				wp_logging(Msg=Msg)
-		self.db_session_body.close()
-		#每xx秒 轮循一次
-		time.sleep(SLEEP_TIME)
-		return self.make_bodys()
+			self.db_session_body = DBSession()
+			#todo条件需要修改 （生产环境下）,改成all（），增加过滤条件
+			articles = self.db_session_body.query(Article).filter(and_(Article.can_make_body==True, Article.is_posted==False)).order_by(~Article.pre_posted_date).all()
+			#test 条件
+			# articles = self.db_session_body.query(Article).filter(Article.can_make_body==False, Article.is_posted==False).order_by(~Article.pre_posted_date).all()
+			if not articles:
+				self.db_session_body.close()
+			else:
+				for article in articles:
+					if article.pre_body is not None and len(article.pre_body) <=0:
+						continue
+					if article.body_6park is not None and len(article.body_6park) >=0:
+						#已经make body了。
+						continue
+					self.make_wordpress_body(article)
+					can_post = self.make_6park_body(article)
+					if can_post:
+						article.can_posted = True
+						self.db_session_body.add(article)
+						self.db_session_body.commit()
+						Msg='（OK）文章%s 能发布了！' % article.id
+						wp_logging(Msg=Msg)
+			self.db_session_body.close()
+			#每xx秒 轮循一次
+			time.sleep(SLEEP_TIME)
 	def make_wordpress_body(self,article):
 		h = pq(article.pre_body)
 		span_list = h("span[class='wp_keywordlink_affiliate']")
