@@ -1228,6 +1228,7 @@ class Filmav_Grab():
 			#状态改成正在解压中
 			q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
 			q.update({'status': 'unraring'})
+			db_session.add(q)
 			db_session.commit()
 			result_dic = command.run(timeout=600)
 			print result_dic
@@ -1235,12 +1236,14 @@ class Filmav_Grab():
 				Msg = u'%s 解压成功!' % url_inst.file_name.encode('utf8')
 				wp_logging(Msg=Msg)
 				q.update({'status': 'unrared'})
+				db_session.add(q)
 				db_session.commit()
 			elif result_dic.get('status') == 'Time Out':
 				Msg = u'%s 解压超时!' % url_inst.file_name.encode('utf8')
 				wp_logging(Msg=Msg)
 				#改成downloaded状态
 				q.update({'status': 'downloaded'})
+				db_session.add(q)
 				db_session.commit()
 			else:
 				raise Exception,'解压发生未知错误：%s ' % result_dic.get('status')
