@@ -1523,9 +1523,9 @@ class Filmav_Grab():
 
 		self.db_session_body = DBSession()
 		#todo条件需要修改 （生产环境下）,改成all（），增加过滤条件
-		articles = self.db_session_body.query(Article).filter(Article.can_make_body==True, Article.is_posted==False).order_by(~Article.pre_posted_date).all()
+		articles = self.db_session_body.query(Article).filter(and_(Article.can_make_body==True, Article.is_posted==False)).order_by(~Article.pre_posted_date).all()
 		#test 条件
-		articles = self.db_session_body.query(Article).filter(Article.can_make_body==False, Article.is_posted==False).order_by(~Article.pre_posted_date).all()
+		# articles = self.db_session_body.query(Article).filter(Article.can_make_body==False, Article.is_posted==False).order_by(~Article.pre_posted_date).all()
 
 		for article in articles:
 			# print article.id
