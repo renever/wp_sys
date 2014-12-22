@@ -27,9 +27,13 @@ from datetime import datetime
 # r = float(1.0/11)
 # print r
 
-today = datetime.today()
-print type(today)
-# print type(today.date())
-print today.day
-start = datetime(today.year,today.month,today.day,23,59,59)
-print start
+# today = datetime.today()
+# print type(today)
+# # print type(today.date())
+# print today.day
+# start = datetime(today.year,today.month,today.day,23,59,59)
+# print start
+
+s = 'a.part1.rar'
+s2 = s.split('.')[-2]
+print s2

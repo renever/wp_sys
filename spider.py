@@ -1191,44 +1191,59 @@ class Filmav_Grab():
 	def check_file_is_unrared(self,article_inst):
 		db_session = self.db_session()
 		db_session.add(article_inst)
-		url_inst = article_inst.old_download_links[0]
-
-		file_path = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'downloaded_files/'+ url_inst.file_name
+		url_insts = article_inst.old_download_links
 		dir = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'unrared_files/'
-		if not os.path.exists(file_path):
-			Msg =  '%s 文件不存在，无法解压！' % url_inst.file_name.encode('utf8')
-			wp_logging(Msg=Msg)
-			return
-		if not os.path.exists(dir):
-			os.makedirs(dir)
+		need_unrared =  []
+		for url_inst in url_insts:
+			#如果文件不需要解压
+			file_path = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'downloaded_files/'+ url_inst.file_name
+			suffix = url_inst.file_name.split('.')[-1]
+			middle = url_inst.file_name.split('.')[-2]
+			if suffix in [u'wmv',u'avi']:
+				common_utility.move_file_to_dir(file_path,dir)
+				Msg = u'文件(%s)不需要解压,直接移动都unrared文件夹' % url_inst.file_name
+				wp_logging(Msg=Msg, allow_print=True)
+			elif middle == u'part1':
+				need_unrared.append(url_inst)
+			elif suffix == u'rar':
+				need_unrared.append(url_inst)
 
-		#如果文件不需要解压
-		if url_inst.file_name.split('.')[-1] in [u'wmv',u'avi']:
-			common_utility.move_file_to_dir(file_path,dir)
 
-		cmd = '/usr/bin/unrar x ' + file_path +' ' + dir
+		for url_inst in need_unrared:
+			if url_inst is None:
+				continue
+			file_path = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'downloaded_files/'+ url_inst.file_name
+			dir = ARTICLE_FILES_DIR +'/'+ str(article_inst.id) +'/'+'unrared_files/'
+			if not os.path.exists(file_path):
+				Msg =  '%s 文件不存在，无法解压！' % url_inst.file_name.encode('utf8')
+				wp_logging(Msg=Msg)
+				return
+			if not os.path.exists(dir):
+				os.makedirs(dir)
 
-		command = ShellCommand(cmd)
+			cmd = '/usr/bin/unrar x ' + file_path +' ' + dir
 
-		#状态改成正在解压中
-		q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
-		q.update({'status': 'unraring'})
-		db_session.commit()
-		result_dic = command.run(timeout=600)
-		print result_dic
-		if result_dic.get('status') == 0:
-			Msg = u'%s 解压成功!' % url_inst.file_name.encode('utf8')
-			wp_logging(Msg=Msg)
-			q.update({'status': 'unrared'})
+			command = ShellCommand(cmd)
+
+			#状态改成正在解压中
+			q = db_session.query(OldDownloadLink).filter(OldDownloadLink.article_id==article_inst.id)
+			q.update({'status': 'unraring'})
 			db_session.commit()
-		elif result_dic.get('status') == 'Time Out':
-			Msg = u'%s 解压超时!' % url_inst.file_name.encode('utf8')
-			wp_logging(Msg=Msg)
-			#改成downloaded状态
-			q.update({'status': 'downloaded'})
-			db_session.commit()
-		else:
-			raise Exception,'解压发生未知错误：%s ' % result_dic.get('status')
+			result_dic = command.run(timeout=600)
+			print result_dic
+			if result_dic.get('status') == 0:
+				Msg = u'%s 解压成功!' % url_inst.file_name.encode('utf8')
+				wp_logging(Msg=Msg)
+				q.update({'status': 'unrared'})
+				db_session.commit()
+			elif result_dic.get('status') == 'Time Out':
+				Msg = u'%s 解压超时!' % url_inst.file_name.encode('utf8')
+				wp_logging(Msg=Msg)
+				#改成downloaded状态
+				q.update({'status': 'downloaded'})
+				db_session.commit()
+			else:
+				raise Exception,'解压发生未知错误：%s ' % result_dic.get('status')
 		UNRARING_LIST.remove(article_inst)
 		db_session.close()
 	def file_rar_system(self):
