@@ -136,15 +136,15 @@ class CommonUtility():
 		filtered_file_name = []
 		for name in file_names:
 			#临时测试压缩
-			if name=='chromedriver':
-				filtered_file_name.append(name.encode('utf8'))
+			if name==u'chromedriver':
+				filtered_file_name.append(name)
 			try:
 				# print name.encode('utf8')
-				ext = name.split('.')[1].lower()
+				suffix = name.split('.')[-1].lower()
 				# print ext.encode('utf8')
-				if ext.encode('utf8') in ['avi','mp4']:
+				if suffix in [u'avi',u'mp4',u'wmv']:
 
-					filtered_file_name.append(name.encode('utf8'))
+					filtered_file_name.append(name)
 			except:
 				pass
 		return filtered_file_name
