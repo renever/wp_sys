@@ -8,3 +8,5 @@ site-static/
 components/
 /wangpan/wp_resource/*
 download_urls.txt
+seeds_rared/
+seeds_uploaded/
