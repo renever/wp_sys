@@ -42,12 +42,8 @@ seeds_rared = os.path.dirname(os.path.abspath(__file__)) + '/seeds_rared/'
 
 file_names = os.listdir(seeds_wait_rar)
 for file_name in file_names:
-	file_name = file_name
-
-	file_name_no_suffix = file_name.split('.torrent')[0].replace(' ','_')+'.rar'
-	file_name = file_name.replace(' ','\ ') # shell 要求给空格加上转换符
-	file_name_rared = seeds_wait_rar+file_name_no_suffix
-
+	file_name_with_suffix_rar = file_name.split('.torrent')[0]+'.rar'
+	file_name_rared = seeds_rared+file_name_with_suffix_rar
 	seed_path = seeds_wait_rar + file_name
 	attachment_path = os.path.dirname(os.path.abspath(__file__)) + u'/desktop_wallpaper.jpg'
 	if os.path.exists(file_name_rared + '.rar'):
@@ -67,17 +63,12 @@ for file_name in file_names:
 		raise Exception,'文件夹名：%s 压缩发生为止错误：%s ' % (file_name,result_dic.get('status'))
 
 	seeds_rared_dir = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/seeds_rared/'
+	#seeds_rared_dir = seeds_rared
 	if not os.path.exists(seeds_rared_dir):
 		os.makedirs(seeds_rared_dir)
-	try:
-		shutil.move(seed_path,seeds_uploaded)
-		shutil.move(file_name_rared,seeds_rared_dir)
-	except Exception as e:
-		try:
-			os.remove(seed_path)
-			os.remove(file_name_rared)
-		except Exception as e:
-			pass
-		print e
+	# 复制压缩好的种子到待上传文件夹
+	if not os.path.exists(seeds_rared_dir+'/'+file_name_with_suffix_rar):
+		shutil.copyfile(file_name_rared,seeds_rared_dir)
+
 
 
