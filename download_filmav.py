@@ -72,7 +72,7 @@ class GrabNewODL():
 		with open('download_urls.txt','r') as f:
 			for line in f.readlines():
 				url_list.append(line.rstrip())
-		print url_list
+		# print url_list
 		return url_list
 
 	def run(self):
@@ -115,6 +115,7 @@ class GrabNewODL():
 		except requests.exceptions.Timeout as e:
 			Msg = e
 			print Msg
+			self.downloading_amount -= 1
 			return 'Download Time out'
 		self.total_size = int(file.headers['content-length'])
 
@@ -125,6 +126,7 @@ class GrabNewODL():
 			if os.path.getsize(file_path) ==self.total_size:
 				Msg = u'文件已经下载过了，不用重新下载。'
 				# print Msg
+				self.downloading_amount -= 1
 				return
 			Msg = u'文件已存在，但大小不对，删除后重新下载！'
 			print Msg
