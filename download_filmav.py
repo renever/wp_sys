@@ -141,7 +141,7 @@ class GrabNewODL():
 					local_file.flush()
 					completeness = u"%10d  [%3.2f%%]" % (file_size_dl, file_size_dl * 100. / self.total_size)
 					# completeness = completeness + chr(8)*(len(completeness)+1)
-					Msg = u'{file_name} dowloaded：{completeness}'\
+					Msg = u'{completeness}  {file_name}'\
 						.format(file_name=file_name, completeness=completeness)
 					print Msg
 		self.downloading_amount -= 1
