@@ -53,6 +53,7 @@ for file_name in file_names:
 	cmd += " "+ attachment_path
 	command = ShellCommand(cmd)
 	result_dic = command.run(timeout=10)
+	print u'压缩命令: %s' % cmd
 	if result_dic.get('status') == 0:
 		Msg = u'%s 压缩成功!' % file_name
 		print Msg
