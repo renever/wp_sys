@@ -38,7 +38,8 @@ class ShellCommand(object):
 
 seeds_wait_rar = os.path.dirname(os.path.abspath(__file__)) + '/seeds_wait_rar/'
 seeds_uploaded = os.path.dirname(os.path.abspath(__file__)) + '/seeds_uploaded/'
-seeds_rared = os.path.dirname(os.path.abspath(__file__)) + '/seeds_rared/'
+# seeds_rared = os.path.dirname(os.path.abspath(__file__)) + '/seeds_rared/'
+seeds_rared = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/seeds_rared/'
 
 file_names = os.listdir(seeds_wait_rar)
 for file_name in file_names:
