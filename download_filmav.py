@@ -4,7 +4,11 @@ import os
 import requests
 # CHUNK_SIZE = 8192
 # CHUNK_SIZE = 10485760 #10M
-CHUNK_SIZE = 5242880 # 5M
+# CHUNK_SIZE = 5242880 # 5M
+import threading
+import time
+
+CHUNK_SIZE = 10485760 # 5M
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -38,12 +42,13 @@ class GrabNewODL():
 		self.dir_delete_id = 263083
 		self.dir_done_id = 210640
 		self.dir_path = '' #硬编码地址
+		self.downloading_amount = 0
 
 	def login(self):
 		self.response = self.r_session.post(url=self.url, data=self.data, headers=self.headers)
 		self.logining = True
 
-	def get_url_and_download(self):
+	def get_urls(self):
 		#todo 从文件读取下载地址，存入一个列表
 		url_list = []
 		with open('download_url.txt','r') as f:
@@ -54,31 +59,34 @@ class GrabNewODL():
 		# 	Msg = u'待下载列表 为空'
 		# 	print Msg
 		# url = url_list.pop()
-		for url in url_list:
-			self.download(url)
+		return url_list
+		# for url in url_list:
+		# 	if self.downloading_amount < 5:
+		# 		check_downloaded = threading.Thread(target=self.download, args=(url,))
+		# 		check_downloaded.start()
+		# 		self.downloading_amount +=1
 
-
+	def run(self):
+		self.login()
+		url_list = self.get_urls()
+		while True:
+			if not url_list:
+				Msg = u'待下载列表 为空'
+				print Msg
+				return
+			if self.downloading_amount < 5:
+				url = url_list.pop()
+				check_downloaded = threading.Thread(target=self.download, args=(url,))
+				check_downloaded.start()
+				self.downloading_amount += 1
+			time.sleep(1)
 	def download(self,url):
 		'''
 		用requests下载
 		'''
-		# #todo 从文件读取下载地址，存入一个列表
-		# url_list = []
-		# with open('download_url.txt','r') as f:
-		# 	for line in f.readlines():
-		# 		url_list.append(line.rstrip())
-		#
-		# if not url_list:
-		# 	Msg = u'待下载列表 为空'
-		# 	print Msg
-
-		# url = url_list.pop()
 		file_name=url.split('/')[-1]
 		dir_name = file_name.split('.')[0]
-		print dir_name
-		print file_name
-
-
+		print u'准备下载文件：%s' % file_name
 		# file_dir = dir_name +'/'
 		file_dir = '/root/filmav/'+dir_name +'/'
 		file_path = file_dir+file_name
@@ -129,5 +137,5 @@ class GrabNewODL():
 			return
 
 download_sys = GrabNewODL()
-download_sys.login()
-download_sys.get_url_and_download()
+# download_sys.login()
+download_sys.run()
