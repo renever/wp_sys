@@ -93,31 +93,32 @@ class GrabNewODL():
 		if not os.path.exists(file_dir):
 			os.makedirs(file_dir)
 
-
-
 		file_size_dl = 0
 
 		# todo 下载是有效的下载方法，可以增大chunk_size
-		with open(file_path, 'wb') as local_file:
-			try:
-				file = self.r_session.get(url, stream=True, allow_redirects=True)
-				# file = self.r_session.post(url_inst.url, data = {'stream':True, 'allow_redirects':True})
-			except requests.exceptions.Timeout as e:
-				Msg = e
+
+		try:
+			file = self.r_session.get(url, stream=True, allow_redirects=True)
+			# file = self.r_session.post(url_inst.url, data = {'stream':True, 'allow_redirects':True})
+		except requests.exceptions.Timeout as e:
+			Msg = e
+			print Msg
+			return 'Download Time out'
+		self.total_size = int(file.headers['content-length'])
+
+		#todo 判断文件是否已经存在，并且大小是否正确，
+		#如果存在，大小正确，直接return
+		#如果存在，大小不正确，删除文件，重新下载
+		if os.path.exists(file_path):
+			if os.path.getsize(file_path) ==self.total_size:
+				Msg = u'文件已经下载过了，不用重新下载。'
 				print Msg
-				return 'Download Time out'
-			self.total_size = int(file.headers['content-length'])
+				return
+			Msg = u'文件已存在，但大小不对，删除后重新下载！'
+			print Msg
+			os.remove(file_path)
 
-			#todo 判断文件是否已经存在，并且大小是否正确，
-			#如果存在，大小正确，直接return
-			#如果存在，大小不正确，删除文件，重新下载
-			if os.path.exists(file_path):
-				if os.path.getsize(file_path) ==self.total_size:
-					Msg = u'文件已经下载过了，不用重新下载。'
-					print Msg
-					return
-				os.remove(file_path)
-
+		with open(file_path, 'wb') as local_file:
 			# for content in file.iter_content(CHUNK_SIZE):
 			for content in file.iter_content(CHUNK_SIZE):
 				if content:  # filter out keep-alive new chunks
