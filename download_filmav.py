@@ -108,13 +108,13 @@ class GrabNewODL():
 				os.remove(file_path)
 
 			# for content in file.iter_content(CHUNK_SIZE):
-			for content in file.iter_content(1024):
+			for content in file.iter_content(CHUNK_SIZE):
 				if content:  # filter out keep-alive new chunks
 					file_size_dl += len(content)
 					local_file.write(content)
 					local_file.flush()
 					completeness = u"%10d  [%3.2f%%]" % (file_size_dl, file_size_dl * 100. / self.total_size)
-					completeness = completeness + chr(8)*(len(completeness)+1)
+					# completeness = completeness + chr(8)*(len(completeness)+1)
 					Msg = u'{file_name} 下载进度：{completeness}'\
 						.format(file_name=file_name, completeness=completeness)
 					print Msg
