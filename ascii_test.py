@@ -16,7 +16,7 @@ for file_name in file_names:
 #todo 替换非unicode或会影响shell命令的符号
 for file_name in os.listdir(seeds_wait_rar):
 	new_file_name = file_name.replace(' ','_').replace("&amp;",'_').replace('[','_')\
-							 .replace(']','_').replace('(','_').replace(')',"_")
+							 .replace(']','_').replace('(','_').replace(')',"_").replace(':','_')
 	file_name_path = seeds_wait_rar+'/'+ file_name
 	new_file_name_path = seeds_wait_rar+'/'+ new_file_name
 
