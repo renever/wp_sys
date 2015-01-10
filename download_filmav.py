@@ -43,32 +43,42 @@ class GrabNewODL():
 		self.dir_done_id = 210640
 		self.dir_path = '' #硬编码地址
 		self.downloading_amount = 0
+		self.urls_downloaded_amount = 0 # 已下载文件统计
+		self.urls_amount = 0 # 待下载的文件数
 
 	def login(self):
 		self.response = self.r_session.post(url=self.url, data=self.data, headers=self.headers)
 		self.logining = True
 
 	def get_urls(self):
+		#todo 从github 获取待下载的url文件 ：download_urls.txt
+		link = u'https://raw.githubusercontent.com/lotaku/wp_sys/develop/download_urls.txt'
+		try:
+			file = self.r_session.get(link, stream=True, allow_redirects=True)
+		except requests.exceptions.Timeout as e:
+			Msg = e + u'获取urls列表文件失败 Download Time out'
+			print Msg
+			return
+		print 'connect to download_urls.txt'
+		with open('download_urls.txt', 'wb') as local_file:
+			for content in file.iter_content(1024):
+				if content:  # filter out keep-alive new chunks
+					local_file.write(content)
+					local_file.flush()
+
 		#todo 从文件读取下载地址，存入一个列表
+
 		url_list = []
-		with open('download_url.txt','r') as f:
+		with open('download_urls.txt','r') as f:
 			for line in f.readlines():
 				url_list.append(line.rstrip())
-		#
-		# if not url_list:
-		# 	Msg = u'待下载列表 为空'
-		# 	print Msg
-		# url = url_list.pop()
+		print url_list
 		return url_list
-		# for url in url_list:
-		# 	if self.downloading_amount < 5:
-		# 		check_downloaded = threading.Thread(target=self.download, args=(url,))
-		# 		check_downloaded.start()
-		# 		self.downloading_amount +=1
 
 	def run(self):
 		self.login()
 		url_list = self.get_urls()
+		self.urls_amount = len(url_list)
 		while True:
 			if not url_list:
 				Msg = u'待下载列表 为空'
@@ -80,6 +90,8 @@ class GrabNewODL():
 				check_downloaded.start()
 				self.downloading_amount += 1
 			time.sleep(1)
+		print u'urls_amount:           %s' % self.urls_amount
+		print u'urls_downloaded_amount:%s' % self.urls_downloaded_amount
 	def download(self,url):
 		'''
 		用requests下载
@@ -112,7 +124,7 @@ class GrabNewODL():
 		if os.path.exists(file_path):
 			if os.path.getsize(file_path) ==self.total_size:
 				Msg = u'文件已经下载过了，不用重新下载。'
-				print Msg
+				# print Msg
 				return
 			Msg = u'文件已存在，但大小不对，删除后重新下载！'
 			print Msg
@@ -130,12 +142,14 @@ class GrabNewODL():
 					Msg = u'{file_name} dowloaded：{completeness}'\
 						.format(file_name=file_name, completeness=completeness)
 					print Msg
+		self.downloading_amount -= 1
 		if file_size_dl == self.total_size:
 			print 'Download successful'
 			return
 		else:
 			print 'Download fail'
 			return
+
 
 download_sys = GrabNewODL()
 # download_sys.login()
