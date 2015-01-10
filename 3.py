@@ -34,6 +34,21 @@ from datetime import datetime
 # start = datetime(today.year,today.month,today.day,23,59,59)
 # print start
 
-s = 'a.part1.rar'
-s2 = s.split('.')[-2]
-print s2
+# s = 'a.part1.rar'
+# s2 = s.split('.')[-2]
+# print s2
+
+#todo 从文件读取下载地址，存入一个列表
+url_list = []
+with open('download_url.txt','r') as f:
+	for line in f.readlines():
+		url_list.append(line.rstrip())
+
+for i in range(1,20):
+	if not url_list:
+		break
+	url = url_list.pop()
+	file_name=url.split('/')[-1]
+	dir_name = file_name.split('.')[0]
+	print dir_name
+	print file_name
