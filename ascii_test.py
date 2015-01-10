@@ -6,5 +6,8 @@ seeds_rared = os.path.dirname(os.path.abspath(__file__)) + '/seeds_rared/'
 
 file_names = os.listdir(seeds_wait_rar)
 for file_name in file_names:
-	print file_name
-	print u'' + file_name.decode('utf-8')
+	try:
+		a =  u'' + file_name
+	except Exception as e:
+		print file_name
+		print e
