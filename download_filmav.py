@@ -76,7 +76,8 @@ class GrabNewODL():
 		print file_name
 
 
-		file_dir = dir_name +'/'
+		# file_dir = dir_name +'/'
+		file_dir = '/root/filmav/'+dir_name +'/'
 		file_path = file_dir+file_name
 		if not os.path.exists(file_dir):
 			os.makedirs(file_dir)
