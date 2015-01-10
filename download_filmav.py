@@ -98,9 +98,9 @@ class GrabNewODL():
 		'''
 		file_name=url.split('/')[-1]
 		dir_name = file_name.split('.')[0]
-		print u'准备下载文件：%s' % file_name
+
 		# file_dir = dir_name +'/'
-		file_dir = '/root/filmav/'+dir_name +'/'
+		file_dir = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/'+dir_name +'/'
 		file_path = file_dir+file_name
 		if not os.path.exists(file_dir):
 			os.makedirs(file_dir)
@@ -129,7 +129,7 @@ class GrabNewODL():
 			Msg = u'文件已存在，但大小不对，删除后重新下载！'
 			print Msg
 			os.remove(file_path)
-
+		print u'准备下载文件：%s' % file_name
 		with open(file_path, 'wb') as local_file:
 			# for content in file.iter_content(CHUNK_SIZE):
 			for content in file.iter_content(CHUNK_SIZE):
