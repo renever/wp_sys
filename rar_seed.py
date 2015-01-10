@@ -42,6 +42,7 @@ seeds_rared = os.path.dirname(os.path.abspath(__file__)) + '/seeds_rared/'
 
 file_names = os.listdir(seeds_wait_rar)
 for file_name in file_names:
+	file_name = file_name.decode('utf-8')
 
 	file_name_no_suffix = file_name.split('.torrent')[0].replace(' ','_')+'.rar'
 	file_name = file_name.replace(' ','\ ') # shell 要求给空格加上转换符
