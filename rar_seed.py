@@ -42,7 +42,7 @@ seeds_rared = os.path.dirname(os.path.abspath(__file__)) + '/seeds_rared/'
 
 file_names = os.listdir(seeds_wait_rar)
 for file_name in file_names:
-	file_name = file_name.decode('utf-8')
+	file_name = file_name
 
 	file_name_no_suffix = file_name.split('.torrent')[0].replace(' ','_')+'.rar'
 	file_name = file_name.replace(' ','\ ') # shell 要求给空格加上转换符
@@ -64,7 +64,7 @@ for file_name in file_names:
 		Msg = u'%s 压缩超时!' % file_name
 		print Msg
 	else:
-		raise Exception,'压缩发生为止错误：%s ' % result_dic.get('status')
+		raise Exception,'文件夹名：%s 压缩发生为止错误：%s ' % (file_name,result_dic.get('status'))
 
 	seeds_rared_dir = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/seeds_rared/'
 	if not os.path.exists(seeds_rared_dir):
@@ -73,8 +73,11 @@ for file_name in file_names:
 		shutil.move(seed_path,seeds_uploaded)
 		shutil.move(file_name_rared,seeds_rared_dir)
 	except Exception as e:
-		os.remove(seed_path)
-		os.remove(file_name_rared)
+		try:
+			os.remove(seed_path)
+			os.remove(file_name_rared)
+		except Exception as e:
+			pass
 		print e
 
 
