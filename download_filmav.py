@@ -7,7 +7,7 @@ import requests
 CHUNK_SIZE = 5242880 # 5M
 import sys
 reload(sys)
-sys.setdefaultencoding('utf-8')
+sys.setdefaultencoding('utf8')
 class GrabNewODL():
 	'''
 	抓取新的下载地址
