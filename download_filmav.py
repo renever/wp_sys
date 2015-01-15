@@ -52,20 +52,21 @@ class GrabNewODL():
 		self.logining = True
 
 	def get_urls(self):
-		#todo 从github 获取待下载的url文件 ：download_urls.txt
-		link = u'https://raw.githubusercontent.com/lotaku/wp_sys/develop/download_urls.txt'
-		try:
-			file = self.r_session.get(link, stream=True, allow_redirects=True)
-		except requests.exceptions.Timeout as e:
-			Msg = e + u'获取urls列表文件失败 Download Time out'
-			print Msg
-			return
-		print 'connect to download_urls.txt'
-		with open('download_urls.txt', 'wb') as local_file:
-			for content in file.iter_content(1024):
-				if content:  # filter out keep-alive new chunks
-					local_file.write(content)
-					local_file.flush()
+
+		# #todo 从github 获取待下载的url文件 ：download_urls.txt
+		# link = u'https://raw.githubusercontent.com/lotaku/wp_sys/develop/download_urls.txt'
+		# try:
+		# 	file = self.r_session.get(link, stream=True, allow_redirects=True)
+		# except requests.exceptions.Timeout as e:
+		# 	Msg = e + u'获取urls列表文件失败 Download Time out'
+		# 	print Msg
+		# 	return
+		# print 'connect to download_urls.txt'
+		# with open('download_urls.txt', 'wb') as local_file:
+		# 	for content in file.iter_content(1024):
+		# 		if content:  # filter out keep-alive new chunks
+		# 			local_file.write(content)
+		# 			local_file.flush()
 
 		#todo 从文件读取下载地址，存入一个列表
 
