@@ -7,6 +7,7 @@ import requests
 # CHUNK_SIZE = 5242880 # 5M
 import threading
 import time
+from datetime import date
 
 CHUNK_SIZE = 10485760 # 5M
 import sys
@@ -99,8 +100,9 @@ class GrabNewODL():
 		file_name=url.split('/')[-1]
 		dir_name = file_name.split('.')[0]
 
-		# file_dir = dir_name +'/'
-		file_dir = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/'+dir_name +'/'
+
+		# file_dir = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/'+dir_name +'/'
+		file_dir = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/'+str(date.today()) +'/'
 		file_path = file_dir+file_name
 		if not os.path.exists(file_dir):
 			os.makedirs(file_dir)
