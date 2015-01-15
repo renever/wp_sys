@@ -25,7 +25,7 @@ from models import FileLink, Article,Image,OldDownloadLink,NewDownloadLink,Tag, 
 from utils import create_session, wp_logging, get_or_create,  common_utility, GrabNewODL,\
 				GrabNewODL_UPNET,GrabNewODL_SH
 from utility.common import ShellCommand, FilmAvFtp
-
+import codecs
 import unicodedata
 #系统包
 import logging
@@ -36,7 +36,8 @@ from datetime import datetime,date
 import re
 import time
 import os
-
+import json
+import shutil
 import threading
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import GetPosts, NewPost
@@ -124,11 +125,11 @@ class Filmav_Grab():
 
 				if img.status_code == 200:
 					Msg = u'抓取图片成功，开始下载...'
-					print Msg
+					# print Msg
 					logging.debug(Msg)
 				else:
 					Msg = u"抓取图片失败，原因：%s " % img.status_code
-					print Msg
+					# print Msg
 					logging.debug(Msg)
 					return
 
@@ -142,16 +143,16 @@ class Filmav_Grab():
 							f.flush()
 							percent_completeness = 100*counter*CHUNK_SIZE/float(file_total_size)
 							Msg =  '{0}% 已下载 --（图片名：{1})'.format(percent_completeness,img_filename)
-							print Msg
+							# print Msg
 							logging.debug(Msg)
 						else:
 							Msg =  '100% 已下载 --（图片名：{1})'.format(img_filename)
-							print Msg
+							# print Msg
 							logging.debug(Msg)
 
 		except Exception ,e:
 			Msg = "下载图片失败，原因：%s " % e
-			print Msg
+			# print Msg
 			logging.debug(Msg)
 
 	def get_big_img_and_type(self, small_img):
@@ -168,7 +169,7 @@ class Filmav_Grab():
 		except Exception as e:
 			Msg = u"小图（%s）的大图没有找到content_length！%s" % (small_img,e)
 
-			wp_logging(Msg=Msg, allow_print=True)
+			wp_logging(Msg=Msg, allow_print=False)
 			raise e
 		if img_content_length == 8183: #一张错误图片，则原图是normal图片
 			img_type = 'normal'
@@ -188,7 +189,7 @@ class Filmav_Grab():
 		else:
 			big_img = small_img[:-6]+u'.jpeg'
 
-		print "imgspice big_img url-1: %s" % big_img
+		# print "imgspice big_img url-1: %s" % big_img
 		response = requests.get(big_img)
 		img_content_length = 0
 		try:
@@ -216,7 +217,7 @@ class Filmav_Grab():
 			pool.map(self.grab_article_url_of_per_page, page_number_list)
 		except Exception,e:
 			Msg = u'抓取文章链接错误：%s' % e
-			wp_logging(Msg=Msg,allow_print=True)
+			wp_logging(Msg=Msg,allow_print=False)
 
 	def grab_article_url_of_per_page(self,page_number):
 		"""
@@ -254,6 +255,26 @@ class Filmav_Grab():
 
 
 	def grab_article(self,url):
+		id = url.split('/')[-1].split('.')[0]
+		file_dir = os.path.dirname(os.path.abspath(__file__)) + '/articles/filmav/grabed_articles/'
+		id_blocked_file =  os.path.dirname(os.path.abspath(__file__)) + '/articles/filmav/id_blocked.txt'
+		id_blocked_list = []
+
+		with open(id_blocked_file) as f:
+			for line in f.readlines():
+				id_blocked_list.append(line.strip('\n'))
+		if id in id_blocked_list:
+			return
+		if not os.path.exists(file_dir):
+			os.makedirs(file_dir)
+		file_path =  file_dir + id + '.py'
+		if os.path.exists(file_path) and os.stat(file_path) !=0:
+			print 'alread exist'
+			return
+
+
+
+		print u'开始抓取url: %s' % url
 		r = requests.get(url, headers=self.headers)
 		h = pq(r.content)
 		body = h('.entry')
@@ -276,22 +297,22 @@ class Filmav_Grab():
 		description = re.sub(pattern2,'',description)
 		description = re.sub(pattern3,'',description)
 		description = description.strip().strip('<br />').strip('\n')
-		print 'description:%s' % description
+		# print 'description:%s' % description
 		#抓取文章标题
 		title = h('.title-single')
 		title_unicode = unicode(title.html())
 		title_str = title.html()
-		print 'title: %s' % title_str
+		# print 'title: %s' % title_str
 		body_dict.update({'title':title_str})
 		#抓取所有图片,使用非贪婪模式
 		#图片网站1
 		small_img_re_str = r'(?P<images>http://img[\d]{0,3}.imagetwist.com/.*?.jpg)'
 		small_img_re = re.compile(small_img_re_str)
 		small_imgs = re.findall(small_img_re, old_body_str)
-		if not small_imgs:
-			print '='*99
-			print u'%s 没有找到imagetwist图片' % url
-			print '='*99
+		# if not small_imgs:
+		# 	print '='*99
+		# 	print u'%s 没有找到imagetwist图片' % url
+		# 	print '='*99
 		# 封面图 small_imgs[0]
 		cover_img = small_imgs[0]
 		Msg = u'cover_img:%s' % cover_img
@@ -314,14 +335,14 @@ class Filmav_Grab():
 			small_path--> 图片存于small_path,
 			big_path-->图片存于big_path
 			"""
-			print 'imgspice图片%s' % small_img
+			# print 'imgspice图片%s' % small_img
 			img_name = small_img.get('img_name')
 			img_ext = small_img.get('img_ext')
 			small_img_url = small_img.get('img_url')
 
 			big_img = self.get_big_img_imgspice(small_img)[0]
 			screenshosts.append(big_img)
-		print 'screenshosts %s' % screenshosts
+		# print 'screenshosts %s' % screenshosts
 		body_dict.update({'screenshosts':screenshosts})
 		#todo 抓取文章发布时间
 		pre_posted_date = h('.post-info-date').text()
@@ -343,7 +364,8 @@ class Filmav_Grab():
 					categorys_temp_list.append(category)
 					categorys +="'%s'," % category
 			categorys+=']'
-		print "categories %s " % categorys
+		# print "categories %s " % categories_text_list
+
 		body_dict.update({'categories':categories})
 		#抓取tag,使用非贪婪模式
 		tags_re_str = r'tag/.*?>(.*?)</a>'
@@ -351,6 +373,7 @@ class Filmav_Grab():
 		tags_finded = re.findall(tags_re, old_body_str)
 		tags = '['
 		tags_temp_list = []
+
 		for tag in tags_finded:
 			# tag =  tag.encode('utf8')
 			# print tag
@@ -359,7 +382,7 @@ class Filmav_Grab():
 				tags +="u'%s'," % tag
 		tags+=']'
 
-		print 'tags %s' % tags
+		# print 'tags %s' % tags_temp_list
 		body_dict.update({'tags':tags})
 
 		old_download_link_pattern = r'(http://ryushare.com/.*/.*)" target="_blank"?'
@@ -371,30 +394,44 @@ class Filmav_Grab():
 			file_name = old_download_link.split('/')[-1].split('.')[0].replace(' ','_').replace('-','_')
 			wait_to_uploaded_url.append(url)
 		except:
-
-			file_name = 'file_'+url.split('/')[-1].split('.')[0]
-			not_file_name_list.append(url)
+			with open(id_blocked_file,'a') as f:
+				f.write(id+'\n')
+				f.flush()
 			return
-		print 'file_name: %s ' % file_name
+		# print 'file_name: %s ' % file_name
 		body_dict.update({'file_name':file_name})
-		file_path = os.path.dirname(os.path.abspath(__file__)) + '/articles/filmav/'+ str(date.today())+'/' + file_name + '.py'
-		import codecs
+
+
+
+
 		with codecs.open(file_path,'wb',encoding='UTF-8') as f:
-			body = u'''# -*- coding:utf-8 -*-
-{file_name} = {left_b}
-	'title':'u{title}',
-	'description':u{three_sq}{description}{three_sq},
-	'cover_img':u'{cover_img}',
-	'screenshosts':{screenshosts},
-	'categories':{categories},
-	'tags':{tags},
-	'file_name':u'{file_name}',
-{right_b}
-'''.format(file_name=file_name,title=title_str,description=description,cover_img=cover_img,categories=categories_text_list, \
-				screenshosts=screenshosts,tags=tags,left_b='{',right_b='}',three_sq='\'\'\'')
-			f.write(body)
-			# f.write(body)
-			f.flush()
+
+			new_body={
+				'id':id,
+				'file_name':file_name,
+				'description':description,
+				'cover_img':cover_img,
+				'screenshosts':screenshosts,
+				'categories':categories_text_list,
+				'tags':tags_temp_list,
+
+			}
+			json.dump(new_body,f)
+# 			body = u'''# -*- coding:utf-8 -*-
+# {file_name} = {left_b}
+# 	'title':'u{title}',
+# 	'description':u{three_sq}{description}{three_sq},
+# 	'cover_img':u'{cover_img}',
+# 	'screenshosts':{screenshosts},
+# 	'categories':{categories},
+# 	'tags':{tags},
+# 	'file_name':u'{file_name}',
+# {right_b}
+# '''.format(file_name=file_name,title=title_str,description=description,cover_img=cover_img,categories=categories_text_list, \
+# 				screenshosts=screenshosts,tags=tags,left_b='{',right_b='}',three_sq='\'\'\'')
+# 			# f.write(body)
+# 			f.write(new_body)
+# 			f.flush()
 # title=str(title_str.encode('utf8'))
 	def grap_download_links(self,pattern='',old_body_str =''):
 		# wp_logging(Msg=u"开始抓取old download links", allow_print=True)
@@ -435,23 +472,23 @@ class Filmav_Grab():
 if __name__ == '__main__':
 
 	filmav_grab = Filmav_Grab()
-	urls = filmav_grab.grab_article_url_of_per_page(page_number=1)
-	# url = 'http://filmav.com/60667.html'
+	# url = 'http://filmav.com/60696.html'
+	#
+	# filmav_grab.grab_article(url=url)
 
-	# filmav_grab.grab_article(url='http://filmav.com/60352.html')
-	# filmav_grab.grab_article(url='http://filmav.com/60370.html')
-
-	for i in range(0,30):
-		url = urls.pop(0)
-		# if i <=15:
-		# 	continue
-		print url
-		filmav_grab.grab_article(url=url)
-	#保存需要手动去获得下载地址的url
-	urls_file_path = os.path.dirname(os.path.abspath(__file__))+'/articles/'+str(date.today())
-	with open(urls_file_path, 'wb') as f:
-		for url in wait_to_uploaded_url:
-			url_html = "<a href='{url}' >{url} </a>\r\n<br />".format(url=url)
-			f.writelines(url_html)
-			f.flush()
+	if True:
+		urls = filmav_grab.grab_article_url_of_per_page(page_number=1)
+		for i in range(0,len(urls)):
+			url = urls.pop(0)
+		# 	# if i <=15:
+		# 	# 	continue
+		# 	print url
+			filmav_grab.grab_article(url=url)
+		#保存需要手动去获得下载地址的url
+		urls_file_path = os.path.dirname(os.path.abspath(__file__))+'/articles/'+str(date.today())
+		with open(urls_file_path, 'wb') as f:
+			for url in wait_to_uploaded_url:
+				url_html = "<a href='{url}' >{url} </a>\r\n<br />".format(url=url)
+				f.writelines(url_html)
+				f.flush()
 
