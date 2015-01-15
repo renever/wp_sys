@@ -86,7 +86,7 @@ class GrabNewODL():
 				return
 			if self.downloading_amount < 5:
 				url = url_list.pop()
-				check_downloaded = threading.Thread(target=self.download, args=(url,))
+				check_downloaded = threading.Thread(target=self.download, args=(url.strip(),))
 				check_downloaded.start()
 				self.downloading_amount += 1
 			time.sleep(1)
