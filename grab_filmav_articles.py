@@ -377,7 +377,7 @@ class Filmav_Grab():
 			return
 		print 'file_name: %s ' % file_name
 		body_dict.update({'file_name':file_name})
-		file_path = os.path.dirname(os.path.abspath(__file__)) + '/articles/filmav/' + file_name + '.py'
+		file_path = os.path.dirname(os.path.abspath(__file__)) + '/articles/filmav/'+ str(date.today())+'/' + file_name + '.py'
 		import codecs
 		with codecs.open(file_path,'wb',encoding='UTF-8') as f:
 			body = u'''# -*- coding:utf-8 -*-
