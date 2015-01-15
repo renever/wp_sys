@@ -32,7 +32,7 @@ import logging
 import logging.config
 from contextlib import closing
 from multiprocessing.dummy import Pool as ThreadPool
-from datetime import datetime
+from datetime import datetime,date
 import re
 import time
 import os
@@ -448,7 +448,7 @@ if __name__ == '__main__':
 		print url
 		filmav_grab.grab_article(url=url)
 	#保存需要手动去获得下载地址的url
-	urls_file_path = os.path.dirname(os.path.abspath(__file__))+'/articles/'+str(datetime.today())
+	urls_file_path = os.path.dirname(os.path.abspath(__file__))+'/articles/'+str(date.today())
 	with open(urls_file_path, 'wb') as f:
 		for url in wait_to_uploaded_url:
 			url_html = "<a href='{url}' >{url} </a>\r\n<br />".format(url=url)
