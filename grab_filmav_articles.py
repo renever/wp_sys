@@ -44,6 +44,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 not_file_name_list = []
+wait_to_uploaded_url = []
 class Filmav_Grab():
 
 	def __init__(self):
@@ -274,7 +275,7 @@ class Filmav_Grab():
 		description = re.sub(pattern1,'',old_body_str)
 		description = re.sub(pattern2,'',description)
 		description = re.sub(pattern3,'',description)
-
+		description = description.strip().strip('<br />').strip('\n')
 		print 'description:%s' % description
 		#抓取文章标题
 		title = h('.title-single')
@@ -368,9 +369,12 @@ class Filmav_Grab():
 			old_download_link = self.grap_download_links(pattern=old_download_link_pattern,old_body_str=old_body_str)
 		try:
 			file_name = old_download_link.split('/')[-1].split('.')[0].replace(' ','_').replace('-','_')
+			wait_to_uploaded_url.append(url)
 		except:
+
 			file_name = 'file_'+url.split('/')[-1].split('.')[0]
 			not_file_name_list.append(url)
+			return
 		print 'file_name: %s ' % file_name
 		body_dict.update({'file_name':file_name})
 		file_path = os.path.dirname(os.path.abspath(__file__)) + '/articles/filmav/' + file_name + '.py'
@@ -379,7 +383,7 @@ class Filmav_Grab():
 			body = u'''# -*- coding:utf-8 -*-
 {file_name} = {left_b}
 	'title':'u{title}',
-	'description':'u{description}',
+	'description':u{three_sq}{description}{three_sq},
 	'cover_img':u'{cover_img}',
 	'screenshosts':{screenshosts},
 	'categories':{categories},
@@ -387,7 +391,7 @@ class Filmav_Grab():
 	'file_name':u'{file_name}',
 {right_b}
 '''.format(file_name=file_name,title=title_str,description=description,cover_img=cover_img,categories=categories_text_list, \
-				screenshosts=screenshosts,tags=tags,left_b='{',right_b='}',)
+				screenshosts=screenshosts,tags=tags,left_b='{',right_b='}',three_sq='\'\'\'')
 			f.write(body)
 			# f.write(body)
 			f.flush()
@@ -435,9 +439,19 @@ if __name__ == '__main__':
 	# url = 'http://filmav.com/60667.html'
 
 	# filmav_grab.grab_article(url='http://filmav.com/60352.html')
-	filmav_grab.grab_article(url='http://filmav.com/60370.html')
+	# filmav_grab.grab_article(url='http://filmav.com/60370.html')
 
-	# for url in urls:
-	# 	filmav_grab.grab_article(url=url)
+	for i in range(0,30):
+		url = urls.pop(0)
+		# if i <=15:
+		# 	continue
+		print url
+		filmav_grab.grab_article(url=url)
+	#保存需要手动去获得下载地址的url
+	urls_file_path = os.path.dirname(os.path.abspath(__file__))+'/articles/'+str(datetime.today())
+	with open(urls_file_path, 'wb') as f:
+		for url in wait_to_uploaded_url:
+			url_html = "<a href='{url}' >{url} </a>\r\n<br />".format(url=url)
+			f.writelines(url_html)
+			f.flush()
 
-	print 'not_file_name_list %s ' % not_file_name_list
