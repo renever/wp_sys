@@ -254,9 +254,9 @@ class Filmav_Grab():
 		return article_urls
 
 
-	def grab_article(self,url):
+	def grab_article(self,name='',url=''):
 		id = url.split('/')[-1].split('.')[0]
-		file_dir = os.path.dirname(os.path.abspath(__file__)) + '/articles/filmav/grabed_articles/'
+		file_dir = os.path.dirname(os.path.abspath(__file__)) + '/articles/filmav/grabed_articles/'+str(date.today()).replace('-','_') + '/'
 		id_blocked_file =  os.path.dirname(os.path.abspath(__file__)) + '/articles/filmav/id_blocked.txt'
 		id_blocked_list = []
 
@@ -390,14 +390,15 @@ class Filmav_Grab():
 		if not old_download_link:
 			old_download_link_pattern = r'(http://www.datafile.com/.*/.*)" target="_blank"?'
 			old_download_link = self.grap_download_links(pattern=old_download_link_pattern,old_body_str=old_body_str)
-		try:
-			file_name = old_download_link.split('/')[-1].split('.')[0].replace(' ','_').replace('-','_')
-			wait_to_uploaded_url.append(url)
-		except:
-			with open(id_blocked_file,'a') as f:
-				f.write(id+'\n')
-				f.flush()
-			return
+		file_name = name
+		# try:
+		# 	file_name = old_download_link.split('/')[-1].split('.')[0].replace(' ','_').replace('-','_')
+		# 	wait_to_uploaded_url.append(url)
+		# except:
+		# 	with open(id_blocked_file,'a') as f:
+		# 		f.write(id+'\n')
+		# 		f.flush()
+		# 	return
 		# print 'file_name: %s ' % file_name
 		body_dict.update({'file_name':file_name})
 
@@ -477,18 +478,25 @@ if __name__ == '__main__':
 	# filmav_grab.grab_article(url=url)
 
 	if True:
-		urls = filmav_grab.grab_article_url_of_per_page(page_number=1)
-		for i in range(0,len(urls)):
-			url = urls.pop(0)
-		# 	# if i <=15:
-		# 	# 	continue
-		# 	print url
-			filmav_grab.grab_article(url=url)
+		# urls = filmav_grab.grab_article_url_of_per_page(page_number=1)
+		urls_file_path = os.path.dirname(os.path.abspath(__file__)) + '/articles/filmav/urls_temp.txt'
+		urls_dict = {}
+		with open(urls_file_path,'r') as f:
+			for line in f.readlines():
+				name, url = line.strip().split(',')
+				urls_dict.update({name:url})
+		# print urls_dict
+		for name, url in urls_dict.iteritems():
+			filmav_grab.grab_article(name=name,url=url)
+		exit()
+		# for i in range(0,len(urls)):
+		# 	url = urls.pop(0)
+		# 	filmav_grab.grab_article(url=url)
 		#保存需要手动去获得下载地址的url
-		urls_file_path = os.path.dirname(os.path.abspath(__file__))+'/articles/'+str(date.today())
-		with open(urls_file_path, 'wb') as f:
-			for url in wait_to_uploaded_url:
-				url_html = "<a href='{url}' >{url} </a>\r\n<br />".format(url=url)
-				f.writelines(url_html)
-				f.flush()
+		# urls_file_path = os.path.dirname(os.path.abspath(__file__))+'/articles/'+str(date.today())
+		# with open(urls_file_path, 'wb') as f:
+		# 	for url in wait_to_uploaded_url:
+		# 		url_html = "<a href='{url}' >{url} </a>\r\n<br />".format(url=url)
+		# 		f.writelines(url_html)
+		# 		f.flush()
 

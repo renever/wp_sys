@@ -102,8 +102,8 @@ class GrabNewODL():
 		dir_name = file_name.split('.')[0]
 
 
-		# file_dir = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/'+dir_name +'/'
-		file_dir = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/'+str(date.today()) +'/'
+		file_dir = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/'+dir_name +'/'
+		# file_dir = '/home/admin/lin2.sborg.in/public_html/myfiles/filmav/'+str(date.today()) +'/'
 		file_path = file_dir+file_name
 		if not os.path.exists(file_dir):
 			os.makedirs(file_dir)

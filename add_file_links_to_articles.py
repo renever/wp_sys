@@ -5,7 +5,7 @@ import json
 import time
 
 import codecs
-dir = os.path.dirname(os.path.abspath(__file__))+'/articles/filmav/grabed_articles/'
+dir = os.path.dirname(os.path.abspath(__file__))+'/articles/filmav/grabed_articles/'+str(date.today()).replace('-','_') + '/'
 download_link_file = os.path.dirname(os.path.abspath(__file__))+'/articles/filmav/' + '%s_download_links.txt' % str(date.today()).replace('-','_')
 print download_link_file
 #把新的下载地址转成一个字典

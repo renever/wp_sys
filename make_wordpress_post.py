@@ -5,7 +5,7 @@ import json
 import time
 
 import codecs
-dir = os.path.dirname(os.path.abspath(__file__))+'/articles/filmav/grabed_articles/'
+dir = os.path.dirname(os.path.abspath(__file__))+'/articles/filmav/grabed_articles/'+str(date.today()).replace('-','_') + '/'
 
 for id in os.listdir(dir):
 	file_path = dir + id
