@@ -83,7 +83,7 @@ class GrabNewODL():
 		self.urls_amount = len(url_list)
 		while True:
 			if not url_list:
-				Msg = u'待下载列表 为空'
+				Msg = u'waiting list is empty'
 				print Msg
 				return
 			if self.downloading_amount < 5:
@@ -127,14 +127,14 @@ class GrabNewODL():
 		#如果存在，大小不正确，删除文件，重新下载
 		if os.path.exists(file_path):
 			if os.path.getsize(file_path) ==self.total_size:
-				Msg = u'文件已经下载过了，不用重新下载。'
+				Msg = u'already downloaded and complete!'
 				# print Msg
 				self.downloading_amount -= 1
 				return
-			Msg = u'文件已存在，但大小不对，删除后重新下载！'
+			Msg = u'file is exist,but it\'s size is not correct.'
 			print Msg
 			os.remove(file_path)
-		print u'准备下载文件：%s' % file_name
+		print u'prepare to download：%s' % file_name
 		with open(file_path, 'wb') as local_file:
 			# for content in file.iter_content(CHUNK_SIZE):
 			for content in file.iter_content(CHUNK_SIZE):
