@@ -134,8 +134,8 @@ class GrabNewODL():
 			Msg = u'file is exist,but it\'s size is not correct.'
 			print Msg
 			os.remove(file_path)
-		print u'prepare to download：'
-		print file_name
+		print 'prepare to download：'
+		# print file_name
 		with open(file_path, 'wb') as local_file:
 			# for content in file.iter_content(CHUNK_SIZE):
 			for content in file.iter_content(CHUNK_SIZE):
